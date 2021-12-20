@@ -9,8 +9,8 @@ theme:
   name: material
   locale: en
   highlightjs: true
-  favicon: /img/favicon.svg
-  logo: /img/logo.png
+  favicon: ./docs/img/favicon.svg
+  logo: ./docs/img/logo.png
   hljs_languages:
     - yaml
     - python
@@ -29,12 +29,12 @@ theme:
   font:
     text: Nunito Sans
     code: IBM Plex Mono
-
+docs_dir: '.'
 nav:
-  - Introduction: ./introduction.md
-  - Installation: ./installation.md
-  - Quick Start: ./quick-start.md
-  - API Reference: ./reference.md
+  - Introduction: ./README.md
+  - Installation: ./docs/installation.md
+  - Quick Start: ./docs/quick-start.md
+  - API Reference: ./docs/reference.md
 
 markdown_extensions:
   - pymdownx.highlight
@@ -50,10 +50,11 @@ markdown_extensions:
   - pymdownx.snippets
 
 extra_css:
-  - css/styles.css
+  - ./docs/css/styles.css
 
 plugins:
   - search
+  - same-dir
   - mkdocstrings:
       default_handler: python
       handlers:
