@@ -13,19 +13,21 @@
         <meta name="author" content="Jonas Scholl, Yannic Schröer">
       
       
+        <link rel="canonical" href="https://docs.tebuto.com/introduction/">
+      
       <link rel="icon" href="/img/favicon.svg">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.6">
     
     
       
-        <title>FastAPI Keycloak Integration</title>
+        <title>Introduction - FastAPI Keycloak Integration</title>
       
     
     
-      <link rel="stylesheet" href="/assets/stylesheets/main.a57b2b03.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.a57b2b03.min.css">
       
         
-        <link rel="stylesheet" href="/assets/stylesheets/palette.3f5d1f46.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.3f5d1f46.min.css">
         
       
     
@@ -40,9 +42,9 @@
     
     
     
-      <link rel="stylesheet" href="/assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
     
-      <link rel="stylesheet" href="/css/styles.css">
+      <link rel="stylesheet" href="../css/styles.css">
     
     
       
@@ -63,7 +65,7 @@
     <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
   
     
-    <script>function __prefix(e){return new URL("/",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
     
       <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
@@ -71,6 +73,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#introduction" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -81,7 +88,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="/." title="FastAPI Keycloak Integration" class="md-header__button md-logo" aria-label="FastAPI Keycloak Integration" data-md-component="logo">
+    <a href=".." title="FastAPI Keycloak Integration" class="md-header__button md-logo" aria-label="FastAPI Keycloak Integration" data-md-component="logo">
       
   <img src="/img/logo.png" alt="logo">
 
@@ -99,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              
+              Introduction
             
           </span>
         </div>
@@ -202,7 +209,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="/." title="FastAPI Keycloak Integration" class="md-nav__button md-logo" aria-label="FastAPI Keycloak Integration" data-md-component="logo">
+    <a href=".." title="FastAPI Keycloak Integration" class="md-nav__button md-logo" aria-label="FastAPI Keycloak Integration" data-md-component="logo">
       
   <img src="/img/logo.png" alt="logo">
 
@@ -231,11 +238,73 @@
 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="/introduction/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Introduction
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Introduction
       </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tldr" class="md-nav__link">
+    TLDR;
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+    <nav class="md-nav" aria-label="Example">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apppy" class="md-nav__link">
+    app.py
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -248,7 +317,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/installation/" class="md-nav__link">
+      <a href="../installation/" class="md-nav__link">
         Installation
       </a>
     </li>
@@ -263,7 +332,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/quick-start/" class="md-nav__link">
+      <a href="../quick-start/" class="md-nav__link">
         Quick Start
       </a>
     </li>
@@ -278,7 +347,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/reference/" class="md-nav__link">
+      <a href="../reference/" class="md-nav__link">
         API Reference
       </a>
     </li>
@@ -292,11 +361,126 @@
               </div>
             
             
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tldr" class="md-nav__link">
+    TLDR;
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+    <nav class="md-nav" aria-label="Example">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apppy" class="md-nav__link">
+    app.py
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content" data-md-component="content">
             <article class="md-content__inner md-typeset">
               
-  <h1>404 - Not found</h1>
+                
+                  <a href="https://github.com/code-specialist/fastapi-keycloak/edit/master/docs/introduction.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="introduction">Introduction</h1>
+<p>Welcome to <code>fastapi-keycloak</code>. This projects goal is to ease the integration of Keycloak (OpenID Connect) with Python, especially FastAPI. FastAPI is not necessary but is
+encouraged due to specific features. Currently, this package supports only the <code>password flow</code>. However, the <code>get_current_user()</code> method accepts any JWT that was signed using
+Keycloak's private key.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>This package is currently under development and is not yet officially released. However, you may still use it and contribute to it.</p>
+</div>
+<h2 id="tldr">TLDR;</h2>
+<p>FastAPI Keycloak enables you to do the following things without writing a single line of additional code:</p>
+<ul>
+<li>Verify identities and roles of users with Keycloak</li>
+<li>Get a list of available identity providers</li>
+<li>Create/read/delete users</li>
+<li>Create/read/delete roles</li>
+<li>Assign/remove roles from users</li>
+<li>Implement the password flow (login/callback/logout)</li>
+</ul>
+<h2 id="example">Example</h2>
+<p>This example assumes you use a frontend technology (such as React, Vue, or whatever suits you) to render your pages and merely depicts a <code>protected backend</code></p>
+<h3 id="apppy">app.py</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">uvicorn</span>
+<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">Depends</span>
+
+<span class="kn">from</span> <span class="nn">fastapi_keycloak</span> <span class="kn">import</span> <span class="n">FastAPIKeycloak</span><span class="p">,</span> <span class="n">OIDCUser</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+<span class="n">idp</span> <span class="o">=</span> <span class="n">FastAPIKeycloak</span><span class="p">(</span>
+    <span class="n">app</span><span class="o">=</span><span class="n">app</span><span class="p">,</span>
+    <span class="n">server_url</span><span class="o">=</span><span class="s2">&quot;https://auth.some-domain.com/auth&quot;</span><span class="p">,</span>
+    <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;some-client&quot;</span><span class="p">,</span>
+    <span class="n">client_secret</span><span class="o">=</span><span class="s2">&quot;some-client-secret&quot;</span><span class="p">,</span>
+    <span class="n">admin_client_secret</span><span class="o">=</span><span class="s2">&quot;admin-cli-secret&quot;</span><span class="p">,</span>
+    <span class="n">realm</span><span class="o">=</span><span class="s2">&quot;some-realm-name&quot;</span><span class="p">,</span>
+    <span class="n">callback_uri</span><span class="o">=</span><span class="s2">&quot;http://localhost:8081/callback&quot;</span>
+<span class="p">)</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/premium&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;secured-endpoint&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">premium</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">OIDCUser</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">idp</span><span class="o">.</span><span class="n">get_current_user</span><span class="p">(</span><span class="n">required_roles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;premium&quot;</span><span class="p">]))):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Hi premium user </span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s1">&#39;</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/user/roles&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;secured-endpoint&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">user_roles</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">OIDCUser</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">idp</span><span class="o">.</span><span class="n">get_current_user</span><span class="p">)):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">roles</span><span class="si">}</span><span class="s1">&#39;</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;app:app&#39;</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8081</span><span class="p">)</span>
+</code></pre></div>
+                
+              
+              
+                
+
 
               
             </article>
@@ -307,6 +491,26 @@
       
         
 <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+      
+        
+        <a href="../installation/" class="md-footer__link md-footer__link--next" aria-label="Next: Installation" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Installation
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -355,10 +559,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "/", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "/assets/javascripts/workers/search.fcfe8b6d.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.fcfe8b6d.min.js", "version": null}</script>
     
     
-      <script src="/assets/javascripts/bundle.b1047164.min.js"></script>
+      <script src="../assets/javascripts/bundle.b1047164.min.js"></script>
       
     
   </body>
