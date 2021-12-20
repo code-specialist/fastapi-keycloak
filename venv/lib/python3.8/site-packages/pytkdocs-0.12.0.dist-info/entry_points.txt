@@ -1,0 +1,3 @@
+[console_scripts]
+pytkdocs=pytkdocs.cli:main
+
