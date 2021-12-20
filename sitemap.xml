@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://docs.tebuto.com/</loc>
+         <lastmod>2021-12-20</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.tebuto.com/installation/</loc>
+         <lastmod>2021-12-20</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.tebuto.com/introduction/</loc>
+         <lastmod>2021-12-20</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.tebuto.com/quick-start/</loc>
+         <lastmod>2021-12-20</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.tebuto.com/reference/</loc>
+         <lastmod>2021-12-20</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+</urlset>
