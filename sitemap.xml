@@ -6,22 +6,67 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.tebuto.com/installation/</loc>
+         <loc>https://docs.tebuto.com/docs/</loc>
          <lastmod>2021-12-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.tebuto.com/introduction/</loc>
+         <loc>https://docs.tebuto.com/docs/installation/</loc>
          <lastmod>2021-12-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.tebuto.com/quick-start/</loc>
+         <loc>https://docs.tebuto.com/docs/quick-start/</loc>
          <lastmod>2021-12-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.tebuto.com/reference/</loc>
+         <loc>https://docs.tebuto.com/docs/reference/</loc>
+         <lastmod>2021-12-20</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.tebuto.com/venv/lib/python3.8/site-packages/</loc>
+         <lastmod>2021-12-20</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.tebuto.com/venv/lib/python3.8/site-packages/CHANGELOG/</loc>
+         <lastmod>2021-12-20</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.tebuto.com/venv/lib/python3.8/site-packages/Markdown-3.3.6.dist-info/LICENSE/</loc>
+         <lastmod>2021-12-20</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.tebuto.com/venv/lib/python3.8/site-packages/idna-3.3.dist-info/LICENSE/</loc>
+         <lastmod>2021-12-20</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.tebuto.com/venv/lib/python3.8/site-packages/mkdocs_material_extensions-1.0.3.dist-info/LICENSE/</loc>
+         <lastmod>2021-12-20</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.tebuto.com/venv/lib/python3.8/site-packages/mkdocs_same_dir-0.1.1.dist-info/LICENSE/</loc>
+         <lastmod>2021-12-20</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.tebuto.com/venv/lib/python3.8/site-packages/pymdown_extensions-9.1.dist-info/LICENSE/</loc>
+         <lastmod>2021-12-20</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.tebuto.com/venv/lib/python3.8/site-packages/starlette-0.16.0.dist-info/LICENSE/</loc>
+         <lastmod>2021-12-20</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.tebuto.com/venv/lib/python3.8/site-packages/uvicorn-0.16.0.dist-info/LICENSE/</loc>
          <lastmod>2021-12-20</lastmod>
          <changefreq>daily</changefreq>
     </url>
