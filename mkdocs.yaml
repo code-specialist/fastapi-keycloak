@@ -1,0 +1,65 @@
+site_name: FastAPI Keycloak Integration
+site_url: https://docs.tebuto.com
+site_description: "Python Package: FastAPI Keycloak Integration"
+site_author: Jonas Scholl, Yannic Schröer
+
+
+theme:
+  name: material
+  locale: en
+  highlightjs: true
+  favicon: /img/favicon.svg
+  logo: /img/logo.png
+  hljs_languages:
+    - yaml
+    - python
+    - bash
+    - shell
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+
+  font:
+    text: Nunito Sans
+    code: IBM Plex Mono
+
+nav:
+  - Introduction: ./introduction.md
+  - Quick Start: ./quick-start.md
+  - Python IDP Example: ./example-app.md
+  - API Reference: ./reference.md
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.snippets
+  - toc:
+      permalink:
+  - admonition
+  - attr_list
+  - def_list
+  - abbr
+  - pymdownx.snippets
+
+extra_css:
+  - css/styles.css
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          rendering:
+            show_source: true
+          setup_commands:
+            - import sys
+            - sys.path.append("fastapi_keycloak")
+      custom_templates: templates
