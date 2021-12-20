@@ -1,1 +1,0 @@
-"""The docstrings parsers' package."""
