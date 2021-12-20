@@ -4,6 +4,9 @@ Welcome to `fastapi-keycloak`. This projects goal is to ease the integration of 
 encouraged due to specific features. Currently, this package supports only the `password flow`. However, the `get_current_user()` method accepts any JWT that was signed using
 Keycloak's private key.
 
+!!! Caution
+    This package is currently under development and is not yet officially released. However, you may still use it and contribute to it.
+
 ## TLDR;
 
 FastAPI Keycloak enables you to do the following things without writing a single line of additional code:
@@ -12,10 +15,12 @@ FastAPI Keycloak enables you to do the following things without writing a single
 - Get a list of available identity providers
 - Create/read/delete users
 - Create/read/delete roles
-- Assign/Remove roles from users
+- Assign/remove roles from users
 - Implement the password flow (login/callback/logout)
 
 ## Example
+
+This example assumes you use a frontend technology (such as React, Vue, or whatever suits you) to render your pages and merely depicts a `protected backend`
 
 ### app.py
 
@@ -49,22 +54,4 @@ def user_roles(user: OIDCUser = Depends(idp.get_current_user)):
 
 if __name__ == '__main__':
     uvicorn.run('app:app', host="127.0.0.1", port=8081)
-```
-
-The `get_current_user()` method validates an `Access Token` that is given as `Authorization` HTTP-header e.g:
-
-```shell
-curl -H "Authorization: Bearer [ACCESS TOKEN]" -X GET http://localhost:8081/user/roles 
-```
-
-You may also retrieve an `Access Token` with login credentials:
-
-```shell
-curl -H "Authorization: Bearer [ACCESS TOKEN]" -X POST http://localhost:8081/user/roles 
-```
-
-## Install
-
-```shell
-pip install fastapi-keycloak
 ```

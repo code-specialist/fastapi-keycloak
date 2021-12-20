@@ -2,7 +2,8 @@ site_name: FastAPI Keycloak Integration
 site_url: https://docs.tebuto.com
 site_description: "Python Package: FastAPI Keycloak Integration"
 site_author: Jonas Scholl, Yannic Schröer
-
+repo_url: https://github.com/code-specialist/fastapi-keycloak
+repo_name: fastapi-keycloak
 
 theme:
   name: material
@@ -31,8 +32,8 @@ theme:
 
 nav:
   - Introduction: ./introduction.md
+  - Installation: ./installation.md
   - Quick Start: ./quick-start.md
-  - Python IDP Example: ./example-app.md
   - API Reference: ./reference.md
 
 markdown_extensions:
@@ -63,3 +64,17 @@ plugins:
             - import sys
             - sys.path.append("fastapi_keycloak")
       custom_templates: templates
+
+extra:
+  social:
+    - icon: fontawesome/brands/instagram
+      link: https://www.instagram.com/specialist_code/
+      name: Code Specialist on Instagram
+    - icon: fontawesome/brands/youtube
+      link: https://www.youtube.com/channel/UCjdmChf65sGfOqWoygzBTyQ
+      name: Code Specialist on YouTube
+    - icon: fontawesome/brands/github
+      link: https://github.com/code-specialist
+      name: Code Specialist on GitHub
+
+copyright: Copyright &copy; 2021 Code Specialist | <a href="https://code-specialist.com/legal-notice/">Legal Notice</a>
