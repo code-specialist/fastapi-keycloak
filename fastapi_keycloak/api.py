@@ -9,19 +9,16 @@ import requests
 from fastapi import Depends, HTTPException, FastAPI
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, ExpiredSignatureError, JWTError
+from jose.exceptions import JWTClaimsError
 from pydantic import BaseModel
 from requests import Response
 
+from fastapi_keycloak.exceptions import KeycloakError
 from fastapi_keycloak.model import HTTPMethod, KeycloakUser, OIDCUser, KeycloakToken, KeycloakRole, KeycloakIdentityProvider
 
 
-class ErrorResponse(BaseModel):
-    content: str
-    status_code: int
-
-
-def result_or_error(response_model: Type[BaseModel] = None, is_list: bool = False):
-    """
+def result_or_error(response_model: Type[BaseModel] = None, is_list: bool = False) -> List[BaseModel] or BaseModel or KeycloakError:
+    """ Decorator used to ease the handling of responses from Keycloak.
 
     Args:
         response_model (Type[BaseModel]): Object that should be returned based on the payload
@@ -30,8 +27,12 @@ def result_or_error(response_model: Type[BaseModel] = None, is_list: bool = Fals
     Returns:
         BaseModel or List[BaseModel]: Based on the given signature and response circumstances
 
+    Raises:
+        KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
+
     Notes:
-        - Keycloak sometimes returns empty payloads but describes the error in its content (byte encoded) which is why this function checks for JSONDecode exceptions
+        - Keycloak sometimes returns empty payloads but describes the error in its content (byte encoded)
+          which is why this function checks for JSONDecode exceptions
     """
 
     def inner(f):
@@ -47,12 +48,12 @@ def result_or_error(response_model: Type[BaseModel] = None, is_list: bool = Fals
             def create_object(json: dict):
                 return response_model.parse_obj(json)
 
-            result: Response = f(*args, **kwargs)
+            result: Response = f(*args, **kwargs)  # The actual call
 
-            if type(result) != Response:
+            if type(result) != Response:  # If the object given is not a response object, directly return it.
                 return result
 
-            if result.status_code in range(100, 399):  # Successful
+            if result.status_code in range(100, 299):  # Successful
                 if response_model is None:  # No model given
 
                     try:
@@ -68,10 +69,9 @@ def result_or_error(response_model: Type[BaseModel] = None, is_list: bool = Fals
 
             else:  # Not Successful, forward status code and error
                 try:
-                    return ErrorResponse(content=result.json(), status_code=result.status_code)
-
+                    raise KeycloakError(status_code=result.status_code, reason=result.json())
                 except JSONDecodeError:
-                    return ErrorResponse(content=result.content.decode('utf-8'), status_code=result.status_code)
+                    raise KeycloakError(status_code=result.status_code, reason=result.content.decode('utf-8'))
 
         return wrapper
 
@@ -80,6 +80,9 @@ def result_or_error(response_model: Type[BaseModel] = None, is_list: bool = Fals
 
 class FastAPIKeycloak:
     """ Instance to wrap the Keycloak API with FastAPI
+
+    Attributes:
+        _admin_token (KeycloakToken): A KeycloakToken instance, containing the access token that is used for any admin related request
 
     Example:
         ```python
@@ -93,11 +96,12 @@ class FastAPIKeycloak:
             realm="Test",
             callback_uri=f"http://localhost:8081/callback"
         )
+        idp.add_swagger_config(app)
         ```
     """
     _admin_token: KeycloakToken
 
-    def __init__(self, server_url: str, client_id: str, client_secret: str, realm: str, admin_client_secret: str, callback_uri: str, app: FastAPI = None):
+    def __init__(self, server_url: str, client_id: str, client_secret: str, realm: str, admin_client_secret: str, callback_uri: str):
         """ FastAPIKeycloak constructor
 
         Args:
@@ -107,7 +111,6 @@ class FastAPIKeycloak:
             realm (str): The realm (name)
             admin_client_secret (str): Secret for the `admin-cli` client
             callback_uri (str): Callback URL of the instance, used for auth flows. Must match at least one `Valid Redirect URIs` of Keycloak
-            app (FastAPI): Optional FastAPI app to add the config to swagger
         """
         self.server_url = server_url
         self.realm = realm
@@ -115,11 +118,11 @@ class FastAPIKeycloak:
         self.client_secret = client_secret
         self.admin_client_secret = admin_client_secret
         self.callback_uri = callback_uri
-        self.config(app)
-        self._get_admin_token()
+        self._get_admin_token()  # Requests an admin access token on startup
 
-    def config(self, app: FastAPI):
-        """
+    def add_swagger_config(self, app: FastAPI):
+        """ Adds the client id and secret securely to the swagger ui.
+        Enabling Swagger ui users to perform actions they usually need the client credentials, without exposing them.
 
         Args:
             app (FastAPI): Optional FastAPI app to add the config to swagger
@@ -127,12 +130,11 @@ class FastAPIKeycloak:
         Returns:
             None: Inplace method
         """
-        if app:
-            app.swagger_ui_init_oauth = {
-                "usePkceWithAuthorizationCodeGrant": True,
-                "clientId": self.client_id,
-                "clientSecret": self.client_secret
-            }
+        app.swagger_ui_init_oauth = {
+            "usePkceWithAuthorizationCodeGrant": True,
+            "clientId": self.client_id,
+            "clientSecret": self.client_secret
+        }
 
     @functools.cached_property
     def user_auth_scheme(self) -> OAuth2PasswordBearer:
@@ -151,6 +153,12 @@ class FastAPIKeycloak:
 
         Returns:
             OIDCUser: Decoded JWT content
+
+        Raises:
+            ExpiredSignatureError: If the token is expired (exp > datetime.now())
+            JWTError: If decoding fails or the signature is invalid
+            JWTClaimsError: If any claim is invalid
+            HTTPException: If any role required is not contained within the roles of the users
         """
 
         def current_user(token: OAuth2PasswordBearer = Depends(self.user_auth_scheme)) -> OIDCUser:
@@ -161,13 +169,14 @@ class FastAPIKeycloak:
 
             Returns:
                 OIDCUser: Decoded JWT content
+
+            Raises:
+                ExpiredSignatureError: If the token is expired (exp > datetime.now())
+                JWTError: If decoding fails or the signature is invalid
+                JWTClaimsError: If any claim is invalid
+                HTTPException: If any role required is not contained within the roles of the users
             """
-            options = {
-                "verify_signature": True,
-                "verify_aud": True,
-                "verify_exp": True
-            }
-            decoded_token: dict = jwt.decode(token, self.public_key, options=options, audience="account")
+            decoded_token = self._decode_token(token=token, audience="account")
             user = OIDCUser.parse_obj(decoded_token)
             if required_roles:
                 for role in required_roles:
@@ -200,6 +209,9 @@ class FastAPIKeycloak:
 
         Returns:
             dict: Proxied response payload
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         return requests.request(
             method=method.name,
@@ -208,11 +220,15 @@ class FastAPIKeycloak:
             headers={"Authorization": f"Bearer {self.admin_token}", **additional_headers}
         )
 
-    def _get_admin_token(self):
+    def _get_admin_token(self) -> None:
         """ Exchanges client credentials (admin-cli) for an access token.
 
         Returns:
-            KeycloakToken: The object that is set to _admin_token
+            None: Inplace method that updated the class attribute `_admin_token`
+
+        Raises:
+            KeycloakError: If fetching an admin access token fails
+
         Notes:
             - Is executed on startup and may be executed again if the token validation fails
         """
@@ -225,8 +241,10 @@ class FastAPIKeycloak:
             "grant_type": "client_credentials"
         }
         response = requests.post(url=self.token_uri, headers=headers, data=data)
-        self._admin_token = KeycloakToken.parse_obj(response.json())
-        return self.admin_token
+        try:
+            self._admin_token = KeycloakToken.parse_obj(response.json())
+        except JSONDecodeError:
+            raise KeycloakError(reason=response.content.decode('utf-8'), status_code=response.status_code)
 
     @functools.cached_property
     def public_key(self) -> str:
@@ -249,6 +267,9 @@ class FastAPIKeycloak:
 
         Returns:
             dict: Proxied response payload
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         keycloak_roles = self.get_roles(roles)
         return self._admin_request(
@@ -267,6 +288,9 @@ class FastAPIKeycloak:
 
         Returns:
             dict: Proxied response payload
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         keycloak_roles = self.get_roles(roles)
         return self._admin_request(
@@ -284,8 +308,13 @@ class FastAPIKeycloak:
 
         Returns:
              List[KeycloakRole]: Full entries stored at Keycloak.
+
         Notes:
-            - The Keycloak RestAPI will only identify RoleRepresentations that use name AND id which is the only reason for existence of this function
+            - The Keycloak RestAPI will only identify RoleRepresentations that
+              use name AND id which is the only reason for existence of this function
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         roles = self.get_all_roles()
         return list(filter(lambda role: role.name in role_names, roles))
@@ -298,7 +327,10 @@ class FastAPIKeycloak:
             user_id (str): ID of the user of interest
 
         Returns:
+            List[KeycloakRole]: All roles possessed by the user
 
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         return self._admin_request(url=f'{self.users_uri}/{user_id}/role-mappings/realm', method=HTTPMethod.GET)
 
@@ -311,6 +343,9 @@ class FastAPIKeycloak:
 
         Returns:
             KeycloakRole: If creation succeeded, else it will return the error
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         response = self._admin_request(url=self.roles_uri, data={'name': role_name}, method=HTTPMethod.POST)
         if response.status_code == 201:
@@ -324,6 +359,9 @@ class FastAPIKeycloak:
 
         Returns:
             List[KeycloakRole]: All roles of the realm
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         return self._admin_request(url=self.roles_uri, method=HTTPMethod.GET)
 
@@ -336,6 +374,9 @@ class FastAPIKeycloak:
 
         Returns:
             dict: Proxied response payload
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         return self._admin_request(url=f'{self.roles_uri}/{role_name}', method=HTTPMethod.DELETE)
 
@@ -348,7 +389,8 @@ class FastAPIKeycloak:
             email: str,
             password: str,
             enabled: bool = True,
-            initial_roles: List[str] = None
+            initial_roles: List[str] = None,
+            send_email_verification: bool = True
     ) -> KeycloakUser:
         """
 
@@ -358,14 +400,19 @@ class FastAPIKeycloak:
             username (str): The username of the new user
             email (str): The email of the new user
             password (str): The password of the new user
-            enabled (bool): True if the user should be able to be used
-            initial_roles List[str]: The roles the user should posses
+            enabled (bool): True if the user should be able to be used. Defaults to `True`
+            initial_roles List[str]: The roles the user should posses. Defaults to `None`
+            send_email_verification (bool): If true, the email verification will be added as an required
+                                            action and the email triggered - if the user was created successfully. Defaults to `True`
 
         Returns:
             KeycloakUser: If the creation succeeded
 
         Notes:
             - Also triggers the email verification email
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         data = {
             "email": email,
@@ -381,12 +428,13 @@ class FastAPIKeycloak:
                     "value": password
                 }
             ],
-            "requiredActions": ["VERIFY_EMAIL"]
+            "requiredActions": ["VERIFY_EMAIL" if send_email_verification else None]
         }
         response = self._admin_request(url=self.users_uri, data=data, method=HTTPMethod.POST)
         if response.status_code == 201:
             user = self.get_user(query=f'username={username}')
-            self.send_email_verification(user.id)
+            if send_email_verification:
+                self.send_email_verification(user.id)
             return user
         else:
             return response
@@ -404,6 +452,9 @@ class FastAPIKeycloak:
 
         Notes:
             - Possibly should be extended by an old password check
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         credentials = {"temporary": False, "type": "password", "value": new_password}
         return self._admin_request(url=f'{self.users_uri}/{user_id}/reset-password', data=credentials, method=HTTPMethod.PUT)
@@ -417,6 +468,9 @@ class FastAPIKeycloak:
 
         Returns:
             dict: Proxied response payload
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         return self._admin_request(url=f'{self.users_uri}/{user_id}/send-verify-email', method=HTTPMethod.PUT)
 
@@ -430,6 +484,9 @@ class FastAPIKeycloak:
 
         Returns:
             KeycloakUser: If the user was found
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         if user_id is None:
             response = self._admin_request(url=f'{self.users_uri}?{query}', method=HTTPMethod.GET)
@@ -447,6 +504,9 @@ class FastAPIKeycloak:
 
         Returns:
             dict: Proxied response payload
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         return self._admin_request(url=f'{self.users_uri}/{user_id}', method=HTTPMethod.DELETE)
 
@@ -456,6 +516,9 @@ class FastAPIKeycloak:
 
         Returns:
             List[KeycloakUser]: All Keycloak users of the realm
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         response = self._admin_request(url=self.users_uri, method=HTTPMethod.GET)
         return response
@@ -466,6 +529,9 @@ class FastAPIKeycloak:
 
         Returns:
             List[KeycloakIdentityProvider]: All configured identity providers
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         return self._admin_request(url=self.providers_uri, method=HTTPMethod.GET).json()
 
@@ -492,6 +558,9 @@ class FastAPIKeycloak:
 
         Returns:
             KeycloakToken: If the exchange succeeds
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         headers = {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -517,6 +586,9 @@ class FastAPIKeycloak:
 
         Returns:
             KeycloakToken: If the exchange succeeds
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         headers = {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -552,48 +624,60 @@ class FastAPIKeycloak:
 
     @functools.cached_property
     def login_uri(self):
+        """ The URL for users to login on the realm. Also adds the client id and the callback. """
         return f'{self.authorization_uri}?response_type=code&client_id={self.client_id}&redirect_uri={self.callback_uri}'
 
     @functools.cached_property
     def authorization_uri(self):
+        """ The authorization endpoint URL """
         return self.open_id_configuration.get('authorization_endpoint')
 
     @functools.cached_property
     def token_uri(self):
+        """ The token endpoint URL """
         return self.open_id_configuration.get('token_endpoint')
 
     @functools.cached_property
     def logout_uri(self):
+        """ The logout endpoint URL """
         return self.open_id_configuration.get('end_session_endpoint')
 
     @functools.cached_property
     def realm_uri(self):
+        """ The realms endpoint URL """
         return f"{self.server_url}/realms/{self.realm}"
 
     @functools.cached_property
     def users_uri(self):
+        """ The users endpoint URL """
         return self.admin_uri(resource="users")
 
     @functools.cached_property
     def roles_uri(self):
+        """ The roles endpoint URL """
         return self.admin_uri(resource="roles")
 
     @functools.cached_property
     def _admin_uri(self):
+        """ The base endpoint for any admin related action """
         return f"{self.server_url}/admin/realms/{self.realm}"
 
     @functools.cached_property
     def _open_id(self):
+        """ The base endpoint for any opendid connect config info """
         return f"{self.realm_uri}/protocol/openid-connect"
 
     @functools.cached_property
     def providers_uri(self):
+        """ The endpoint that returns all configured identity providers """
         return self.admin_uri(resource="identity-provider/instances")
 
     def admin_uri(self, resource: str):
+        """ Returns a admin resource URL """
         return f"{self._admin_uri}/{resource}"
 
     def open_id(self, resource: str):
+        """ Returns a openip connect resource URL """
         return f"{self._open_id}/{resource}"
 
     def token_is_valid(self, token: str, audience: str = None) -> bool:
@@ -607,14 +691,35 @@ class FastAPIKeycloak:
             bool: True if the token is valid
         """
         try:
-            options = {"verify_signature": True, "verify_aud": audience is not None, "verify_exp": True}
-            jwt.decode(token, self.public_key, options=options, audience=audience)
+            self._decode_token(token=token, audience=audience)
             return True
-        except (ExpiredSignatureError, JWTError):
+        except (ExpiredSignatureError, JWTError, JWTClaimsError):
             return False
 
+    def _decode_token(self, token: str, options: dict = None, audience: str = None) -> dict:
+        """ Decodes a token, verifies the signature by using Keycloaks public key. Optionally verifying the audience
+
+        Args:
+            token (str):
+            options (dict):
+            audience (str): Name of the audience, must match the audience given in the token
+
+        Returns:
+            dict: Decoded JWT
+
+        Raises:
+            ExpiredSignatureError: If the token is expired (exp > datetime.now())
+            JWTError: If decoding fails or the signature is invalid
+            JWTClaimsError: If any claim is invalid
+        """
+        if options is None:
+            options = {"verify_signature": True, "verify_aud": audience is not None, "verify_exp": True}
+        return jwt.decode(token=token, key=self.public_key, options=options, audience=audience)
+
     def __str__(self):
+        """ String representation """
         return f'FastAPI Keycloak Integration'
 
     def __repr__(self):
+        """ Debug representation """
         return f'{self.__str__()} <class {self.__class__} >'

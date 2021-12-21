@@ -2,8 +2,6 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/code-specialist/fastapi-keycloak/badge)](https://www.codefactor.io/repository/github/code-specialist/fastapi-keycloak)
 
-[Documentation](https://code-specialist.github.io/fastapi-keycloak/)
-
 ---
 
 ## Introduction
@@ -12,7 +10,8 @@ Welcome to `fastapi-keycloak`. This projects goal is to ease the integration of 
 encouraged due to specific features. Currently, this package supports only the `password flow`. However, the `get_current_user()` method accepts any JWT that was signed using
 Keycloak's private key.
 
-!!! Caution This package is currently under development and is not yet officially released. However, you may still use it and contribute to it.
+!!! Caution
+    This package is currently under development and is not yet officially released. However, you may still use it and contribute to it.
 
 ## TLDR;
 
