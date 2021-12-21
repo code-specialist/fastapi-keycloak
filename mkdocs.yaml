@@ -34,6 +34,7 @@ nav:
   - Installation: ./installation.md
   - Quick Start: ./quick-start.md
   - API Reference: ./reference.md
+  - Known issues: ./apple-m1.md
 
 markdown_extensions:
   - pymdownx.highlight

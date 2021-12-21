@@ -98,7 +98,7 @@ class FastAPIKeycloak:
         idp.add_swagger_config(app)
         ```
     """
-    _admin_token: KeycloakToken
+    _admin_token: str
 
     def __init__(self, server_url: str, client_id: str, client_secret: str, realm: str, admin_client_secret: str, callback_uri: str):
         """ FastAPIKeycloak constructor
@@ -119,6 +119,38 @@ class FastAPIKeycloak:
         self.admin_client_secret = admin_client_secret
         self.callback_uri = callback_uri
         self._get_admin_token()  # Requests an admin access token on startup
+
+    @property
+    def admin_token(self):
+        """ Holds an AccessToken for the `admin-cli` client
+
+        Returns:
+            KeycloakToken: A token, valid to perform admin actions
+
+        Notes:
+            - This might result in an infinite recursion if something unforeseen goes wrong
+        """
+        if self.token_is_valid(token=self._admin_token):
+            return self._admin_token
+        else:
+            self._get_admin_token()
+            return self.admin_token
+
+    @admin_token.setter
+    def admin_token(self, value: str):
+        """ Setter for the admin_token
+
+        Args:
+            value (str): An access Token
+
+        Returns:
+            None: Inplace method, updates the _admin_token
+        """
+        decoded_token = self._decode_token(token=value)
+        if not decoded_token.get('realm_access'):
+            raise AssertionError("realm_access was not contained in the access token for the `admin-cli`. "
+                                 "Possibly a Keycloak misconfiguration. Check if the admin-cli client has `Full Scope Allowed`")
+        self._admin_token = value
 
     def add_swagger_config(self, app: FastAPI):
         """ Adds the client id and secret securely to the swagger ui.
@@ -227,7 +259,7 @@ class FastAPIKeycloak:
             None: Inplace method that updated the class attribute `_admin_token`
 
         Raises:
-            KeycloakError: If fetching an admin access token fails
+            KeycloakError: If fetching an admin access token fails, or the response does not contain an access_token at all
 
         Notes:
             - Is executed on startup and may be executed again if the token validation fails
@@ -242,9 +274,11 @@ class FastAPIKeycloak:
         }
         response = requests.post(url=self.token_uri, headers=headers, data=data)
         try:
-            self._admin_token = KeycloakToken.parse_obj(response.json())
+            self.admin_token = response.json()['access_token']
         except JSONDecodeError:
             raise KeycloakError(reason=response.content.decode('utf-8'), status_code=response.status_code)
+        except KeyError:
+            raise KeycloakError(reason=f"The response did not contain an access_token: {response.json()}", status_code=403)
 
     @functools.cached_property
     def public_key(self) -> str:
@@ -534,19 +568,6 @@ class FastAPIKeycloak:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         return self._admin_request(url=self.providers_uri, method=HTTPMethod.GET).json()
-
-    @property
-    def admin_token(self) -> KeycloakToken:
-        """ Requests an AccessToken on the `admin-cli` client
-
-        Returns:
-            KeycloakToken: A token, valid to perform admin actions
-        """
-        if self.token_is_valid(token=self._admin_token.access_token):
-            return self._admin_token.access_token
-        else:
-            self._get_admin_token()
-            return self.admin_token
 
     @result_or_error(response_model=KeycloakToken)
     def user_login(self, username: str, password: str) -> KeycloakToken:
