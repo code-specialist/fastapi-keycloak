@@ -1,0 +1,39 @@
+name: Test-Suite
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Set up Python 3.8"
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+#      - name: Install Pip
+#        run: |
+#          python -m pip install --upgrade pip
+#
+#      - name: "Install Test Dependencies"
+#        run: |
+#          python -m pip install wheel
+#          python -m pip install pytest
+#          python -m pip install pytest-cov
+#
+#      - name: "Install dependencies"
+#        run: |
+#          python -m pip install -r requirements.txt
+#
+#      - name: Test with pytest
+#        run: |
+#          pytest tests
+
+      - name: "Upload coverage to Codecov"
+        uses: codecov/codecov-action@v2
+        with:
+          fail_ci_if_error: true
