@@ -16,10 +16,15 @@ def read_dependencies() -> List[str]:
     return list(filter(lambda line: not (line.startswith('#') or line.startswith('-')) and line, requirements_list))
 
 
+def get_packages() -> List[str]:
+    all_packages = setuptools.find_packages()
+    return [package for package in all_packages]
+
+
 setup(
     name='fastapi-keycloak',
     version='0.0.1a',
-    packages=setuptools.find_packages(),
+    packages=get_packages(),
     description='Keycloak integration for FastAPI',
     long_description=read_description(),
     long_description_content_type="text/markdown",

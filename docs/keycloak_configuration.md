@@ -9,3 +9,4 @@
 3. Modify the `admin-cli` client
    1. **Settings**: Service Accounts Enabled
    2. **Scope**: Full Scope Allowed
+   3. **Service Account Roles**: Select all Client Roles available for `account` and `realm_management`

@@ -16,6 +16,10 @@ services:
 
   keycloak:
     image: docker.io/jboss/keycloak:16.0.1   # Locally built with `build_keycloak_m1.sh` as the current images do not support the architecture
+    volumes:
+      - ./realm-export.json:/opt/jboss/keycloak/imports/realm-export.json
+    command:
+      - "-b 0.0.0.0 -Dkeycloak.import=/opt/jboss/keycloak/imports/realm-export.json"
     environment:
       DB_VENDOR: POSTGRES
       DB_ADDR: postgres
