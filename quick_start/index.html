@@ -13,21 +13,21 @@
         <meta name="author" content="Jonas Scholl, Yannic Schröer">
       
       
-        <link rel="canonical" href="https://docs.tebuto.com/">
+        <link rel="canonical" href="https://docs.tebuto.com/quick_start/">
       
-      <link rel="icon" href="img/favicon.svg">
+      <link rel="icon" href="../img/favicon.svg">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.6">
     
     
       
-        <title>FastAPI Keycloak Integration</title>
+        <title>Quickstart - FastAPI Keycloak Integration</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.a57b2b03.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.a57b2b03.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.3f5d1f46.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.3f5d1f46.min.css">
         
       
     
@@ -42,9 +42,9 @@
     
     
     
-      <link rel="stylesheet" href="assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
     
-      <link rel="stylesheet" href="css/styles.css">
+      <link rel="stylesheet" href="../css/styles.css">
     
     
       
@@ -65,7 +65,7 @@
     <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
   
     
-    <script>function __prefix(e){return new URL(".",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
     
       <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
@@ -75,7 +75,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#fastapi-keycloak-integration" class="md-skip">
+        <a href="#quickstart" class="md-skip">
           Skip to content
         </a>
       
@@ -88,9 +88,9 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="FastAPI Keycloak Integration" class="md-header__button md-logo" aria-label="FastAPI Keycloak Integration" data-md-component="logo">
+    <a href=".." title="FastAPI Keycloak Integration" class="md-header__button md-logo" aria-label="FastAPI Keycloak Integration" data-md-component="logo">
       
-  <img src="img/logo.png" alt="logo">
+  <img src="../img/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -106,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Introduction
+              Quickstart
             
           </span>
         </div>
@@ -209,9 +209,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="FastAPI Keycloak Integration" class="md-nav__button md-logo" aria-label="FastAPI Keycloak Integration" data-md-component="logo">
+    <a href=".." title="FastAPI Keycloak Integration" class="md-nav__button md-logo" aria-label="FastAPI Keycloak Integration" data-md-component="logo">
       
-  <img src="img/logo.png" alt="logo">
+  <img src="../img/logo.png" alt="logo">
 
     </a>
     FastAPI Keycloak Integration
@@ -238,6 +238,36 @@
 
   
   
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        Installation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
     
   
   
@@ -250,12 +280,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Introduction
+          Quickstart
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <a href="." class="md-nav__link md-nav__link--active">
-        Introduction
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Quickstart
       </a>
       
         
@@ -275,36 +305,30 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#introduction" class="md-nav__link">
-    Introduction
+  <a href="#1-configure-the-containers" class="md-nav__link">
+    1. Configure the Containers
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#tldr" class="md-nav__link">
-    TLDR;
+  <a href="#2-start-the-containers" class="md-nav__link">
+    2. Start the Containers
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
-    Example
-  </a>
-  
-    <nav class="md-nav" aria-label="Example">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#apppy" class="md-nav__link">
-    app.py
+  <a href="#3-the-fastapi-app" class="md-nav__link">
+    3. The FastAPI App
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#4-usage" class="md-nav__link">
+    4. Usage
+  </a>
   
 </li>
       
@@ -324,37 +348,7 @@
   
   
     <li class="md-nav__item">
-      <a href="installation/" class="md-nav__link">
-        Installation
-      </a>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="quick_start/" class="md-nav__link">
-        Quickstart
-      </a>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="full_example/" class="md-nav__link">
+      <a href="../full_example/" class="md-nav__link">
         Full example
       </a>
     </li>
@@ -369,7 +363,7 @@
   
   
     <li class="md-nav__item">
-      <a href="reference/" class="md-nav__link">
+      <a href="../reference/" class="md-nav__link">
         API Reference
       </a>
     </li>
@@ -384,7 +378,7 @@
   
   
     <li class="md-nav__item">
-      <a href="apple-m1/" class="md-nav__link">
+      <a href="../apple-m1/" class="md-nav__link">
         Known issues
       </a>
     </li>
@@ -419,36 +413,30 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#introduction" class="md-nav__link">
-    Introduction
+  <a href="#1-configure-the-containers" class="md-nav__link">
+    1. Configure the Containers
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#tldr" class="md-nav__link">
-    TLDR;
+  <a href="#2-start-the-containers" class="md-nav__link">
+    2. Start the Containers
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
-    Example
-  </a>
-  
-    <nav class="md-nav" aria-label="Example">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#apppy" class="md-nav__link">
-    app.py
+  <a href="#3-the-fastapi-app" class="md-nav__link">
+    3. The FastAPI App
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#4-usage" class="md-nav__link">
+    4. Usage
+  </a>
   
 </li>
       
@@ -464,67 +452,117 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/code-specialist/fastapi-keycloak/edit/master/docs/index.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/code-specialist/fastapi-keycloak/edit/master/docs/quick_start.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                <h1 id="fastapi-keycloak-integration">FastAPI Keycloak Integration</h1>
-<p><a href="https://www.codefactor.io/repository/github/code-specialist/fastapi-keycloak"><img alt="CodeFactor" src="https://www.codefactor.io/repository/github/code-specialist/fastapi-keycloak/badge" /></a>
-<a href="https://codecov.io/gh/code-specialist/fastapi-keycloak"><img alt="codecov" src="https://codecov.io/gh/code-specialist/fastapi-keycloak/branch/master/graph/badge.svg?token=PX6NJBDUJ9" /></a></p>
-<hr />
-<h2 id="introduction">Introduction</h2>
-<p>Welcome to <code>fastapi-keycloak</code>. This projects goal is to ease the integration of Keycloak (OpenID Connect) with Python, especially FastAPI. FastAPI is not necessary but is
-encouraged due to specific features. Currently, this package supports only the <code>password</code> and the <code>authorization_code</code>. However, the <code>get_current_user()</code> method accepts any JWT 
-that was signed 
-using
-Keycloak's private key.</p>
-<div class="admonition caution">
-<p class="admonition-title">Caution</p>
-<p>This package is currently under development and is not yet officially released. However, you may still use it and contribute to it.</p>
-</div>
-<h2 id="tldr">TLDR;</h2>
-<p>FastAPI Keycloak enables you to do the following things without writing a single line of additional code:</p>
-<ul>
-<li>Verify identities and roles of users with Keycloak</li>
-<li>Get a list of available identity providers</li>
-<li>Create/read/delete users</li>
-<li>Create/read/delete roles</li>
-<li>Assign/remove roles from users</li>
-<li>Implement the <code>password</code> or the <code>authorization_code</code> flow (login/callback/logout)</li>
-</ul>
-<h2 id="example">Example</h2>
-<p>This example assumes you use a frontend technology (such as React, Vue, or whatever suits you) to render your pages and merely depicts a <code>protected backend</code></p>
-<h3 id="apppy">app.py</h3>
+                <h1 id="quickstart">Quickstart</h1>
+<p>In order to just get started, we prepared some containers and configs for your.</p>
+<h2 id="1-configure-the-containers">1. Configure the Containers</h2>
+<p><strong>docker-compose.yaml</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nt">version</span><span class="p">:</span> <span class="s">&#39;3&#39;</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+  <span class="nt">postgres_data</span><span class="p">:</span>
+    <span class="nt">driver</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">local</span>
+
+<span class="nt">services</span><span class="p">:</span>
+  <span class="nt">postgres</span><span class="p">:</span>
+    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">postgres</span>
+    <span class="nt">environment</span><span class="p">:</span>
+      <span class="nt">POSTGRES_DB</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testkeycloakdb</span>
+      <span class="nt">POSTGRES_USER</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testkeycloakuser</span>
+      <span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testkeycloakpassword</span>
+    <span class="nt">restart</span><span class="p">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">always</span>
+
+  <span class="nt">keycloak</span><span class="p">:</span>
+    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jboss/keycloak:16.0.1</span>   
+    <span class="nt">volumes</span><span class="p">:</span>
+<span class="hll">      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./realm-export.json:/opt/jboss/keycloak/imports/realm-export.json</span>
+</span>    <span class="nt">command</span><span class="p">:</span>
+<span class="hll">      <span class="p p-Indicator">-</span> <span class="s">&quot;-b</span><span class="nv"> </span><span class="s">0.0.0.0</span><span class="nv"> </span><span class="s">-Dkeycloak.profile.feature.upload_scripts=enabled</span><span class="nv"> </span><span class="s">-Dkeycloak.import=/opt/jboss/keycloak/imports/realm-export.json&quot;</span>
+</span>    <span class="nt">environment</span><span class="p">:</span>
+      <span class="nt">DB_VENDOR</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">POSTGRES</span>
+      <span class="nt">DB_ADDR</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">postgres</span>
+      <span class="nt">DB_DATABASE</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testkeycloakdb</span>
+      <span class="nt">DB_USER</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testkeycloakuser</span>
+      <span class="nt">DB_SCHEMA</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">public</span>
+      <span class="nt">DB_PASSWORD</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testkeycloakpassword</span>
+      <span class="nt">KEYCLOAK_USER</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keycloakuser</span>
+      <span class="nt">KEYCLOAK_PASSWORD</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keycloakpassword</span>
+      <span class="nt">PROXY_ADDRESS_FORWARDING</span><span class="p">:</span> <span class="s">&quot;true&quot;</span>
+      <span class="nt">KEYCLOAK_LOGLEVEL</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">DEBUG</span>
+    <span class="nt">ports</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="s">&#39;8085:8080&#39;</span>
+    <span class="nt">depends_on</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">postgres</span>
+    <span class="nt">restart</span><span class="p">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">always</span>
+</code></pre></div>
+<p>This will create a Postgres and a Keycloak container ready to use. Make sure to download the <a href="../downloads/realm-export.json">realm-export.json</a> and keep it in the same folder as
+the docker compose file to bind the configuration.</p>
+<p>!!! Caution These containers are stateless and non-persistent. Data will be lost on restart.</p>
+<h2 id="2-start-the-containers">2. Start the Containers</h2>
+<p>Start the containers by applying the <code>docker-compose.yaml</code>:</p>
+<div class="highlight"><pre><span></span><code>docker-compose up -d
+</code></pre></div>
+<p>!!! info When you want to delete the containers you may use <code>docker-compose down</code> in the same directory to kill the containers created with the <code>docker-compose.yaml</code></p>
+<h2 id="3-the-fastapi-app">3. The FastAPI App</h2>
+<p>You may use the code below without altering it, the imported config will match these values:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">uvicorn</span>
 <span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">Depends</span>
-
+<span class="kn">from</span> <span class="nn">fastapi.responses</span> <span class="kn">import</span> <span class="n">RedirectResponse</span>
 <span class="kn">from</span> <span class="nn">fastapi_keycloak</span> <span class="kn">import</span> <span class="n">FastAPIKeycloak</span><span class="p">,</span> <span class="n">OIDCUser</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
 <span class="n">idp</span> <span class="o">=</span> <span class="n">FastAPIKeycloak</span><span class="p">(</span>
-    <span class="n">server_url</span><span class="o">=</span><span class="s2">&quot;https://auth.some-domain.com/auth&quot;</span><span class="p">,</span>
-    <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;some-client&quot;</span><span class="p">,</span>
-    <span class="n">client_secret</span><span class="o">=</span><span class="s2">&quot;some-client-secret&quot;</span><span class="p">,</span>
-    <span class="n">admin_client_secret</span><span class="o">=</span><span class="s2">&quot;admin-cli-secret&quot;</span><span class="p">,</span>
-    <span class="n">realm</span><span class="o">=</span><span class="s2">&quot;some-realm-name&quot;</span><span class="p">,</span>
+    <span class="n">server_url</span><span class="o">=</span><span class="s2">&quot;http://localhost:8085/auth&quot;</span><span class="p">,</span>
+    <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;test-client&quot;</span><span class="p">,</span>
+    <span class="n">client_secret</span><span class="o">=</span><span class="s2">&quot;GzgACcJzhzQ4j8kWhmhazt7WSdxDVUyE&quot;</span><span class="p">,</span>
+    <span class="n">admin_client_secret</span><span class="o">=</span><span class="s2">&quot;BIcczGsZ6I8W5zf0rZg5qSexlloQLPKB&quot;</span><span class="p">,</span>
+    <span class="n">realm</span><span class="o">=</span><span class="s2">&quot;Test&quot;</span><span class="p">,</span>
     <span class="n">callback_uri</span><span class="o">=</span><span class="s2">&quot;http://localhost:8081/callback&quot;</span>
 <span class="p">)</span>
 <span class="n">idp</span><span class="o">.</span><span class="n">add_swagger_config</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/admin&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">admin</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">OIDCUser</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">idp</span><span class="o">.</span><span class="n">get_current_user</span><span class="p">(</span><span class="n">required_roles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;admin&quot;</span><span class="p">]))):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Hi premium user </span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s1">&#39;</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>  <span class="c1"># Unprotected</span>
+<span class="k">def</span> <span class="nf">root</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s1">&#39;Hello World&#39;</span>
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/user/roles&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">user_roles</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">OIDCUser</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">idp</span><span class="o">.</span><span class="n">get_current_user</span><span class="p">)):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">roles</span><span class="si">}</span><span class="s1">&#39;</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/user&quot;</span><span class="p">)</span>  <span class="c1"># Requires logged in</span>
+<span class="k">def</span> <span class="nf">current_users</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">OIDCUser</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">idp</span><span class="o">.</span><span class="n">get_current_user</span><span class="p">())):</span>
+    <span class="k">return</span> <span class="n">user</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/admin&quot;</span><span class="p">)</span>  <span class="c1"># Requires the admin role</span>
+<span class="k">def</span> <span class="nf">company_admin</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">OIDCUser</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">idp</span><span class="o">.</span><span class="n">get_current_user</span><span class="p">(</span><span class="n">required_roles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;admin&quot;</span><span class="p">]))):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Hi admin </span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s1">&#39;</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/login&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">login_redirect</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">RedirectResponse</span><span class="p">(</span><span class="n">idp</span><span class="o">.</span><span class="n">login_uri</span><span class="p">)</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/callback&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">session_state</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">idp</span><span class="o">.</span><span class="n">exchange_authorization_code</span><span class="p">(</span><span class="n">session_state</span><span class="o">=</span><span class="n">session_state</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="n">code</span><span class="p">)</span>  <span class="c1"># This will return an access token</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;app:app&#39;</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8081</span><span class="p">)</span>
 </code></pre></div>
+<h2 id="4-usage">4. Usage</h2>
+<p>You may now use any of the <a href="../reference/">APIs exposed endpoints</a> as everything is configured for testing all the features.</p>
+<p>After you call the <code>/login</code> endpoint of your app, you will be redirected to the login screen of Keycloak. We provided a sample user on the <code>Test</code> with the <code>realm-export.json</code>
+you may use to login: Username: <code>testuser</code>, password: <code>test</code>.</p>
+<p>You may open the Keycloak Frontend at <a href="http://localhost:8085/auth">http://localhost:8085/auth</a> and create a user. To
+log into your Keycloak instance, the username is <code>keycloakuser</code> and the password is <code>keycloakpassword</code> as described in the <code>docker-compose.yaml</code> above. </p>
+<p>To utilize this fully you need a way to store the Access-Token provided by the callback Router and append it to the requests as <code>Authorization</code> Bearer.</p>
                 
               
               
@@ -543,15 +581,30 @@ Keycloak's private key.</p>
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
+        
+        <a href="../installation/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Installation" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Installation
+            </div>
+          </div>
+        </a>
+      
       
         
-        <a href="installation/" class="md-footer__link md-footer__link--next" aria-label="Next: Installation" rel="next">
+        <a href="../full_example/" class="md-footer__link md-footer__link--next" aria-label="Next: Full example" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Installation
+              Full example
             </div>
           </div>
           <div class="md-footer__button md-icon">
@@ -608,10 +661,10 @@ Keycloak's private key.</p>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": ".", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "assets/javascripts/workers/search.fcfe8b6d.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.fcfe8b6d.min.js", "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.b1047164.min.js"></script>
+      <script src="../assets/javascripts/bundle.b1047164.min.js"></script>
       
     
   </body>

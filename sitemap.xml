@@ -11,6 +11,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://docs.tebuto.com/full_example/</loc>
+         <lastmod>2021-12-21</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://docs.tebuto.com/installation/</loc>
          <lastmod>2021-12-21</lastmod>
          <changefreq>daily</changefreq>
@@ -21,7 +26,7 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://docs.tebuto.com/quick-start/</loc>
+         <loc>https://docs.tebuto.com/quick_start/</loc>
          <lastmod>2021-12-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
