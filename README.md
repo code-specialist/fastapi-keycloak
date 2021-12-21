@@ -2,16 +2,15 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/code-specialist/fastapi-keycloak/badge)](https://www.codefactor.io/repository/github/code-specialist/fastapi-keycloak)
 
-[Documentation](https://code-specialist.github.io/fastapi-keycloak/)
+---
 
 ## Introduction
 
 Welcome to `fastapi-keycloak`. This projects goal is to ease the integration of Keycloak (OpenID Connect) with Python, especially FastAPI. FastAPI is not necessary but is
-encouraged due to specific features. Currently, this package supports only the `password flow`. However, the `get_current_user()` method accepts any JWT that was signed using
-Keycloak's private key.
+encouraged due to specific features. Currently, this package supports only the `password` and the `authorization_code`. However, the `get_current_user()` method accepts any JWT 
+that was signed using Keycloak's private key.
 
-!!! Caution
-    This package is currently under development and is not yet officially released. However, you may still use it and contribute to it.
+**This package is currently under development and is not yet officially released. However, you may still use it and contribute to it.**
 
 ## TLDR;
 
@@ -22,7 +21,7 @@ FastAPI Keycloak enables you to do the following things without writing a single
 - Create/read/delete users
 - Create/read/delete roles
 - Assign/remove roles from users
-- Implement the password flow (login/callback/logout)
+- Implement the `password` or the `authorization_code` flow (login/callback/logout)
 
 ## Example
 
@@ -38,7 +37,6 @@ from fastapi_keycloak import FastAPIKeycloak, OIDCUser
 
 app = FastAPI()
 idp = FastAPIKeycloak(
-    app=app,
     server_url="https://auth.some-domain.com/auth",
     client_id="some-client",
     client_secret="some-client-secret",
@@ -46,14 +44,14 @@ idp = FastAPIKeycloak(
     realm="some-realm-name",
     callback_uri="http://localhost:8081/callback"
 )
+idp.add_swagger_config(app)
 
-
-@app.get("/premium", tags=["secured-endpoint"])
-def premium(user: OIDCUser = Depends(idp.get_current_user(required_roles=["premium"]))):
+@app.get("/admin")
+def admin(user: OIDCUser = Depends(idp.get_current_user(required_roles=["admin"]))):
     return f'Hi premium user {user}'
 
 
-@app.get("/user/roles", tags=["secured-endpoint"])
+@app.get("/user/roles")
 def user_roles(user: OIDCUser = Depends(idp.get_current_user)):
     return f'{user.roles}'
 

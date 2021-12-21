@@ -11,7 +11,6 @@ from fastapi_keycloak import FastAPIKeycloak, OIDCUser, UsernamePassword, HTTPMe
 
 app = FastAPI()
 idp = FastAPIKeycloak(
-    app=app,
     server_url="https://auth.some-domain.com/auth",
     client_id="some-client",
     client_secret="some-client-secret",
@@ -19,6 +18,7 @@ idp = FastAPIKeycloak(
     realm="some-realm-name",
     callback_uri="http://localhost:8081/callback"
 )
+idp.add_swagger_config(app)
 
 
 # Admin
@@ -114,17 +114,12 @@ def get_user_roles(user_id: str):
     return idp.get_user_roles(user_id=user_id)
 
 
-@app.get("/users/{user_id}/roles", tags=["user-roles"])
-def get_user_roles(user_id: str):
-    return idp.get_user_roles(user_id=user_id)
-
-
 @app.delete("/users/{user_id}/roles", tags=["user-roles"])
 def delete_roles_from_user(user_id: str, roles: Optional[List[str]] = Query(None)):
     return idp.remove_user_roles(user_id=user_id, roles=roles)
 
 
-# User Requests
+# Example User Requests
 
 @app.get("/protected", tags=["example-user-request"])
 def protected(user: OIDCUser = Depends(idp.get_current_user())):
@@ -136,9 +131,9 @@ def get_current_users_roles(user: OIDCUser = Depends(idp.get_current_user())):
     return user.roles
 
 
-@app.get("/company/edit", tags=["example-user-request"])
-def company_admin(user: OIDCUser = Depends(idp.get_current_user(required_roles=["company_admin"]))):
-    return f'Hi company admin {user}'
+@app.get("/admin", tags=["example-user-request"])
+def company_admin(user: OIDCUser = Depends(idp.get_current_user(required_roles=["admin"]))):
+    return f'Hi admin {user}'
 
 
 @app.get("/login", tags=["example-user-request"])

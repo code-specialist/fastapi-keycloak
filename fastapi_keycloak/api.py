@@ -88,7 +88,6 @@ class FastAPIKeycloak:
         ```python
         app = FastAPI()
         idp = KeycloakFastAPI(
-            app=app,
             server_url="https://auth.some-domain.com/auth",
             client_id="some-test-client",
             client_secret="some-secret",
@@ -110,7 +109,8 @@ class FastAPIKeycloak:
             client_secret (str): The client secret
             realm (str): The realm (name)
             admin_client_secret (str): Secret for the `admin-cli` client
-            callback_uri (str): Callback URL of the instance, used for auth flows. Must match at least one `Valid Redirect URIs` of Keycloak
+            callback_uri (str): Callback URL of the instance, used for auth flows. Must match at least one `Valid Redirect URIs` of Keycloak and should point to an endpoint
+                                that utilizes the authorization_code flow.
         """
         self.server_url = server_url
         self.realm = realm

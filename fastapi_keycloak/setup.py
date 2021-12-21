@@ -22,7 +22,7 @@ def get_packages() -> List[str]:
 
 
 setup(
-    name='fastapikeycloak',
+    name='fastapi-keycloak',
     version='0.0.1a',
     packages=get_packages(),
     description='Keycloak integration for FastAPI',
