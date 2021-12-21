@@ -503,12 +503,18 @@
 </code></pre></div>
 <p>This will create a Postgres and a Keycloak container ready to use. Make sure to download the <a href="../downloads/realm-export.json">realm-export.json</a> and keep it in the same folder as
 the docker compose file to bind the configuration.</p>
-<p>!!! Caution These containers are stateless and non-persistent. Data will be lost on restart.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>These containers are stateless and non-persistent. Data will be lost on restart.</p>
+</div>
 <h2 id="2-start-the-containers">2. Start the Containers</h2>
 <p>Start the containers by applying the <code>docker-compose.yaml</code>:</p>
 <div class="highlight"><pre><span></span><code>docker-compose up -d
 </code></pre></div>
-<p>!!! info When you want to delete the containers you may use <code>docker-compose down</code> in the same directory to kill the containers created with the <code>docker-compose.yaml</code></p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>When you want to delete the containers you may use <code>docker-compose down</code> in the same directory to kill the containers created with the <code>docker-compose.yaml</code></p>
+</div>
 <h2 id="3-the-fastapi-app">3. The FastAPI App</h2>
 <p>You may use the code below without altering it, the imported config will match these values:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">uvicorn</span>
