@@ -32,7 +32,10 @@ def result_or_error(response_model: Type[BaseModel] = None, is_list: bool = Fals
 
     Notes:
         - Keycloak sometimes returns empty payloads but describes the error in its content (byte encoded)
-          which is why this function checks for JSONDecode exceptions
+          which is why this function checks for JSONDecode exceptions.
+        - Keycloak often does not expose the real error for security measures. You will most likely encounter:
+          {'error': 'unknown_error'} as a result. If so, please check the logs of your Keycloak instance to get error details,
+          the RestAPI doesnt provide any.
     """
 
     def inner(f):
@@ -229,8 +232,7 @@ class FastAPIKeycloak:
         response = requests.get(url=f'{self.realm_uri}/.well-known/openid-configuration')
         return response.json()
 
-    @result_or_error
-    def proxy(self, relative_path: str, method: HTTPMethod, additional_headers: dict = None, payload: dict = None) -> dict:
+    def proxy(self, relative_path: str, method: HTTPMethod, additional_headers: dict = None, payload: dict = None) -> Response:
         """ Proxies a request to Keycloak and automatically adds the required Authorization header. Should not be exposed under any circumstances. Grants full API admin access.
 
         Args:
@@ -241,16 +243,20 @@ class FastAPIKeycloak:
             payload (dict): Optional payload to send
 
         Returns:
-            dict: Proxied response payload
+            Response: Proxied response
 
         Raises:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
+        headers = {"Authorization": f"Bearer {self.admin_token}"}
+        if additional_headers is not None:
+            headers = {**headers, **additional_headers}
+
         return requests.request(
             method=method.name,
             url=f'{self.server_url}{relative_path}',
             data=json.dumps(payload),
-            headers={"Authorization": f"Bearer {self.admin_token}", **additional_headers}
+            headers=headers
         )
 
     def _get_admin_token(self) -> None:
@@ -335,14 +341,14 @@ class FastAPIKeycloak:
         )
 
     @result_or_error(response_model=KeycloakRole, is_list=True)
-    def get_roles(self, role_names: List[str]) -> List[KeycloakRole]:
+    def get_roles(self, role_names: List[str]) -> List[KeycloakRole] or None:
         """ Returns full entries of Roles based on role names
 
         Args:
             role_names List[str]: Roles that should be looked up (names)
 
         Returns:
-             List[KeycloakRole]: Full entries stored at Keycloak.
+             List[KeycloakRole]: Full entries stored at Keycloak. Or None if the list of requested roles is None
 
         Notes:
             - The Keycloak RestAPI will only identify RoleRepresentations that
@@ -351,6 +357,8 @@ class FastAPIKeycloak:
         Raises:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
+        if role_names is None:
+            return None
         roles = self.get_all_roles()
         return list(filter(lambda role: role.name in role_names, roles))
 
@@ -435,8 +443,8 @@ class FastAPIKeycloak:
             username (str): The username of the new user
             email (str): The email of the new user
             password (str): The password of the new user
-            enabled (bool): True if the user should be able to be used. Defaults to `True`
             initial_roles List[str]: The roles the user should posses. Defaults to `None`
+            enabled (bool): True if the user should be able to be used. Defaults to `True`
             send_email_verification (bool): If true, the email verification will be added as an required
                                             action and the email triggered - if the user was created successfully. Defaults to `True`
 
