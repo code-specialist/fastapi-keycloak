@@ -476,14 +476,14 @@
   <span class="nt">keycloak</span><span class="p">:</span>
     <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jboss/keycloak:16.0.1</span>   
     <span class="nt">volumes</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./realm-export.json:/opt/jboss/keycloak/imports/realm-export.json</span>
-    <span class="nt">command</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="s">&quot;-b</span><span class="nv"> </span><span class="s">0.0.0.0</span><span class="nv"> </span><span class="s">-Dkeycloak.profile.feature.upload_scripts=enabled</span><span class="nv"> </span><span class="s">-Dkeycloak.import=/opt/jboss/keycloak/imports/realm-export.json&quot;</span>
-    <span class="nt">environment</span><span class="p">:</span>
-<span class="hll">      <span class="nt">DB_VENDOR</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">POSTGRES</span>
-</span>      <span class="nt">DB_ADDR</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">postgres</span>
-<span class="hll">      <span class="nt">DB_DATABASE</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testkeycloakdb</span>
-</span>      <span class="nt">DB_USER</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testkeycloakuser</span>
+<span class="hll">      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./realm-export.json:/opt/jboss/keycloak/imports/realm-export.json</span>
+</span>    <span class="nt">command</span><span class="p">:</span>
+<span class="hll">      <span class="p p-Indicator">-</span> <span class="s">&quot;-b</span><span class="nv"> </span><span class="s">0.0.0.0</span><span class="nv"> </span><span class="s">-Dkeycloak.profile.feature.upload_scripts=enabled</span><span class="nv"> </span><span class="s">-Dkeycloak.import=/opt/jboss/keycloak/imports/realm-export.json&quot;</span>
+</span>    <span class="nt">environment</span><span class="p">:</span>
+      <span class="nt">DB_VENDOR</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">POSTGRES</span>
+      <span class="nt">DB_ADDR</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">postgres</span>
+      <span class="nt">DB_DATABASE</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testkeycloakdb</span>
+      <span class="nt">DB_USER</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testkeycloakuser</span>
       <span class="nt">DB_SCHEMA</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">public</span>
       <span class="nt">DB_PASSWORD</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">testkeycloakpassword</span>
       <span class="nt">KEYCLOAK_USER</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">keycloakuser</span>
