@@ -361,6 +361,21 @@
   
 
     
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="apple-m1/" class="md-nav__link">
+        Known issues
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -440,11 +455,14 @@
                 
                 
                 <h1 id="fastapi-keycloak-integration">FastAPI Keycloak Integration</h1>
-<p><a href="https://www.codefactor.io/repository/github/code-specialist/fastapi-keycloak"><img alt="CodeFactor" src="https://www.codefactor.io/repository/github/code-specialist/fastapi-keycloak/badge" /></a></p>
+<p><a href="https://www.codefactor.io/repository/github/code-specialist/fastapi-keycloak"><img alt="CodeFactor" src="https://www.codefactor.io/repository/github/code-specialist/fastapi-keycloak/badge" /></a>
+<a href="https://codecov.io/gh/code-specialist/fastapi-keycloak"><img alt="codecov" src="https://codecov.io/gh/code-specialist/fastapi-keycloak/branch/master/graph/badge.svg?token=PX6NJBDUJ9" /></a></p>
 <hr />
 <h2 id="introduction">Introduction</h2>
 <p>Welcome to <code>fastapi-keycloak</code>. This projects goal is to ease the integration of Keycloak (OpenID Connect) with Python, especially FastAPI. FastAPI is not necessary but is
-encouraged due to specific features. Currently, this package supports only the <code>password flow</code>. However, the <code>get_current_user()</code> method accepts any JWT that was signed using
+encouraged due to specific features. Currently, this package supports only the <code>password</code> and the <code>authorization_code</code>. However, the <code>get_current_user()</code> method accepts any JWT 
+that was signed 
+using
 Keycloak's private key.</p>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
@@ -458,7 +476,7 @@ Keycloak's private key.</p>
 <li>Create/read/delete users</li>
 <li>Create/read/delete roles</li>
 <li>Assign/remove roles from users</li>
-<li>Implement the password flow (login/callback/logout)</li>
+<li>Implement the <code>password</code> or the <code>authorization_code</code> flow (login/callback/logout)</li>
 </ul>
 <h2 id="example">Example</h2>
 <p>This example assumes you use a frontend technology (such as React, Vue, or whatever suits you) to render your pages and merely depicts a <code>protected backend</code></p>
@@ -470,7 +488,6 @@ Keycloak's private key.</p>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
 <span class="n">idp</span> <span class="o">=</span> <span class="n">FastAPIKeycloak</span><span class="p">(</span>
-    <span class="n">app</span><span class="o">=</span><span class="n">app</span><span class="p">,</span>
     <span class="n">server_url</span><span class="o">=</span><span class="s2">&quot;https://auth.some-domain.com/auth&quot;</span><span class="p">,</span>
     <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;some-client&quot;</span><span class="p">,</span>
     <span class="n">client_secret</span><span class="o">=</span><span class="s2">&quot;some-client-secret&quot;</span><span class="p">,</span>
@@ -478,14 +495,14 @@ Keycloak's private key.</p>
     <span class="n">realm</span><span class="o">=</span><span class="s2">&quot;some-realm-name&quot;</span><span class="p">,</span>
     <span class="n">callback_uri</span><span class="o">=</span><span class="s2">&quot;http://localhost:8081/callback&quot;</span>
 <span class="p">)</span>
+<span class="n">idp</span><span class="o">.</span><span class="n">add_swagger_config</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
 
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/premium&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;secured-endpoint&quot;</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">premium</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">OIDCUser</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">idp</span><span class="o">.</span><span class="n">get_current_user</span><span class="p">(</span><span class="n">required_roles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;premium&quot;</span><span class="p">]))):</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/admin&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">admin</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">OIDCUser</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">idp</span><span class="o">.</span><span class="n">get_current_user</span><span class="p">(</span><span class="n">required_roles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;admin&quot;</span><span class="p">]))):</span>
     <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Hi premium user </span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s1">&#39;</span>
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/user/roles&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;secured-endpoint&quot;</span><span class="p">])</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/user/roles&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">user_roles</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">OIDCUser</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">idp</span><span class="o">.</span><span class="n">get_current_user</span><span class="p">)):</span>
     <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">roles</span><span class="si">}</span><span class="s1">&#39;</span>
 

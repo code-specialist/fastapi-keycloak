@@ -302,6 +302,21 @@
   
 
     
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../apple-m1/" class="md-nav__link">
+        Known issues
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -349,7 +364,6 @@
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
 <span class="n">idp</span> <span class="o">=</span> <span class="n">FastAPIKeycloak</span><span class="p">(</span>
-    <span class="n">app</span><span class="o">=</span><span class="n">app</span><span class="p">,</span>
     <span class="n">server_url</span><span class="o">=</span><span class="s2">&quot;https://auth.some-domain.com/auth&quot;</span><span class="p">,</span>
     <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;some-client&quot;</span><span class="p">,</span>
     <span class="n">client_secret</span><span class="o">=</span><span class="s2">&quot;some-client-secret&quot;</span><span class="p">,</span>
@@ -357,6 +371,7 @@
     <span class="n">realm</span><span class="o">=</span><span class="s2">&quot;some-realm-name&quot;</span><span class="p">,</span>
     <span class="n">callback_uri</span><span class="o">=</span><span class="s2">&quot;http://localhost:8081/callback&quot;</span>
 <span class="p">)</span>
+<span class="n">idp</span><span class="o">.</span><span class="n">add_swagger_config</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
 
 
 <span class="c1"># Admin</span>
@@ -452,17 +467,12 @@
     <span class="k">return</span> <span class="n">idp</span><span class="o">.</span><span class="n">get_user_roles</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">)</span>
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/users/</span><span class="si">{user_id}</span><span class="s2">/roles&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;user-roles&quot;</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">get_user_roles</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">idp</span><span class="o">.</span><span class="n">get_user_roles</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">)</span>
-
-
 <span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/users/</span><span class="si">{user_id}</span><span class="s2">/roles&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;user-roles&quot;</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">delete_roles_from_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">roles</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="kc">None</span><span class="p">)):</span>
     <span class="k">return</span> <span class="n">idp</span><span class="o">.</span><span class="n">remove_user_roles</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span> <span class="n">roles</span><span class="o">=</span><span class="n">roles</span><span class="p">)</span>
 
 
-<span class="c1"># User Requests</span>
+<span class="c1"># Example User Requests</span>
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/protected&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;example-user-request&quot;</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">protected</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">OIDCUser</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">idp</span><span class="o">.</span><span class="n">get_current_user</span><span class="p">())):</span>
@@ -474,9 +484,9 @@
     <span class="k">return</span> <span class="n">user</span><span class="o">.</span><span class="n">roles</span>
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/company/edit&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;example-user-request&quot;</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">company_admin</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">OIDCUser</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">idp</span><span class="o">.</span><span class="n">get_current_user</span><span class="p">(</span><span class="n">required_roles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;company_admin&quot;</span><span class="p">]))):</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Hi company admin </span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s1">&#39;</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/admin&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;example-user-request&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">company_admin</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">OIDCUser</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">idp</span><span class="o">.</span><span class="n">get_current_user</span><span class="p">(</span><span class="n">required_roles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;admin&quot;</span><span class="p">]))):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Hi admin </span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s1">&#39;</span>
 
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/login&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;example-user-request&quot;</span><span class="p">])</span>

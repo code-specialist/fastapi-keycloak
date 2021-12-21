@@ -2,22 +2,32 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://docs.tebuto.com/</loc>
-         <lastmod>2021-12-20</lastmod>
+         <lastmod>2021-12-21</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.tebuto.com/apple-m1/</loc>
+         <lastmod>2021-12-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.tebuto.com/installation/</loc>
-         <lastmod>2021-12-20</lastmod>
+         <lastmod>2021-12-21</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.tebuto.com/keycloak_configuration/</loc>
+         <lastmod>2021-12-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.tebuto.com/quick-start/</loc>
-         <lastmod>2021-12-20</lastmod>
+         <lastmod>2021-12-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.tebuto.com/reference/</loc>
-         <lastmod>2021-12-20</lastmod>
+         <lastmod>2021-12-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
