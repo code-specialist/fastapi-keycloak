@@ -15,9 +15,11 @@ def read_description() -> str:
         return file.read()
 
 
+# FLIT
+
 setup(
     name='fastapi-keycloak',
-    packages=['fastapi-keycloak'],
+    packages=['fastapi_keycloak'],
     version='0.0.1a',
     license='apache-2.0',
     description='Keycloak API Client for integrating authentication and authorization with FastAPI',

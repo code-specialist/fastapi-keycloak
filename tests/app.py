@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import FastAPI, Depends, Query, Body
 from pydantic import SecretStr
 
-from fastapi_keycloak import FastAPIKeycloak, OIDCUser, UsernamePassword, HTTPMethod
+from fastapi_keycloak import FastAPIKeycloak, OIDCUser, UsernamePassword, HTTPMethod, KeycloakUser
 
 app = FastAPI()
 idp = FastAPIKeycloak(
@@ -60,6 +60,11 @@ def create_user(first_name: str, last_name: str, email: str, password: SecretStr
 @app.get("/user/{user_id}", tags=["user-management"])
 def get_user(user_id: str = None):
     return idp.get_user(user_id=user_id)
+
+
+@app.put("/user", tags=["user-management"])
+def update_user(user: KeycloakUser):
+    return idp.update_user(user=user)
 
 
 @app.delete("/user/{user_id}", tags=["user-management"])
