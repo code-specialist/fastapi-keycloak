@@ -116,10 +116,7 @@ if __name__ == '__main__':
 
 You may now use any of the [APIs exposed endpoints](reference.md) as everything is configured for testing all the features.
 
-After you call the `/login` endpoint of your app, you will be redirected to the login screen of Keycloak. We provided a sample user on the `Test` with the `realm-export.json`
-you may use to login: Username: `testuser`, password: `test`.
-
-You may open the Keycloak Frontend at [http://localhost:8085/auth](http://localhost:8085/auth) and create a user. To
+After you call the `/login` endpoint of your app, you will be redirected to the login screen of Keycloak. You may open the Keycloak Frontend at [http://localhost:8085/auth](http://localhost:8085/auth) and create a user. To
 log into your Keycloak instance, the username is `keycloakuser` and the password is `keycloakpassword` as described in the `docker-compose.yaml` above. 
 
 To utilize this fully you need a way to store the Access-Token provided by the callback route and append it to the preceding requests as `Authorization` Bearer.

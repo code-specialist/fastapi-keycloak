@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel, SecretStr
 
@@ -31,9 +31,9 @@ class KeycloakUser(BaseModel):
         enabled (bool):
         totp (bool):
         emailVerified (bool):
-        firstName (str):
-        lastName (str):
-        email (str):
+        firstName (Optional[str]):
+        lastName (Optional[str]):
+        email (Optional[str]):
         disableableCredentialTypes (List[str]):
         requiredActions (List[str]):
         notBefore (int):
@@ -48,9 +48,9 @@ class KeycloakUser(BaseModel):
     enabled: bool
     totp: bool
     emailVerified: bool
-    firstName: str
-    lastName: str
-    email: str
+    firstName: Optional[str]
+    lastName: Optional[str]
+    email: Optional[str]
     disableableCredentialTypes: List[str]
     requiredActions: List[str]
     notBefore: int
@@ -77,10 +77,10 @@ class OIDCUser(BaseModel):
         exp (int):
         scope (str):
         email_verified (bool):
-        name (str):
-        given_name (str):
-        family_name (str):
-        email (str):
+        name (Optional[str]):
+        given_name (Optional[str]):
+        family_name (Optional[str]):
+        email (Optional[str]):
         realm_access (dict):
 
     Notes:
@@ -89,13 +89,13 @@ class OIDCUser(BaseModel):
     sub: str
     iat: int
     exp: int
-    scope: str
+    scope: Optional[str]
     email_verified: bool
-    name: str
-    given_name: str
-    family_name: str
-    email: str
-    realm_access: dict
+    name: Optional[str]
+    given_name: Optional[str]
+    family_name: Optional[str]
+    email: Optional[str]
+    realm_access: Optional[dict]
 
     @property
     def roles(self) -> List[str]:

@@ -298,7 +298,7 @@ class FastAPIKeycloak:
         public_key = response.json()["public_key"]
         return f"-----BEGIN PUBLIC KEY-----\n{public_key}\n-----END PUBLIC KEY-----"
 
-    @result_or_error
+    @result_or_error()
     def add_user_roles(self, roles: List[str], user_id: str) -> dict:
         """ Adds roles to a specific user
 
@@ -319,7 +319,7 @@ class FastAPIKeycloak:
             method=HTTPMethod.POST
         )
 
-    @result_or_error
+    @result_or_error()
     def remove_user_roles(self, roles: List[str], user_id: str) -> dict:
         """ Removes roles from a specific user
 
@@ -408,7 +408,7 @@ class FastAPIKeycloak:
         """
         return self._admin_request(url=self.roles_uri, method=HTTPMethod.GET)
 
-    @result_or_error
+    @result_or_error()
     def delete_role(self, role_name: str) -> dict:
         """ Deletes a role on the realm
 
@@ -482,7 +482,7 @@ class FastAPIKeycloak:
         else:
             return response
 
-    @result_or_error
+    @result_or_error()
     def change_password(self, user_id: str, new_password: str) -> dict:
         """ Exchanges a users password.
 
@@ -502,7 +502,7 @@ class FastAPIKeycloak:
         credentials = {"temporary": False, "type": "password", "value": new_password}
         return self._admin_request(url=f'{self.users_uri}/{user_id}/reset-password', data=credentials, method=HTTPMethod.PUT)
 
-    @result_or_error
+    @result_or_error()
     def send_email_verification(self, user_id: str) -> dict:
         """ Sends the email to verify the email address
 
@@ -538,7 +538,7 @@ class FastAPIKeycloak:
             response = self._admin_request(url=f'{self.users_uri}/{user_id}', method=HTTPMethod.GET)
             return KeycloakUser(**response.json())
 
-    @result_or_error
+    @result_or_error()
     def delete_user(self, user_id: str) -> dict:
         """ Deletes an user
 

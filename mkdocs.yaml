@@ -1,5 +1,5 @@
 site_name: FastAPI Keycloak Integration
-site_url: https://docs.tebuto.com
+site_url: https://fastapi-keycloak.code-specialist.com/
 site_description: "Python Package: FastAPI Keycloak Integration"
 site_author: Jonas Scholl, Yannic Schröer
 repo_url: https://github.com/code-specialist/fastapi-keycloak
@@ -33,6 +33,7 @@ nav:
   - Introduction: ./index.md
   - Installation: ./installation.md
   - Quickstart: ./quick_start.md
+  - Keycloak Configuration: ./keycloak_configuration.md
   - Full example: ./full_example.md
   - API Reference: ./reference.md
   - Known issues: ./apple-m1.md

@@ -1,4 +1,5 @@
 from fastapi_keycloak.api import FastAPIKeycloak
-from fastapi_keycloak.model import OIDCUser, UsernamePassword, HTTPMethod
+from fastapi_keycloak.model import OIDCUser, UsernamePassword, HTTPMethod, KeycloakError, KeycloakUser, KeycloakToken, KeycloakRole, KeycloakIdentityProvider
 
-__all__ = [FastAPIKeycloak, OIDCUser, UsernamePassword, HTTPMethod]
+__all__ = [FastAPIKeycloak.__name__, OIDCUser.__name__, UsernamePassword.__name__, HTTPMethod.__name__, KeycloakError.__name__, KeycloakUser.__name__, KeycloakToken.__name__,
+           KeycloakRole.__name__, KeycloakIdentityProvider.__name__]
