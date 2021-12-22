@@ -13,7 +13,7 @@
         <meta name="author" content="Jonas Scholl, Yannic Schröer">
       
       
-        <link rel="canonical" href="https://docs.tebuto.com/quick_start/">
+        <link rel="canonical" href="https://fastapi-keycloak.code-specialist.com/quick_start/">
       
       <link rel="icon" href="../img/favicon.svg">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.6">
@@ -348,6 +348,21 @@
   
   
     <li class="md-nav__item">
+      <a href="../keycloak_configuration/" class="md-nav__link">
+        Keycloak Configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../full_example/" class="md-nav__link">
         Full example
       </a>
@@ -560,9 +575,7 @@ the docker compose file to bind the configuration.</p>
 </code></pre></div>
 <h2 id="4-usage">4. Usage</h2>
 <p>You may now use any of the <a href="../reference/">APIs exposed endpoints</a> as everything is configured for testing all the features.</p>
-<p>After you call the <code>/login</code> endpoint of your app, you will be redirected to the login screen of Keycloak. We provided a sample user on the <code>Test</code> with the <code>realm-export.json</code>
-you may use to login: Username: <code>testuser</code>, password: <code>test</code>.</p>
-<p>You may open the Keycloak Frontend at <a href="http://localhost:8085/auth">http://localhost:8085/auth</a> and create a user. To
+<p>After you call the <code>/login</code> endpoint of your app, you will be redirected to the login screen of Keycloak. You may open the Keycloak Frontend at <a href="http://localhost:8085/auth">http://localhost:8085/auth</a> and create a user. To
 log into your Keycloak instance, the username is <code>keycloakuser</code> and the password is <code>keycloakpassword</code> as described in the <code>docker-compose.yaml</code> above. </p>
 <p>To utilize this fully you need a way to store the Access-Token provided by the callback route and append it to the preceding requests as <code>Authorization</code> Bearer.</p>
                 
@@ -600,13 +613,13 @@ log into your Keycloak instance, the username is <code>keycloakuser</code> and t
       
       
         
-        <a href="../full_example/" class="md-footer__link md-footer__link--next" aria-label="Next: Full example" rel="next">
+        <a href="../keycloak_configuration/" class="md-footer__link md-footer__link--next" aria-label="Next: Keycloak Configuration" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Full example
+              Keycloak Configuration
             </div>
           </div>
           <div class="md-footer__button md-icon">

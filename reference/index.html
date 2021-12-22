@@ -13,7 +13,7 @@
         <meta name="author" content="Jonas Scholl, Yannic Schröer">
       
       
-        <link rel="canonical" href="https://docs.tebuto.com/reference/">
+        <link rel="canonical" href="https://fastapi-keycloak.code-specialist.com/reference/">
       
       <link rel="icon" href="../img/favicon.svg">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.6">
@@ -285,6 +285,21 @@
   
   
     <li class="md-nav__item">
+      <a href="../keycloak_configuration/" class="md-nav__link">
+        Keycloak Configuration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../full_example/" class="md-nav__link">
         Full example
       </a>
@@ -457,8 +472,22 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#fastapi_keycloak.api.FastAPIKeycloak.add_user_roles" class="md-nav__link">
+    add_user_roles()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#fastapi_keycloak.api.FastAPIKeycloak.admin_uri" class="md-nav__link">
     admin_uri()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.api.FastAPIKeycloak.change_password" class="md-nav__link">
+    change_password()
   </a>
   
 </li>
@@ -473,6 +502,20 @@
         <li class="md-nav__item">
   <a href="#fastapi_keycloak.api.FastAPIKeycloak.create_user" class="md-nav__link">
     create_user()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.api.FastAPIKeycloak.delete_role" class="md-nav__link">
+    delete_role()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.api.FastAPIKeycloak.delete_user" class="md-nav__link">
+    delete_user()
   </a>
   
 </li>
@@ -543,6 +586,20 @@
         <li class="md-nav__item">
   <a href="#fastapi_keycloak.api.FastAPIKeycloak.proxy" class="md-nav__link">
     proxy()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.api.FastAPIKeycloak.remove_user_roles" class="md-nav__link">
+    remove_user_roles()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.api.FastAPIKeycloak.send_email_verification" class="md-nav__link">
+    send_email_verification()
   </a>
   
 </li>
@@ -846,8 +903,22 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#fastapi_keycloak.api.FastAPIKeycloak.add_user_roles" class="md-nav__link">
+    add_user_roles()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#fastapi_keycloak.api.FastAPIKeycloak.admin_uri" class="md-nav__link">
     admin_uri()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.api.FastAPIKeycloak.change_password" class="md-nav__link">
+    change_password()
   </a>
   
 </li>
@@ -862,6 +933,20 @@
         <li class="md-nav__item">
   <a href="#fastapi_keycloak.api.FastAPIKeycloak.create_user" class="md-nav__link">
     create_user()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.api.FastAPIKeycloak.delete_role" class="md-nav__link">
+    delete_role()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.api.FastAPIKeycloak.delete_user" class="md-nav__link">
+    delete_user()
   </a>
   
 </li>
@@ -932,6 +1017,20 @@
         <li class="md-nav__item">
   <a href="#fastapi_keycloak.api.FastAPIKeycloak.proxy" class="md-nav__link">
     proxy()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.api.FastAPIKeycloak.remove_user_roles" class="md-nav__link">
+    remove_user_roles()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.api.FastAPIKeycloak.send_email_verification" class="md-nav__link">
+    send_email_verification()
   </a>
   
 </li>
@@ -1715,6 +1814,104 @@ Enabling Swagger ui users to perform actions they usually need the client creden
 
 
 
+  <div class="doc doc-object doc-method">
+
+
+
+<h2 id="fastapi_keycloak.api.FastAPIKeycloak.add_user_roles" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">add_user_roles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">roles</span><span class="p">,</span> <span class="n">user_id</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Adds roles to a specific user</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>roles</code></td>
+        <td><code>List[str]</code></td>
+        <td><p>Roles to add (name)</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>user_id</code></td>
+        <td><code>str</code></td>
+        <td><p>ID of the user the roles should be added to</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>dict</code></td>
+      <td><p>Proxied response payload</p></td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Exceptions:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>KeycloakError</code></td>
+        <td><p>If the resulting response is not a successful HTTP-Code (&gt;299)</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>fastapi_keycloak/api.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@result_or_error</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">add_user_roles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">roles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Adds roles to a specific user</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        roles List[str]: Roles to add (name)</span>
+<span class="sd">        user_id str: ID of the user the roles should be added to</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: Proxied response payload</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        KeycloakError: If the resulting response is not a successful HTTP-Code (&gt;299)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">keycloak_roles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_roles</span><span class="p">(</span><span class="n">roles</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_admin_request</span><span class="p">(</span>
+        <span class="n">url</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">users_uri</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s1">/role-mappings/realm&#39;</span><span class="p">,</span>
+        <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">role</span><span class="o">.</span><span class="vm">__dict__</span> <span class="k">for</span> <span class="n">role</span> <span class="ow">in</span> <span class="n">keycloak_roles</span><span class="p">],</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">HTTPMethod</span><span class="o">.</span><span class="n">POST</span>
+    <span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
 
   <div class="doc doc-object doc-method">
 
@@ -1741,6 +1938,109 @@ Enabling Swagger ui users to perform actions they usually need the client creden
 
   </div>
 
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h2 id="fastapi_keycloak.api.FastAPIKeycloak.change_password" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">change_password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">new_password</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Exchanges a users password.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>user_id</code></td>
+        <td><code>str</code></td>
+        <td><p>The user ID of interest</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>new_password</code></td>
+        <td><code>str</code></td>
+        <td><p>The new password</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>dict</code></td>
+      <td><p>Proxied response payload</p></td>
+    </tr>
+  </tbody>
+</table>      <div class="admonition notes">
+<p class="admonition-title">Notes</p>
+<ul>
+<li>Possibly should be extended by an old password check</li>
+</ul>
+</div>
+
+<p><strong>Exceptions:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>KeycloakError</code></td>
+        <td><p>If the resulting response is not a successful HTTP-Code (&gt;299)</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>fastapi_keycloak/api.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@result_or_error</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">change_password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">new_password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Exchanges a users password.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        user_id (str): The user ID of interest</span>
+<span class="sd">        new_password (str): The new password</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: Proxied response payload</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        - Possibly should be extended by an old password check</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        KeycloakError: If the resulting response is not a successful HTTP-Code (&gt;299)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">credentials</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;temporary&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;password&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">new_password</span><span class="p">}</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_admin_request</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">users_uri</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s1">/reset-password&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">credentials</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">HTTPMethod</span><span class="o">.</span><span class="n">PUT</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
 
 
 
@@ -2013,6 +2313,178 @@ Enabling Swagger ui users to perform actions they usually need the client creden
   </div>
 
 
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h2 id="fastapi_keycloak.api.FastAPIKeycloak.delete_role" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">delete_role</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">role_name</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Deletes a role on the realm</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>role_name</code></td>
+        <td><code>str</code></td>
+        <td><p>The role (name) to delte</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>dict</code></td>
+      <td><p>Proxied response payload</p></td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Exceptions:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>KeycloakError</code></td>
+        <td><p>If the resulting response is not a successful HTTP-Code (&gt;299)</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>fastapi_keycloak/api.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@result_or_error</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">delete_role</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">role_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Deletes a role on the realm</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        role_name (str): The role (name) to delte</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: Proxied response payload</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        KeycloakError: If the resulting response is not a successful HTTP-Code (&gt;299)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_admin_request</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">roles_uri</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">role_name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">HTTPMethod</span><span class="o">.</span><span class="n">DELETE</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h2 id="fastapi_keycloak.api.FastAPIKeycloak.delete_user" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">delete_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Deletes an user</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>user_id</code></td>
+        <td><code>str</code></td>
+        <td><p>The user ID of interest</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>dict</code></td>
+      <td><p>Proxied response payload</p></td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Exceptions:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>KeycloakError</code></td>
+        <td><p>If the resulting response is not a successful HTTP-Code (&gt;299)</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>fastapi_keycloak/api.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@result_or_error</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">delete_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Deletes an user</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        user_id (str): The user ID of interest</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: Proxied response payload</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        KeycloakError: If the resulting response is not a successful HTTP-Code (&gt;299)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_admin_request</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">users_uri</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">HTTPMethod</span><span class="o">.</span><span class="n">DELETE</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
 
 
 
@@ -2876,6 +3348,190 @@ The callback will also create a session_state and code query parameter that can 
 
 
 
+  <div class="doc doc-object doc-method">
+
+
+
+<h2 id="fastapi_keycloak.api.FastAPIKeycloak.remove_user_roles" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">remove_user_roles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">roles</span><span class="p">,</span> <span class="n">user_id</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Removes roles from a specific user</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>roles</code></td>
+        <td><code>List[str]</code></td>
+        <td><p>Roles to remove (name)</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>user_id</code></td>
+        <td><code>str</code></td>
+        <td><p>ID of the user the roles should be removed from</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>dict</code></td>
+      <td><p>Proxied response payload</p></td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Exceptions:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>KeycloakError</code></td>
+        <td><p>If the resulting response is not a successful HTTP-Code (&gt;299)</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>fastapi_keycloak/api.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@result_or_error</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">remove_user_roles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">roles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Removes roles from a specific user</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        roles List[str]: Roles to remove (name)</span>
+<span class="sd">        user_id str: ID of the user the roles should be removed from</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: Proxied response payload</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        KeycloakError: If the resulting response is not a successful HTTP-Code (&gt;299)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">keycloak_roles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_roles</span><span class="p">(</span><span class="n">roles</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_admin_request</span><span class="p">(</span>
+        <span class="n">url</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">users_uri</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s1">/role-mappings/realm&#39;</span><span class="p">,</span>
+        <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">role</span><span class="o">.</span><span class="vm">__dict__</span> <span class="k">for</span> <span class="n">role</span> <span class="ow">in</span> <span class="n">keycloak_roles</span><span class="p">],</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">HTTPMethod</span><span class="o">.</span><span class="n">DELETE</span>
+    <span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h2 id="fastapi_keycloak.api.FastAPIKeycloak.send_email_verification" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">send_email_verification</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Sends the email to verify the email address</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>user_id</code></td>
+        <td><code>str</code></td>
+        <td><p>The user ID of interest</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>dict</code></td>
+      <td><p>Proxied response payload</p></td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Exceptions:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>KeycloakError</code></td>
+        <td><p>If the resulting response is not a successful HTTP-Code (&gt;299)</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>fastapi_keycloak/api.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@result_or_error</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">send_email_verification</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Sends the email to verify the email address</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        user_id (str): The user ID of interest</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: Proxied response payload</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        KeycloakError: If the resulting response is not a successful HTTP-Code (&gt;299)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_admin_request</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">users_uri</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s1">/send-verify-email&#39;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">HTTPMethod</span><span class="o">.</span><span class="n">PUT</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
 
 
   <div class="doc doc-object doc-method">
@@ -3608,17 +4264,17 @@ KeycloakUser            (<span title="pydantic.main.BaseModel">BaseModel</span>)
       </tr>
       <tr>
         <td><code>firstName</code></td>
-        <td><code>str</code></td>
+        <td><code>Optional[str]</code></td>
         <td></td>
       </tr>
       <tr>
         <td><code>lastName</code></td>
-        <td><code>str</code></td>
+        <td><code>Optional[str]</code></td>
         <td></td>
       </tr>
       <tr>
         <td><code>email</code></td>
-        <td><code>str</code></td>
+        <td><code>Optional[str]</code></td>
         <td></td>
       </tr>
       <tr>
@@ -3753,22 +4409,22 @@ OIDCUser            (<span title="pydantic.main.BaseModel">BaseModel</span>)
       </tr>
       <tr>
         <td><code>name</code></td>
-        <td><code>str</code></td>
+        <td><code>Optional[str]</code></td>
         <td></td>
       </tr>
       <tr>
         <td><code>given_name</code></td>
-        <td><code>str</code></td>
+        <td><code>Optional[str]</code></td>
         <td></td>
       </tr>
       <tr>
         <td><code>family_name</code></td>
-        <td><code>str</code></td>
+        <td><code>Optional[str]</code></td>
         <td></td>
       </tr>
       <tr>
         <td><code>email</code></td>
-        <td><code>str</code></td>
+        <td><code>Optional[str]</code></td>
         <td></td>
       </tr>
       <tr>
