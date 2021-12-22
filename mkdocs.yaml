@@ -1,0 +1,82 @@
+site_name: FastAPI Keycloak Integration
+site_url: https://fastapi-keycloak.code-specialist.com/
+site_description: "Python Package: FastAPI Keycloak Integration"
+site_author: Jonas Scholl, Yannic Schröer
+repo_url: https://github.com/code-specialist/fastapi-keycloak
+repo_name: fastapi-keycloak
+
+theme:
+  name: material
+  locale: en
+  highlightjs: true
+  favicon: ./img/favicon.svg
+  logo: ./img/logo.png
+  hljs_languages:
+    - yaml
+    - python
+    - bash
+    - shell
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+  font:
+    text: Nunito Sans
+    code: IBM Plex Mono
+
+nav:
+  - Introduction: ./index.md
+  - Installation: ./installation.md
+  - Quickstart: ./quick_start.md
+  - Keycloak Configuration: ./keycloak_configuration.md
+  - Full example: ./full_example.md
+  - API Reference: ./reference.md
+  - Known issues: ./apple-m1.md
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.snippets
+  - toc:
+      permalink:
+  - admonition
+  - attr_list
+  - def_list
+  - abbr
+  - pymdownx.snippets
+
+extra_css:
+  - ./css/styles.css
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          rendering:
+            show_source: true
+          setup_commands:
+            - import sys
+            - sys.path.append("fastapi_keycloak")
+      custom_templates: templates
+
+extra:
+  social:
+    - icon: fontawesome/brands/instagram
+      link: https://www.instagram.com/specialist_code/
+      name: Code Specialist on Instagram
+    - icon: fontawesome/brands/youtube
+      link: https://www.youtube.com/channel/UCjdmChf65sGfOqWoygzBTyQ
+      name: Code Specialist on YouTube
+    - icon: fontawesome/brands/github
+      link: https://github.com/code-specialist
+      name: Code Specialist on GitHub
+
+copyright: Copyright &copy; 2021 Code Specialist | <a href="https://code-specialist.com/legal-notice/">Legal Notice</a>
