@@ -7,15 +7,15 @@ import uvicorn
 from fastapi import FastAPI, Depends, Query, Body
 from pydantic import SecretStr
 
-from fastapi_keycloak import FastAPIKeycloak, OIDCUser, UsernamePassword, HTTPMethod
+from fastapi_keycloak import FastAPIKeycloak, OIDCUser, UsernamePassword, HTTPMethod, KeycloakUser
 
 app = FastAPI()
 idp = FastAPIKeycloak(
-    server_url="https://auth.some-domain.com/auth",
-    client_id="some-client",
-    client_secret="some-client-secret",
-    admin_client_secret="admin-cli-secret",
-    realm="some-realm-name",
+    server_url="http://localhost:8085/auth",
+    client_id="test-client",
+    client_secret="GzgACcJzhzQ4j8kWhmhazt7WSdxDVUyE",
+    admin_client_secret="BIcczGsZ6I8W5zf0rZg5qSexlloQLPKB",
+    realm="Test",
     callback_uri="http://localhost:8081/callback"
 )
 idp.add_swagger_config(app)
@@ -63,6 +63,11 @@ def create_user(first_name: str, last_name: str, email: str, password: SecretStr
 @app.get("/user/{user_id}", tags=["user-management"])
 def get_user(user_id: str = None):
     return idp.get_user(user_id=user_id)
+
+
+@app.put("/user", tags=["user-management"])
+def update_user(user: KeycloakUser):
+    return idp.update_user(user=user)
 
 
 @app.delete("/user/{user_id}", tags=["user-management"])
@@ -159,5 +164,5 @@ def logout():
 
 
 if __name__ == '__main__':
-    uvicorn.run('example_app:app', host="127.0.0.1", port=8081)
+    uvicorn.run('app:app', host="127.0.0.1", port=8081)
 ```
