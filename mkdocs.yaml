@@ -31,7 +31,6 @@ theme:
 
 nav:
   - Introduction: ./index.md
-  - Installation: ./installation.md
   - Quickstart: ./quick_start.md
   - Keycloak Configuration: ./keycloak_configuration.md
   - Full example: ./full_example.md
