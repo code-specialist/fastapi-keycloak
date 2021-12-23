@@ -612,6 +612,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#fastapi_keycloak.api.FastAPIKeycloak.update_user" class="md-nav__link">
+    update_user()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#fastapi_keycloak.api.FastAPIKeycloak.user_login" class="md-nav__link">
     user_login()
   </a>
@@ -1038,6 +1045,13 @@
         <li class="md-nav__item">
   <a href="#fastapi_keycloak.api.FastAPIKeycloak.token_is_valid" class="md-nav__link">
     token_is_valid()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.api.FastAPIKeycloak.update_user" class="md-nav__link">
+    update_user()
   </a>
   
 </li>
@@ -1945,7 +1959,7 @@ Enabling Swagger ui users to perform actions they usually need the client creden
 
 
 <h2 id="fastapi_keycloak.api.FastAPIKeycloak.change_password" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">change_password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">new_password</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">change_password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">new_password</span><span class="p">,</span> <span class="n">temporary</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
 
 </h2>
@@ -1965,6 +1979,12 @@ Enabling Swagger ui users to perform actions they usually need the client creden
     </tr>
   </thead>
   <tbody>
+      <tr>
+        <td><code>temporary</code></td>
+        <td><code>bool</code></td>
+        <td><p>If True, the password must be changed on the first login</p></td>
+        <td><code>False</code></td>
+      </tr>
       <tr>
         <td><code>user_id</code></td>
         <td><code>str</code></td>
@@ -2018,10 +2038,11 @@ Enabling Swagger ui users to perform actions they usually need the client creden
         <details class="quote">
           <summary>Source code in <code>fastapi_keycloak/api.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="nd">@result_or_error</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">change_password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">new_password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">change_password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">new_password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">temporary</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot; Exchanges a users password.</span>
 
 <span class="sd">    Args:</span>
+<span class="sd">        temporary (bool): If True, the password must be changed on the first login</span>
 <span class="sd">        user_id (str): The user ID of interest</span>
 <span class="sd">        new_password (str): The new password</span>
 
@@ -2034,7 +2055,7 @@ Enabling Swagger ui users to perform actions they usually need the client creden
 <span class="sd">    Raises:</span>
 <span class="sd">        KeycloakError: If the resulting response is not a successful HTTP-Code (&gt;299)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">credentials</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;temporary&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;password&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">new_password</span><span class="p">}</span>
+    <span class="n">credentials</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;temporary&quot;</span><span class="p">:</span> <span class="n">temporary</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;password&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">new_password</span><span class="p">}</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_admin_request</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">users_uri</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s1">/reset-password&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">credentials</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">HTTPMethod</span><span class="o">.</span><span class="n">PUT</span><span class="p">)</span>
 </code></pre></div>
         </details>
@@ -3617,6 +3638,107 @@ The callback will also create a session_state and code query parameter that can 
 
 
 
+<h2 id="fastapi_keycloak.api.FastAPIKeycloak.update_user" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">update_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span></code>
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Updates a user. Requires the whole object.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>user</code></td>
+        <td><code>KeycloakUser</code></td>
+        <td><p>The (new) user object</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>KeycloakUser</code></td>
+      <td><p>The updated user</p></td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Exceptions:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>KeycloakError</code></td>
+        <td><p>If the resulting response is not a successful HTTP-Code (&gt;299)</p></td>
+      </tr>
+  </tbody>
+</table>      <div class="admonition notes">
+<p class="admonition-title">Notes</p>
+<ul>
+<li>You may alter any aspect of the user object, also the requiredActions for instance. There is not explicit function for updating those as it is a user update in
+  essence</li>
+</ul>
+</div>
+
+        <details class="quote">
+          <summary>Source code in <code>fastapi_keycloak/api.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="nd">@result_or_error</span><span class="p">(</span><span class="n">response_model</span><span class="o">=</span><span class="n">KeycloakUser</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">update_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">KeycloakUser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Updates a user. Requires the whole object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        user (KeycloakUser): The (new) user object</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        KeycloakUser: The updated user</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        KeycloakError: If the resulting response is not a successful HTTP-Code (&gt;299)</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        - You may alter any aspect of the user object, also the requiredActions for instance. There is not explicit function for updating those as it is a user update in</span>
+<span class="sd">          essence</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_admin_request</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">users_uri</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">HTTPMethod</span><span class="o">.</span><span class="n">PUT</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">204</span><span class="p">:</span>  <span class="c1"># Update successful</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_user</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">response</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
 <h2 id="fastapi_keycloak.api.FastAPIKeycloak.user_login" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">user_login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span></code>
 
@@ -3625,7 +3747,7 @@ The callback will also create a session_state and code query parameter that can 
 
     <div class="doc doc-contents ">
 
-      <p>Models the password OAuth2 flow. Exchanges username and password for an access token.</p>
+      <p>Models the password OAuth2 flow. Exchanges username and password for an access token. Will raise detailed errors if login fails due to requiredActions</p>
 
 <p><strong>Parameters:</strong></p>
 <table>
@@ -3677,16 +3799,50 @@ The callback will also create a session_state and code query parameter that can 
   </thead>
   <tbody>
       <tr>
+        <td><code>HTTPException</code></td>
+        <td><p>If the credentials did not match any user</p></td>
+      </tr>
+      <tr>
+        <td><code>MandatoryActionException</code></td>
+        <td><p>If the login is not possible due to mandatory actions</p></td>
+      </tr>
+      <tr>
         <td><code>KeycloakError</code></td>
-        <td><p>If the resulting response is not a successful HTTP-Code (&gt;299)</p></td>
+        <td><p>If the resulting response is not a successful HTTP-Code (&gt;299, != 400, != 401)</p></td>
+      </tr>
+      <tr>
+        <td><code>UpdateUserLocaleException</code></td>
+        <td><p>If the credentials we're correct but the has requiredActions of which the first one is to update his locale</p></td>
+      </tr>
+      <tr>
+        <td><code>ConfigureTOTPException</code></td>
+        <td><p>If the credentials we're correct but the has requiredActions of which the first one is to configure TOTP</p></td>
+      </tr>
+      <tr>
+        <td><code>VerifyEmailException</code></td>
+        <td><p>If the credentials we're correct but the has requiredActions of which the first one is to verify his email</p></td>
+      </tr>
+      <tr>
+        <td><code>UpdatePasswordException</code></td>
+        <td><p>If the credentials we're correct but the has requiredActions of which the first one is to update his password</p></td>
+      </tr>
+      <tr>
+        <td><code>UpdateProfileException</code></td>
+        <td><p>If the credentials we're correct but the has requiredActions of which the first one is to update his profile</p></td>
       </tr>
   </tbody>
-</table>
+</table>      <div class="admonition notes">
+<p class="admonition-title">Notes</p>
+<ul>
+<li>To avoid calling this multiple times, you may want to check all requiredActions of the user if it fails due to a (sub)instance of an MandatoryActionException</li>
+</ul>
+</div>
+
         <details class="quote">
           <summary>Source code in <code>fastapi_keycloak/api.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="nd">@result_or_error</span><span class="p">(</span><span class="n">response_model</span><span class="o">=</span><span class="n">KeycloakToken</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">user_login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KeycloakToken</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot; Models the password OAuth2 flow. Exchanges username and password for an access token.</span>
+    <span class="sd">&quot;&quot;&quot; Models the password OAuth2 flow. Exchanges username and password for an access token. Will raise detailed errors if login fails due to requiredActions</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        username (str): Username used for login</span>
@@ -3696,7 +3852,17 @@ The callback will also create a session_state and code query parameter that can 
 <span class="sd">        KeycloakToken: If the exchange succeeds</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">        KeycloakError: If the resulting response is not a successful HTTP-Code (&gt;299)</span>
+<span class="sd">        HTTPException: If the credentials did not match any user</span>
+<span class="sd">        MandatoryActionException: If the login is not possible due to mandatory actions</span>
+<span class="sd">        KeycloakError: If the resulting response is not a successful HTTP-Code (&gt;299, != 400, != 401)</span>
+<span class="sd">        UpdateUserLocaleException: If the credentials we&#39;re correct but the has requiredActions of which the first one is to update his locale</span>
+<span class="sd">        ConfigureTOTPException: If the credentials we&#39;re correct but the has requiredActions of which the first one is to configure TOTP</span>
+<span class="sd">        VerifyEmailException: If the credentials we&#39;re correct but the has requiredActions of which the first one is to verify his email</span>
+<span class="sd">        UpdatePasswordException: If the credentials we&#39;re correct but the has requiredActions of which the first one is to update his password</span>
+<span class="sd">        UpdateProfileException: If the credentials we&#39;re correct but the has requiredActions of which the first one is to update his profile</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        - To avoid calling this multiple times, you may want to check all requiredActions of the user if it fails due to a (sub)instance of an MandatoryActionException</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/x-www-form-urlencoded&quot;</span>
@@ -3709,6 +3875,24 @@ The callback will also create a session_state and code query parameter that can 
         <span class="s2">&quot;grant_type&quot;</span><span class="p">:</span> <span class="s2">&quot;password&quot;</span>
     <span class="p">}</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">token_uri</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">401</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">401</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Invalid user credentials&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">400</span><span class="p">:</span>
+        <span class="n">user</span><span class="p">:</span> <span class="n">KeycloakUser</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_user</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;username=</span><span class="si">{</span><span class="n">username</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">requiredActions</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">reason</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">requiredActions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">exception</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;update_user_locale&quot;</span><span class="p">:</span> <span class="n">UpdateUserLocaleException</span><span class="p">(),</span>
+                <span class="s2">&quot;CONFIGURE_TOTP&quot;</span><span class="p">:</span> <span class="n">ConfigureTOTPException</span><span class="p">(),</span>
+                <span class="s2">&quot;VERIFY_EMAIL&quot;</span><span class="p">:</span> <span class="n">VerifyEmailException</span><span class="p">(),</span>
+                <span class="s2">&quot;UPDATE_PASSWORD&quot;</span><span class="p">:</span> <span class="n">UpdatePasswordException</span><span class="p">(),</span>
+                <span class="s2">&quot;UPDATE_PROFILE&quot;</span><span class="p">:</span> <span class="n">UpdateProfileException</span><span class="p">(),</span>
+            <span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="n">reason</span><span class="p">,</span>  <span class="c1"># Try to return the matching exception</span>
+                <span class="c1"># On custom or unknown actions return a MandatoryActionException by default</span>
+                <span class="n">MandatoryActionException</span><span class="p">(</span><span class="n">detail</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;This user can&#39;t login until the following action has been resolved: </span><span class="si">{</span><span class="n">reason</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="n">exception</span>
     <span class="k">return</span> <span class="n">response</span>
 </code></pre></div>
         </details>
