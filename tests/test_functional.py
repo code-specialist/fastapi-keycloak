@@ -4,13 +4,29 @@ import pytest as pytest
 from fastapi import HTTPException
 
 from fastapi_keycloak import KeycloakError
+from fastapi_keycloak.exceptions import VerifyEmailException, UpdateUserLocaleException, ConfigureTOTPException, UpdatePasswordException, UpdateProfileException
 from fastapi_keycloak.model import KeycloakUser, KeycloakRole, KeycloakToken, OIDCUser
 from tests import BaseTestClass
+
+TEST_PASSWORD = "test-password"
 
 
 class TestAPIFunctional(BaseTestClass):
 
-    def test_functional_a(self, idp):
+    @pytest.fixture
+    def user(self, idp):
+        return idp.create_user(
+            first_name="test",
+            last_name="user",
+            username="user@code-specialist.com",
+            email="user@code-specialist.com",
+            password=TEST_PASSWORD,
+            enabled=True,
+            send_email_verification=False
+        )
+
+    @pytest.fixture()
+    def users(self, idp):
         assert idp.get_all_users() == []  # No users yet
 
         # Create some test users
@@ -19,7 +35,7 @@ class TestAPIFunctional(BaseTestClass):
             last_name="user",
             username="testuser_alice@code-specialist.com",
             email="testuser_alice@code-specialist.com",
-            password="test-password",
+            password=TEST_PASSWORD,
             enabled=True,
             send_email_verification=False
         )
@@ -33,7 +49,7 @@ class TestAPIFunctional(BaseTestClass):
                 last_name="user",
                 username="testuser_alice@code-specialist.com",
                 email="testuser_alice@code-specialist.com",
-                password="test-password",
+                password=TEST_PASSWORD,
                 enabled=True,
                 send_email_verification=False
             )
@@ -44,12 +60,16 @@ class TestAPIFunctional(BaseTestClass):
             last_name="user",
             username="testuser_bob@code-specialist.com",
             email="testuser_bob@code-specialist.com",
-            password="test-password",
+            password=TEST_PASSWORD,
             enabled=True,
             send_email_verification=False
         )
         assert isinstance(user_bob, KeycloakUser)
         assert len(idp.get_all_users()) == 2
+        return user_alice, user_bob
+
+    def test_roles(self, idp, users):
+        user_alice, user_bob = users
 
         # Check the roles
         user_alice_roles = idp.get_user_roles(user_id=user_alice.id)
@@ -109,9 +129,9 @@ class TestAPIFunctional(BaseTestClass):
             assert role.name in ["default-roles-test", test_role_saturn.name, test_role_mars.name]
 
         # Exchange the details for access tokens
-        keycloak_token_alice: KeycloakToken = idp.user_login(username=user_alice.username, password="test-password")
+        keycloak_token_alice: KeycloakToken = idp.user_login(username=user_alice.username, password=TEST_PASSWORD)
         assert idp.token_is_valid(keycloak_token_alice.access_token)
-        keycloak_token_bob: KeycloakToken = idp.user_login(username=user_bob.username, password="test-password")
+        keycloak_token_bob: KeycloakToken = idp.user_login(username=user_bob.username, password=TEST_PASSWORD)
         assert idp.token_is_valid(keycloak_token_bob.access_token)
 
         # Check get_current_user Alice
@@ -174,3 +194,29 @@ class TestAPIFunctional(BaseTestClass):
         idp.delete_role(role_name=test_role_mars.name)
         idp.delete_user(user_id=user_alice.id)
         idp.delete_user(user_id=user_bob.id)
+
+    @pytest.mark.parametrize("action, exception", [
+        ("update_user_locale", UpdateUserLocaleException),
+        ("CONFIGURE_TOTP", ConfigureTOTPException),
+        ("VERIFY_EMAIL", VerifyEmailException),
+        ("UPDATE_PASSWORD", UpdatePasswordException),
+        ("UPDATE_PROFILE", UpdateProfileException),
+    ])
+    def test_login_exceptions(self, idp, action, exception, user):
+
+        # Get access tokens for the users
+        access_token = idp.user_login(username=user.username, password=TEST_PASSWORD)
+        assert access_token
+
+        user.requiredActions.append(action)  # Add an action
+        user: KeycloakUser = idp.update_user(user=user)  # Save the change
+
+        with pytest.raises(exception):  # Expect the login to fail due to the verify email action
+            idp.user_login(username=user.username, password=TEST_PASSWORD)
+
+        user.requiredActions.remove(action)  # Remove the action
+        user: KeycloakUser = idp.update_user(user=user)  # Save the change
+        assert idp.user_login(username=user.username, password=TEST_PASSWORD)  # Login possible again
+
+        # Clean up
+        idp.delete_user(user_id=user.id)

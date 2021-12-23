@@ -10,7 +10,7 @@ from fastapi_keycloak.model import KeycloakRole
 from tests import BaseTestClass
 
 
-class TestAPIUnit(BaseTestClass):
+class TestAPIIntegration(BaseTestClass):
 
     def test_properties(self, idp):
         assert idp.public_key

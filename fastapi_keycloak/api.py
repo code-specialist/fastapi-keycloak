@@ -13,7 +13,8 @@ from jose.exceptions import JWTClaimsError
 from pydantic import BaseModel
 from requests import Response
 
-from fastapi_keycloak.exceptions import KeycloakError
+from fastapi_keycloak.exceptions import KeycloakError, MandatoryActionException, UpdateUserLocaleException, ConfigureTOTPException, VerifyEmailException, \
+    UpdateProfileException, UpdatePasswordException
 from fastapi_keycloak.model import HTTPMethod, KeycloakUser, OIDCUser, KeycloakToken, KeycloakRole, KeycloakIdentityProvider
 
 
@@ -483,10 +484,11 @@ class FastAPIKeycloak:
             return response
 
     @result_or_error()
-    def change_password(self, user_id: str, new_password: str) -> dict:
+    def change_password(self, user_id: str, new_password: str, temporary: bool = False) -> dict:
         """ Exchanges a users password.
 
         Args:
+            temporary (bool): If True, the password must be changed on the first login
             user_id (str): The user ID of interest
             new_password (str): The new password
 
@@ -499,7 +501,7 @@ class FastAPIKeycloak:
         Raises:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
-        credentials = {"temporary": False, "type": "password", "value": new_password}
+        credentials = {"temporary": temporary, "type": "password", "value": new_password}
         return self._admin_request(url=f'{self.users_uri}/{user_id}/reset-password', data=credentials, method=HTTPMethod.PUT)
 
     @result_or_error()
@@ -537,6 +539,28 @@ class FastAPIKeycloak:
         else:
             response = self._admin_request(url=f'{self.users_uri}/{user_id}', method=HTTPMethod.GET)
             return KeycloakUser(**response.json())
+
+    @result_or_error(response_model=KeycloakUser)
+    def update_user(self, user: KeycloakUser):
+        """ Updates a user. Requires the whole object.
+
+        Args:
+            user (KeycloakUser): The (new) user object
+
+        Returns:
+            KeycloakUser: The updated user
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
+
+        Notes:
+            - You may alter any aspect of the user object, also the requiredActions for instance. There is not explicit function for updating those as it is a user update in
+              essence
+        """
+        response = self._admin_request(url=f'{self.users_uri}/{user.id}', data=user.__dict__, method=HTTPMethod.PUT)
+        if response.status_code == 204:  # Update successful
+            return self.get_user(user_id=user.id)
+        return response
 
     @result_or_error()
     def delete_user(self, user_id: str) -> dict:
@@ -580,7 +604,7 @@ class FastAPIKeycloak:
 
     @result_or_error(response_model=KeycloakToken)
     def user_login(self, username: str, password: str) -> KeycloakToken:
-        """ Models the password OAuth2 flow. Exchanges username and password for an access token.
+        """ Models the password OAuth2 flow. Exchanges username and password for an access token. Will raise detailed errors if login fails due to requiredActions
 
         Args:
             username (str): Username used for login
@@ -590,7 +614,17 @@ class FastAPIKeycloak:
             KeycloakToken: If the exchange succeeds
 
         Raises:
-            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
+            HTTPException: If the credentials did not match any user
+            MandatoryActionException: If the login is not possible due to mandatory actions
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299, != 400, != 401)
+            UpdateUserLocaleException: If the credentials we're correct but the has requiredActions of which the first one is to update his locale
+            ConfigureTOTPException: If the credentials we're correct but the has requiredActions of which the first one is to configure TOTP
+            VerifyEmailException: If the credentials we're correct but the has requiredActions of which the first one is to verify his email
+            UpdatePasswordException: If the credentials we're correct but the has requiredActions of which the first one is to update his password
+            UpdateProfileException: If the credentials we're correct but the has requiredActions of which the first one is to update his profile
+
+        Notes:
+            - To avoid calling this multiple times, you may want to check all requiredActions of the user if it fails due to a (sub)instance of an MandatoryActionException
         """
         headers = {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -603,6 +637,24 @@ class FastAPIKeycloak:
             "grant_type": "password"
         }
         response = requests.post(url=self.token_uri, headers=headers, data=data)
+        if response.status_code == 401:
+            raise HTTPException(status_code=401, detail="Invalid user credentials")
+        if response.status_code == 400:
+            user: KeycloakUser = self.get_user(query=f'username={username}')
+            if len(user.requiredActions) > 0:
+                reason = user.requiredActions[0]
+                exception = {
+                    "update_user_locale": UpdateUserLocaleException(),
+                    "CONFIGURE_TOTP": ConfigureTOTPException(),
+                    "VERIFY_EMAIL": VerifyEmailException(),
+                    "UPDATE_PASSWORD": UpdatePasswordException(),
+                    "UPDATE_PROFILE": UpdateProfileException(),
+                }.get(
+                    reason,  # Try to return the matching exception
+                    # On custom or unknown actions return a MandatoryActionException by default
+                    MandatoryActionException(detail=f"This user can't login until the following action has been resolved: {reason}")
+                )
+                raise exception
         return response
 
     @result_or_error(response_model=KeycloakToken)
