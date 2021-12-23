@@ -255,21 +255,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../installation/" class="md-nav__link">
-        Installation
-      </a>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../quick_start/" class="md-nav__link">
         Quickstart
       </a>
@@ -294,9 +279,55 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Keycloak Configuration
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         Keycloak Configuration
       </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-new-realm" class="md-nav__link">
+    Create a new realm
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-new-client" class="md-nav__link">
+    Create a new client
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modify-the-admin-cli-client" class="md-nav__link">
+    Modify the admin-cli client
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -368,6 +399,35 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-new-realm" class="md-nav__link">
+    Create a new realm
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-new-client" class="md-nav__link">
+    Create a new client
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modify-the-admin-cli-client" class="md-nav__link">
+    Modify the admin-cli client
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -384,16 +444,20 @@
                 
                 
                 <h1 id="keycloak-sample-configuration">Keycloak sample configuration</h1>
+<h2 id="create-a-new-realm">Create a new realm</h2>
 <ol>
-<li>Create a new realm </li>
 <li><strong>General</strong>: Enabled, OpenID Endpoint Configuration</li>
 <li><strong>Login</strong>: User registration enabled</li>
-<li>Create a new client</li>
+</ol>
+<h2 id="create-a-new-client">Create a new client</h2>
+<ol>
 <li><strong>Settings</strong>: Enabled, Direct Access Granted, Service Accounts Enabled, Authorization Enabled</li>
-<li><strong>Scope</strong>: Full Scope Allowed (Will automatically grant all available roles to all users using this client, you may want to disable this and assign the roles to the client 
-      manually)</li>
+<li><strong>Scope</strong>: Full Scope Allowed (Will automatically grant all available roles to all users using this client, you may want to disable this and assign the roles to the 
+   client manually)</li>
 <li>Valid Redirect URIs: <code>http://localhost:8081/callback</code> (Or whatever you configure in your python app)</li>
-<li>Modify the <code>admin-cli</code> client</li>
+</ol>
+<h2 id="modify-the-admin-cli-client">Modify the <code>admin-cli</code> client</h2>
+<ol>
 <li><strong>Settings</strong>: Service Accounts Enabled</li>
 <li><strong>Scope</strong>: Full Scope Allowed</li>
 <li><strong>Service Account Roles</strong>: Select all Client Roles available for <code>account</code> and <code>realm_management</code></li>

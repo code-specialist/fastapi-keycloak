@@ -255,21 +255,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../installation/" class="md-nav__link">
-        Installation
-      </a>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../quick_start/" class="md-nav__link">
         Quickstart
       </a>
@@ -633,8 +618,57 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#fastapi_keycloak.exceptions" class="md-nav__link">
+    fastapi_keycloak.exceptions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.exceptions.ConfigureTOTPException" class="md-nav__link">
+    ConfigureTOTPException
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#fastapi_keycloak.exceptions.KeycloakError" class="md-nav__link">
-    fastapi_keycloak.exceptions.KeycloakError
+    KeycloakError
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.exceptions.MandatoryActionException" class="md-nav__link">
+    MandatoryActionException
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.exceptions.UpdatePasswordException" class="md-nav__link">
+    UpdatePasswordException
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.exceptions.UpdateProfileException" class="md-nav__link">
+    UpdateProfileException
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.exceptions.UpdateUserLocaleException" class="md-nav__link">
+    UpdateUserLocaleException
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.exceptions.VerifyEmailException" class="md-nav__link">
+    VerifyEmailException
   </a>
   
 </li>
@@ -1071,8 +1105,57 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#fastapi_keycloak.exceptions" class="md-nav__link">
+    fastapi_keycloak.exceptions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.exceptions.ConfigureTOTPException" class="md-nav__link">
+    ConfigureTOTPException
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#fastapi_keycloak.exceptions.KeycloakError" class="md-nav__link">
-    fastapi_keycloak.exceptions.KeycloakError
+    KeycloakError
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.exceptions.MandatoryActionException" class="md-nav__link">
+    MandatoryActionException
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.exceptions.UpdatePasswordException" class="md-nav__link">
+    UpdatePasswordException
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.exceptions.UpdateProfileException" class="md-nav__link">
+    UpdateProfileException
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.exceptions.UpdateUserLocaleException" class="md-nav__link">
+    UpdateUserLocaleException
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastapi_keycloak.exceptions.VerifyEmailException" class="md-nav__link">
+    VerifyEmailException
   </a>
   
 </li>
@@ -3913,10 +3996,77 @@ The callback will also create a session_state and code query parameter that can 
 <h2 id="keycloakerror">KeycloakError</h2>
 
 
+  <div class="doc doc-object doc-module">
+
+<a id="fastapi_keycloak.exceptions"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
   <div class="doc doc-object doc-class">
 
-<a id="fastapi_keycloak.exceptions.KeycloakError"></a>
-    <div class="doc doc-contents first">
+
+
+<h2 id="fastapi_keycloak.exceptions.ConfigureTOTPException" class="doc doc-heading">
+        <code>
+ConfigureTOTPException            (<a title="fastapi_keycloak.exceptions.MandatoryActionException" href="#fastapi_keycloak.exceptions.MandatoryActionException">MandatoryActionException</a>)
+        </code>
+
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Throw if the exchange of username and password for an access token fails due to the CONFIGURE_TOTP requiredAction</p>
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="fastapi_keycloak.exceptions.KeycloakError" class="doc doc-heading">
+        <code>
+KeycloakError            (<span title="Exception">Exception</span>)
+        </code>
+
+
+
+</h2>
+
+    <div class="doc doc-contents ">
 
       <p>Thrown if any response of keycloak does not match our expectation</p>
 
@@ -3951,6 +4101,223 @@ The callback will also create a session_state and code query parameter that can 
 
 
 
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="fastapi_keycloak.exceptions.MandatoryActionException" class="doc doc-heading">
+        <code>
+MandatoryActionException            (<span title="fastapi.exceptions.HTTPException">HTTPException</span>)
+        </code>
+
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Throw if the exchange of username and password for an access token fails </p>
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="fastapi_keycloak.exceptions.UpdatePasswordException" class="doc doc-heading">
+        <code>
+UpdatePasswordException            (<a title="fastapi_keycloak.exceptions.MandatoryActionException" href="#fastapi_keycloak.exceptions.MandatoryActionException">MandatoryActionException</a>)
+        </code>
+
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Throw if the exchange of username and password for an access token fails due to the UPDATE_PASSWORD requiredAction</p>
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="fastapi_keycloak.exceptions.UpdateProfileException" class="doc doc-heading">
+        <code>
+UpdateProfileException            (<a title="fastapi_keycloak.exceptions.MandatoryActionException" href="#fastapi_keycloak.exceptions.MandatoryActionException">MandatoryActionException</a>)
+        </code>
+
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Throw if the exchange of username and password for an access token fails due to the UPDATE_PROFILE requiredAction</p>
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="fastapi_keycloak.exceptions.UpdateUserLocaleException" class="doc doc-heading">
+        <code>
+UpdateUserLocaleException            (<a title="fastapi_keycloak.exceptions.MandatoryActionException" href="#fastapi_keycloak.exceptions.MandatoryActionException">MandatoryActionException</a>)
+        </code>
+
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Throw if the exchange of username and password for an access token fails due to the update_user_locale requiredAction</p>
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="fastapi_keycloak.exceptions.VerifyEmailException" class="doc doc-heading">
+        <code>
+VerifyEmailException            (<a title="fastapi_keycloak.exceptions.MandatoryActionException" href="#fastapi_keycloak.exceptions.MandatoryActionException">MandatoryActionException</a>)
+        </code>
+
+
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Throw if the exchange of username and password for an access token fails due to the VERIFY_EMAIL requiredAction</p>
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
 
 
 

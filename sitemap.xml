@@ -16,11 +16,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://fastapi-keycloak.code-specialist.com/installation/</loc>
-         <lastmod>2021-12-23</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://fastapi-keycloak.code-specialist.com/keycloak_configuration/</loc>
          <lastmod>2021-12-23</lastmod>
          <changefreq>daily</changefreq>

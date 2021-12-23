@@ -255,21 +255,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../installation/" class="md-nav__link">
-        Installation
-      </a>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../quick_start/" class="md-nav__link">
         Quickstart
       </a>
@@ -390,15 +375,15 @@
 <span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">Query</span><span class="p">,</span> <span class="n">Body</span>
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">SecretStr</span>
 
-<span class="kn">from</span> <span class="nn">fastapi_keycloak</span> <span class="kn">import</span> <span class="n">FastAPIKeycloak</span><span class="p">,</span> <span class="n">OIDCUser</span><span class="p">,</span> <span class="n">UsernamePassword</span><span class="p">,</span> <span class="n">HTTPMethod</span>
+<span class="kn">from</span> <span class="nn">fastapi_keycloak</span> <span class="kn">import</span> <span class="n">FastAPIKeycloak</span><span class="p">,</span> <span class="n">OIDCUser</span><span class="p">,</span> <span class="n">UsernamePassword</span><span class="p">,</span> <span class="n">HTTPMethod</span><span class="p">,</span> <span class="n">KeycloakUser</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
 <span class="n">idp</span> <span class="o">=</span> <span class="n">FastAPIKeycloak</span><span class="p">(</span>
-    <span class="n">server_url</span><span class="o">=</span><span class="s2">&quot;https://auth.some-domain.com/auth&quot;</span><span class="p">,</span>
-    <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;some-client&quot;</span><span class="p">,</span>
-    <span class="n">client_secret</span><span class="o">=</span><span class="s2">&quot;some-client-secret&quot;</span><span class="p">,</span>
-    <span class="n">admin_client_secret</span><span class="o">=</span><span class="s2">&quot;admin-cli-secret&quot;</span><span class="p">,</span>
-    <span class="n">realm</span><span class="o">=</span><span class="s2">&quot;some-realm-name&quot;</span><span class="p">,</span>
+    <span class="n">server_url</span><span class="o">=</span><span class="s2">&quot;http://localhost:8085/auth&quot;</span><span class="p">,</span>
+    <span class="n">client_id</span><span class="o">=</span><span class="s2">&quot;test-client&quot;</span><span class="p">,</span>
+    <span class="n">client_secret</span><span class="o">=</span><span class="s2">&quot;GzgACcJzhzQ4j8kWhmhazt7WSdxDVUyE&quot;</span><span class="p">,</span>
+    <span class="n">admin_client_secret</span><span class="o">=</span><span class="s2">&quot;BIcczGsZ6I8W5zf0rZg5qSexlloQLPKB&quot;</span><span class="p">,</span>
+    <span class="n">realm</span><span class="o">=</span><span class="s2">&quot;Test&quot;</span><span class="p">,</span>
     <span class="n">callback_uri</span><span class="o">=</span><span class="s2">&quot;http://localhost:8081/callback&quot;</span>
 <span class="p">)</span>
 <span class="n">idp</span><span class="o">.</span><span class="n">add_swagger_config</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
@@ -446,6 +431,11 @@
 <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/user/</span><span class="si">{user_id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;user-management&quot;</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">get_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">idp</span><span class="o">.</span><span class="n">get_user</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">)</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;/user&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;user-management&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">update_user</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">KeycloakUser</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">idp</span><span class="o">.</span><span class="n">update_user</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
 
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/user/</span><span class="si">{user_id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;user-management&quot;</span><span class="p">])</span>
@@ -542,7 +532,7 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;example_app:app&#39;</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8081</span><span class="p">)</span>
+    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;app:app&#39;</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8081</span><span class="p">)</span>
 </code></pre></div>
                 
               
