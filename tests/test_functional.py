@@ -5,7 +5,7 @@ from fastapi import HTTPException
 
 from fastapi_keycloak import KeycloakError
 from fastapi_keycloak.exceptions import VerifyEmailException, UpdateUserLocaleException, ConfigureTOTPException, UpdatePasswordException, UpdateProfileException
-from fastapi_keycloak.model import KeycloakUser, KeycloakRole, KeycloakToken, OIDCUser
+from fastapi_keycloak.model import KeycloakGroup, KeycloakUser, KeycloakRole, KeycloakToken, OIDCUser
 from tests import BaseTestClass
 
 TEST_PASSWORD = "test-password"
@@ -194,6 +194,11 @@ class TestAPIFunctional(BaseTestClass):
         idp.delete_role(role_name=test_role_mars.name)
         idp.delete_user(user_id=user_alice.id)
         idp.delete_user(user_id=user_bob.id)
+
+    def test_groups(self, idp):
+        # Check that there are no groups
+        all_groups: List[KeycloakGroup] = idp.get_all_groups()
+        assert len(all_groups) == 0
 
     @pytest.mark.parametrize("action, exception", [
         ("update_user_locale", UpdateUserLocaleException),

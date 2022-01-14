@@ -15,7 +15,7 @@ from requests import Response
 
 from fastapi_keycloak.exceptions import KeycloakError, MandatoryActionException, UpdateUserLocaleException, ConfigureTOTPException, VerifyEmailException, \
     UpdateProfileException, UpdatePasswordException
-from fastapi_keycloak.model import HTTPMethod, KeycloakUser, OIDCUser, KeycloakToken, KeycloakRole, KeycloakIdentityProvider
+from fastapi_keycloak.model import HTTPMethod, KeycloakUser, OIDCUser, KeycloakToken, KeycloakRole, KeycloakIdentityProvider, KeycloakGroup
 
 
 def result_or_error(response_model: Type[BaseModel] = None, is_list: bool = False) -> List[BaseModel] or BaseModel or KeycloakError:
@@ -423,6 +423,18 @@ class FastAPIKeycloak:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         return self._admin_request(url=f'{self.roles_uri}/{role_name}', method=HTTPMethod.DELETE)
+    
+    @result_or_error(response_model=KeycloakGroup, is_list=True)
+    def get_all_groups(self) -> List[KeycloakGroup]:
+        """ Get all groups of the Keycloak realm
+
+        Returns:
+            List[KeycloakGroup]: All groups of the realm
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
+        """
+        return self._admin_request(url=self.groups_uri, method=HTTPMethod.GET)
 
     @result_or_error(response_model=KeycloakUser)
     def create_user(
@@ -738,6 +750,11 @@ class FastAPIKeycloak:
     def roles_uri(self):
         """ The roles endpoint URL """
         return self.admin_uri(resource="roles")
+    
+    @functools.cached_property
+    def groups_uri(self):
+        """ The groups endpoint URL """
+        return self.admin_uri(resource="groups")
 
     @functools.cached_property
     def _admin_uri(self):

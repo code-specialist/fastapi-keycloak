@@ -179,3 +179,19 @@ class KeycloakToken(BaseModel):
     def __str__(self):
         """ String representation of KeycloakToken """
         return f'Bearer {self.access_token}'
+
+
+class KeycloakGroup(BaseModel):
+    """ Keycloak representation of a group
+    
+    Attributes:
+        id (str):
+        name (str):
+        path (Optional[str]):
+        realmRoles (Optional[str]):        
+    """
+    id: str
+    name: str
+    path: Optional[str]
+    realmRoles: Optional[List[str]]
+    subGroups: Optional[List['KeycloakGroup']]
