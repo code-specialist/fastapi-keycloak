@@ -195,3 +195,6 @@ class KeycloakGroup(BaseModel):
     path: Optional[str]
     realmRoles: Optional[List[str]]
     subGroups: Optional[List['KeycloakGroup']]
+
+
+KeycloakGroup.update_forward_refs()

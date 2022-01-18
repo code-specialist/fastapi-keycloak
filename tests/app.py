@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import FastAPI, Depends, Query, Body
 from pydantic import SecretStr
 
-from fastapi_keycloak import FastAPIKeycloak, OIDCUser, UsernamePassword, HTTPMethod, KeycloakUser
+from fastapi_keycloak import FastAPIKeycloak, OIDCUser, UsernamePassword, HTTPMethod, KeycloakUser, KeycloakGroup
 
 app = FastAPI()
 idp = FastAPIKeycloak(
@@ -102,6 +102,33 @@ def add_role(role_name: str):
 @app.delete("/roles", tags=["role-management"])
 def delete_roles(role_name: str):
     return idp.delete_role(role_name=role_name)
+
+
+# Group Management
+
+@app.get("/groups", tags=["group-management"])
+def get_all_groups():
+    return idp.get_all_groups()
+
+
+@app.get("/group/{group_name}", tags=["group-management"])
+def get_group(group_name: str):
+    return idp.get_groups([group_name])
+
+
+@app.get("/group-by-path/{path: path}", tags=["group-management"])
+def get_group_by_path(path: str):
+    return idp.get_group_by_path(path)
+
+
+@app.post("/groups", tags=["group-management"])
+def add_group(group_name: str, parent_id: Optional[str] = None):
+    return idp.create_group(group_name=group_name, parent=parent_id)
+
+
+@app.delete("/groups", tags=["group-management"])
+def delete_groups(group_id: str):
+    return idp.delete_group(group_id=group_id)
 
 
 # User Roles
