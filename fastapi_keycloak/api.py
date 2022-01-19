@@ -569,6 +569,53 @@ class FastAPIKeycloak:
         """
         return self._admin_request(url=f'{self.groups_uri}/{group_id}', method=HTTPMethod.DELETE)   
 
+    @result_or_error()
+    def add_user_group(self, user_id: str, group_id: str) -> dict:
+        """ Add group to a specific user
+
+        Args:
+            user_id str: ID of the user the group should be added to
+            group_id str: Group to add (id)
+
+        Returns:
+            dict: Proxied response payload
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
+        """
+        return self._admin_request(url=f'{self.users_uri}/{user_id}/groups/{group_id}', method=HTTPMethod.PUT)
+
+    @result_or_error(response_model=KeycloakGroup, is_list=True)
+    def get_user_groups(self, user_id: str) -> List[KeycloakGroup]:
+        """ Gets all groups of an user
+
+        Args:
+            user_id (str): ID of the user of interest
+
+        Returns:
+            List[KeycloakGroup]: All groups possessed by the user
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
+        """
+        return self._admin_request(url=f'{self.users_uri}/{user_id}/groups', method=HTTPMethod.GET)
+    
+    @result_or_error()
+    def remove_user_group(self, user_id: str, group_id: str) -> dict:
+        """ Remove group from a specific user
+
+        Args:
+            user_id str: ID of the user the groups should be removed from
+            group_id str: Group to remove (id)
+
+        Returns:
+            dict: Proxied response payload
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
+        """
+        return self._admin_request(url=f'{self.users_uri}/{user_id}/groups/{group_id}', method=HTTPMethod.DELETE)    
+
     @result_or_error(response_model=KeycloakUser)
     def create_user(
             self,

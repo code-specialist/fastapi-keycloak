@@ -281,6 +281,33 @@ class TestAPIFunctional(BaseTestClass):
         # Clean up
         idp.delete_group(group_id=bar_group.id)
         idp.delete_group(group_id=foo_group.id)
+        
+        
+    def test_user_groups(self, idp, user):
+        
+        # Check initial user groups
+        user_groups = idp.get_user_groups(user.id)
+        assert len(user_groups) == 0        
+        
+        # Create the first group and add to user
+        foo_group: KeycloakGroup = idp.create_group(group_name='Foo')
+        idp.add_user_group(user_id=user.id, group_id=foo_group.id)
+        
+        # Check if the user is in the group
+        user_groups = idp.get_user_groups(user.id)
+        assert len(user_groups) == 1
+        assert user_groups[0].id == foo_group.id
+        
+        # Remove User of the group
+        idp.remove_user_group(user.id, foo_group.id)
+        
+        # Check if the user has no group
+        user_groups = idp.get_user_groups(user.id)
+        assert len(user_groups) == 0        
+        
+        idp.delete_group(group_id=foo_group.id)
+        idp.delete_user(user_id=user.id)
+
 
     @pytest.mark.parametrize("action, exception", [
         ("update_user_locale", UpdateUserLocaleException),

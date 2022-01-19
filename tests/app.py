@@ -148,6 +148,23 @@ def delete_roles_from_user(user_id: str, roles: Optional[List[str]] = Query(None
     return idp.remove_user_roles(user_id=user_id, roles=roles)
 
 
+# User Groups
+
+@app.post("/users/{user_id}/groups", tags=["user-groups"])
+def add_group_to_user(user_id: str, group_id: str):
+    return idp.add_user_group(user_id=user_id, group_id=group_id)
+
+
+@app.get("/users/{user_id}/groups", tags=["user-groups"])
+def get_user_groups(user_id: str):
+    return idp.get_user_groups(user_id=user_id)
+
+
+@app.delete("/users/{user_id}/groups", tags=["user-groups"])
+def delete_groups_from_user(user_id: str, group_id: str):
+    return idp.remove_user_group(user_id=user_id, group_id=group_id)
+
+
 # Example User Requests
 
 @app.get("/protected", tags=["example-user-request"])
