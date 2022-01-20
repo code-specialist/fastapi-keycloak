@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import FastAPI, Depends, Query, Body
 from pydantic import SecretStr
 
-from fastapi_keycloak import FastAPIKeycloak, OIDCUser, UsernamePassword, HTTPMethod, KeycloakUser
+from fastapi_keycloak import FastAPIKeycloak, OIDCUser, UsernamePassword, HTTPMethod, KeycloakUser, KeycloakGroup
 
 app = FastAPI()
 idp = FastAPIKeycloak(
@@ -104,6 +104,33 @@ def delete_roles(role_name: str):
     return idp.delete_role(role_name=role_name)
 
 
+# Group Management
+
+@app.get("/groups", tags=["group-management"])
+def get_all_groups():
+    return idp.get_all_groups()
+
+
+@app.get("/group/{group_name}", tags=["group-management"])
+def get_group(group_name: str):
+    return idp.get_groups([group_name])
+
+
+@app.get("/group-by-path/{path: path}", tags=["group-management"])
+def get_group_by_path(path: str):
+    return idp.get_group_by_path(path)
+
+
+@app.post("/groups", tags=["group-management"])
+def add_group(group_name: str, parent_id: Optional[str] = None):
+    return idp.create_group(group_name=group_name, parent=parent_id)
+
+
+@app.delete("/groups", tags=["group-management"])
+def delete_groups(group_id: str):
+    return idp.delete_group(group_id=group_id)
+
+
 # User Roles
 
 @app.post("/users/{user_id}/roles", tags=["user-roles"])
@@ -119,6 +146,23 @@ def get_user_roles(user_id: str):
 @app.delete("/users/{user_id}/roles", tags=["user-roles"])
 def delete_roles_from_user(user_id: str, roles: Optional[List[str]] = Query(None)):
     return idp.remove_user_roles(user_id=user_id, roles=roles)
+
+
+# User Groups
+
+@app.post("/users/{user_id}/groups", tags=["user-groups"])
+def add_group_to_user(user_id: str, group_id: str):
+    return idp.add_user_group(user_id=user_id, group_id=group_id)
+
+
+@app.get("/users/{user_id}/groups", tags=["user-groups"])
+def get_user_groups(user_id: str):
+    return idp.get_user_groups(user_id=user_id)
+
+
+@app.delete("/users/{user_id}/groups", tags=["user-groups"])
+def delete_groups_from_user(user_id: str, group_id: str):
+    return idp.remove_user_group(user_id=user_id, group_id=group_id)
 
 
 # Example User Requests
