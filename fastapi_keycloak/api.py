@@ -499,7 +499,7 @@ class FastAPIKeycloak:
                     if group.path == path:
                         return group
                     res = self.get_subgroups(group, path)
-                    if res != None:
+                    if res is not None:
                         return res        
         return None
     
