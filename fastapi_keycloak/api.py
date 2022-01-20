@@ -441,10 +441,10 @@ class FastAPIKeycloak:
         """ Returns full entries of base Groups based on group names
 
         Args:
-            group_names List[str]: Groups that should be looked up (names)
+            group_names (List[str]): Groups that should be looked up (names)
 
         Returns:
-             List[KeycloakGroup]: Full entries stored at Keycloak. Or None if the list of requested groups is None
+            List[KeycloakGroup]: Full entries stored at Keycloak. Or None if the list of requested groups is None
 
         Raises:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
@@ -458,8 +458,8 @@ class FastAPIKeycloak:
         """Utility function to iterate through nested group structures
         
         Args: 
-            group KeycloakGroup: Group Representation
-            path str: Subgroup path
+            group (KeycloakGroup): Group Representation
+            path (str): Subgroup path
             
         Returns:
             KeycloakGroup: Keycloak group representation or none if not exists
@@ -480,8 +480,8 @@ class FastAPIKeycloak:
         """ Return Group based on path
 
         Args:
-            path str: Path that should be looked up
-            search_in_subgroups bool: Whether to search in subgroups
+            path (str): Path that should be looked up
+            search_in_subgroups (bool): Whether to search in subgroups
 
         Returns:
             KeycloakGroup: Full entries stored at Keycloak. Or None if the path not found       
@@ -508,7 +508,7 @@ class FastAPIKeycloak:
         """ Return Group based on group id
 
         Args:
-            group_id str: Group id to be found
+            group_id (str): Group id to be found
 
         Returns:
              KeycloakGroup: Keycloak object by id. Or None if the id is invalid
@@ -527,8 +527,8 @@ class FastAPIKeycloak:
         """ Create a group on the realm
 
         Args:
-            group_name str: Name of the new group
-            parent Union[KeycloakGroup, str]: Can contain an instance or object id
+            group_name (str): Name of the new group
+            parent (Union[KeycloakGroup, str]): Can contain an instance or object id
 
         Returns:
             KeycloakGroup: If creation succeeded, else it will return the error
@@ -574,8 +574,8 @@ class FastAPIKeycloak:
         """ Add group to a specific user
 
         Args:
-            user_id str: ID of the user the group should be added to
-            group_id str: Group to add (id)
+            user_id (str): ID of the user the group should be added to
+            group_id (str): Group to add (id)
 
         Returns:
             dict: Proxied response payload
