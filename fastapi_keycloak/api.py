@@ -469,9 +469,9 @@ class FastAPIKeycloak:
                 return subgroup
             elif subgroup.subGroups:
                 for subgroup in group.subGroups:
-                    result = self.get_subgroups(subgroup, path)
-                    if result:
-                        return result
+                    subgroups = self.get_subgroups(subgroup, path)
+                    if subgroups:
+                        return subgroups
         # Went through the tree without hits
         return None  
     
