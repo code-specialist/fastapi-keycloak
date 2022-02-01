@@ -53,6 +53,7 @@ nosetests.xml
 *.py,cover
 .hypothesis/
 .pytest_cache/
+.coverage
 
 # Translations
 *.mo
@@ -72,7 +73,7 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/_build/
+documentation/docs/_build/
 
 # PyBuilder
 target/

@@ -48,5 +48,4 @@ dependencies = [
 ]
 
 [project.urls]
-Documentation = "https://github.com/code-specialist/fastapi-keycloak"
-Source = "https://github.com/code-specialist/fastapi-keycloak/archive/refs/tags/0.0.2a.tar.gz"
+Documentation = "https://fastapi-keycloak.code-specialist.com/"
