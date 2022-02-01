@@ -375,7 +375,7 @@
 <span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">Query</span><span class="p">,</span> <span class="n">Body</span>
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">SecretStr</span>
 
-<span class="kn">from</span> <span class="nn">fastapi_keycloak</span> <span class="kn">import</span> <span class="n">FastAPIKeycloak</span><span class="p">,</span> <span class="n">OIDCUser</span><span class="p">,</span> <span class="n">UsernamePassword</span><span class="p">,</span> <span class="n">HTTPMethod</span><span class="p">,</span> <span class="n">KeycloakUser</span>
+<span class="kn">from</span> <span class="nn">fastapi_keycloak</span> <span class="kn">import</span> <span class="n">FastAPIKeycloak</span><span class="p">,</span> <span class="n">OIDCUser</span><span class="p">,</span> <span class="n">UsernamePassword</span><span class="p">,</span> <span class="n">HTTPMethod</span><span class="p">,</span> <span class="n">KeycloakUser</span><span class="p">,</span> <span class="n">KeycloakGroup</span>
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
 <span class="n">idp</span> <span class="o">=</span> <span class="n">FastAPIKeycloak</span><span class="p">(</span>
@@ -475,6 +475,33 @@
     <span class="k">return</span> <span class="n">idp</span><span class="o">.</span><span class="n">delete_role</span><span class="p">(</span><span class="n">role_name</span><span class="o">=</span><span class="n">role_name</span><span class="p">)</span>
 
 
+<span class="c1"># Group Management</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/groups&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;group-management&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">get_all_groups</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">idp</span><span class="o">.</span><span class="n">get_all_groups</span><span class="p">()</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/group/</span><span class="si">{group_name}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;group-management&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">get_group</span><span class="p">(</span><span class="n">group_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">idp</span><span class="o">.</span><span class="n">get_groups</span><span class="p">([</span><span class="n">group_name</span><span class="p">])</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/group-by-path/{path: path}&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;group-management&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">get_group_by_path</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">idp</span><span class="o">.</span><span class="n">get_group_by_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/groups&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;group-management&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">add_group</span><span class="p">(</span><span class="n">group_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parent_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">idp</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="n">group_name</span><span class="o">=</span><span class="n">group_name</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent_id</span><span class="p">)</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/groups&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;group-management&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">delete_groups</span><span class="p">(</span><span class="n">group_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">idp</span><span class="o">.</span><span class="n">delete_group</span><span class="p">(</span><span class="n">group_id</span><span class="o">=</span><span class="n">group_id</span><span class="p">)</span>
+
+
 <span class="c1"># User Roles</span>
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/users/</span><span class="si">{user_id}</span><span class="s2">/roles&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;user-roles&quot;</span><span class="p">])</span>
@@ -490,6 +517,23 @@
 <span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/users/</span><span class="si">{user_id}</span><span class="s2">/roles&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;user-roles&quot;</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">delete_roles_from_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">roles</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="kc">None</span><span class="p">)):</span>
     <span class="k">return</span> <span class="n">idp</span><span class="o">.</span><span class="n">remove_user_roles</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span> <span class="n">roles</span><span class="o">=</span><span class="n">roles</span><span class="p">)</span>
+
+
+<span class="c1"># User Groups</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/users/</span><span class="si">{user_id}</span><span class="s2">/groups&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;user-groups&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">add_group_to_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">group_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">idp</span><span class="o">.</span><span class="n">add_user_group</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span> <span class="n">group_id</span><span class="o">=</span><span class="n">group_id</span><span class="p">)</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/users/</span><span class="si">{user_id}</span><span class="s2">/groups&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;user-groups&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">get_user_groups</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">idp</span><span class="o">.</span><span class="n">get_user_groups</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">)</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/users/</span><span class="si">{user_id}</span><span class="s2">/groups&quot;</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;user-groups&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">delete_groups_from_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">group_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">idp</span><span class="o">.</span><span class="n">remove_user_group</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_id</span><span class="p">,</span> <span class="n">group_id</span><span class="o">=</span><span class="n">group_id</span><span class="p">)</span>
 
 
 <span class="c1"># Example User Requests</span>
