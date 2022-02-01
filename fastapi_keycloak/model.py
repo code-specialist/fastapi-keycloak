@@ -81,6 +81,7 @@ class OIDCUser(BaseModel):
         given_name (Optional[str]):
         family_name (Optional[str]):
         email (Optional[str]):
+        preferred_username (Optional[str]):
         realm_access (dict):
 
     Notes:
@@ -95,6 +96,7 @@ class OIDCUser(BaseModel):
     given_name: Optional[str]
     family_name: Optional[str]
     email: Optional[str]
+    preferred_username: Optional[str]
     realm_access: Optional[dict]
 
     @property
@@ -111,7 +113,7 @@ class OIDCUser(BaseModel):
 
     def __str__(self) -> str:
         """ String representation of an OIDCUser """
-        return self.email
+        return self.preferred_username
 
 
 class KeycloakIdentityProvider(BaseModel):
