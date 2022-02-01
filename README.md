@@ -25,3 +25,16 @@ FastAPI Keycloak enables you to do the following things without writing a single
 - Assign/remove roles from users
 - Implement the `password` or the `authorization_code` flow (login/callback/logout)
 
+## Contributions
+
+We would like encourage anyone using this package to contribute to its improvement, if anything isn't working as expected or isn't well enough documented, please open an issue or a
+pull request. Please note that for any code contribution tests are required.
+
+### Testing
+
+Tests are stored and executed in `./tests`. To test the package, it is necessary to use the `start_infra.sh` script upfront, to set up Keycloak and Postgres. We do this to avoid
+artificial testing conditions that occur by mocking all the keycloak requests. The issue here is that we currently see no way to offer public testing opportunities without
+significant security issues, which is why you have to run these tests locally and provide a `test_coverage.xml` file. The test coverage is configured in the `pytest.ini` and will 
+be created once the tests finished running (locally).
+
+
