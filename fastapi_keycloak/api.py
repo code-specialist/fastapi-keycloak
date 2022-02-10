@@ -104,7 +104,7 @@ class FastAPIKeycloak:
     """
     _admin_token: str
 
-    def __init__(self, server_url: str, client_id: str, client_secret: str, realm: str, admin_client_secret: str, callback_uri: str):
+    def __init__(self, server_url: str, client_id: str, client_secret: str, realm: str, admin_client_secret: str, callback_uri: str, admin_client_id: str = "admin-cli"):
         """ FastAPIKeycloak constructor
 
         Args:
@@ -112,6 +112,7 @@ class FastAPIKeycloak:
             client_id (str): The id of the client used for users
             client_secret (str): The client secret
             realm (str): The realm (name)
+            admin_client_id (str): The id for the admin client, defaults to 'admin-cli'
             admin_client_secret (str): Secret for the `admin-cli` client
             callback_uri (str): Callback URL of the instance, used for auth flows. Must match at least one `Valid Redirect URIs` of Keycloak and should point to an endpoint
                                 that utilizes the authorization_code flow.
@@ -120,6 +121,7 @@ class FastAPIKeycloak:
         self.realm = realm
         self.client_id = client_id
         self.client_secret = client_secret
+        self.admin_client_id = admin_client_id
         self.admin_client_secret = admin_client_secret
         self.callback_uri = callback_uri
         self._get_admin_token()  # Requests an admin access token on startup
@@ -276,7 +278,7 @@ class FastAPIKeycloak:
             "Content-Type": "application/x-www-form-urlencoded"
         }
         data = {
-            "client_id": "admin-cli",
+            "client_id": self.admin_client_id,
             "client_secret": self.admin_client_secret,
             "grant_type": "client_credentials"
         }
