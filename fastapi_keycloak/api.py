@@ -104,7 +104,7 @@ class FastAPIKeycloak:
     """
     _admin_token: str
 
-    def __init__(self, server_url: str, client_id: str, client_secret: str, realm: str, admin_client_id: str, admin_client_secret: str, callback_uri: str):
+    def __init__(self, server_url: str, client_id: str, client_secret: str, realm: str, admin_client_secret: str, callback_uri: str, admin_client_id: str = "admin-cli"):
         """ FastAPIKeycloak constructor
 
         Args:
@@ -121,7 +121,7 @@ class FastAPIKeycloak:
         self.realm = realm
         self.client_id = client_id
         self.client_secret = client_secret
-        self.admin_client_id = "admin-cli" if admin_client_id is None else admin_client_id
+        self.admin_client_id = admin_client_id
         self.admin_client_secret = admin_client_secret
         self.callback_uri = callback_uri
         self._get_admin_token()  # Requests an admin access token on startup
