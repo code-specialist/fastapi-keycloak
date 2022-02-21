@@ -38,6 +38,7 @@ class KeycloakUser(BaseModel):
         requiredActions (List[str]):
         notBefore (int):
         access (dict):
+        attributes (Optional[dict]):
 
     Notes:
          Check the Keycloak documentation at https://www.keycloak.org/docs-api/15.0/rest-api/index.html for details. This is a mere proxy object.
@@ -55,6 +56,7 @@ class KeycloakUser(BaseModel):
     requiredActions: List[str]
     notBefore: int
     access: dict
+    attributes: Optional[dict]
 
 
 class UsernamePassword(BaseModel):
