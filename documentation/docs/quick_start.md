@@ -20,7 +20,7 @@ services:
       always
 
   keycloak:
-    image: jboss/keycloak:16.0.1   
+    image: jboss/keycloak:16.1.0   
     volumes:
       - ./realm-export.json:/opt/jboss/keycloak/imports/realm-export.json
     command:
