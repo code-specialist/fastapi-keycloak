@@ -848,7 +848,9 @@
       "redirectUris": [
         "http://localhost:8081/callback"
       ],
-      "webOrigins": [],
+      "webOrigins": [
+        "*"
+      ],
       "notBefore": 0,
       "bearerOnly": false,
       "consentRequired": false,

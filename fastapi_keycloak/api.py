@@ -3,7 +3,7 @@ from __future__ import annotations
 import functools
 import json
 from json import JSONDecodeError
-from typing import List, Type
+from typing import List, Type, Union
 
 import requests
 from fastapi import Depends, HTTPException, FastAPI
@@ -15,7 +15,7 @@ from requests import Response
 
 from fastapi_keycloak.exceptions import KeycloakError, MandatoryActionException, UpdateUserLocaleException, ConfigureTOTPException, VerifyEmailException, \
     UpdateProfileException, UpdatePasswordException
-from fastapi_keycloak.model import HTTPMethod, KeycloakUser, OIDCUser, KeycloakToken, KeycloakRole, KeycloakIdentityProvider
+from fastapi_keycloak.model import HTTPMethod, KeycloakUser, OIDCUser, KeycloakToken, KeycloakRole, KeycloakIdentityProvider, KeycloakGroup
 
 
 def result_or_error(response_model: Type[BaseModel] = None, is_list: bool = False) -> List[BaseModel] or BaseModel or KeycloakError:
@@ -104,7 +104,7 @@ class FastAPIKeycloak:
     """
     _admin_token: str
 
-    def __init__(self, server_url: str, client_id: str, client_secret: str, realm: str, admin_client_secret: str, callback_uri: str):
+    def __init__(self, server_url: str, client_id: str, client_secret: str, realm: str, admin_client_secret: str, callback_uri: str, admin_client_id: str = "admin-cli"):
         """ FastAPIKeycloak constructor
 
         Args:
@@ -112,6 +112,7 @@ class FastAPIKeycloak:
             client_id (str): The id of the client used for users
             client_secret (str): The client secret
             realm (str): The realm (name)
+            admin_client_id (str): The id for the admin client, defaults to 'admin-cli'
             admin_client_secret (str): Secret for the `admin-cli` client
             callback_uri (str): Callback URL of the instance, used for auth flows. Must match at least one `Valid Redirect URIs` of Keycloak and should point to an endpoint
                                 that utilizes the authorization_code flow.
@@ -120,6 +121,7 @@ class FastAPIKeycloak:
         self.realm = realm
         self.client_id = client_id
         self.client_secret = client_secret
+        self.admin_client_id = admin_client_id
         self.admin_client_secret = admin_client_secret
         self.callback_uri = callback_uri
         self._get_admin_token()  # Requests an admin access token on startup
@@ -276,7 +278,7 @@ class FastAPIKeycloak:
             "Content-Type": "application/x-www-form-urlencoded"
         }
         data = {
-            "client_id": "admin-cli",
+            "client_id": self.admin_client_id,
             "client_secret": self.admin_client_secret,
             "grant_type": "client_credentials"
         }
@@ -423,6 +425,198 @@ class FastAPIKeycloak:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         return self._admin_request(url=f'{self.roles_uri}/{role_name}', method=HTTPMethod.DELETE)
+        
+    @result_or_error(response_model=KeycloakGroup, is_list=True)
+    def get_all_groups(self) -> List[KeycloakGroup]:
+        """ Get all base groups of the Keycloak realm
+
+        Returns:
+            List[KeycloakGroup]: All base groups of the realm
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
+        """
+        return self._admin_request(url=self.groups_uri, method=HTTPMethod.GET)     
+        
+    @result_or_error(response_model=KeycloakGroup, is_list=True)
+    def get_groups(self, group_names: List[str]) -> List[KeycloakGroup] or None:
+        """ Returns full entries of base Groups based on group names
+
+        Args:
+            group_names (List[str]): Groups that should be looked up (names)
+
+        Returns:
+            List[KeycloakGroup]: Full entries stored at Keycloak. Or None if the list of requested groups is None
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
+        """
+        if group_names is None:
+            return None
+        groups = self.get_all_groups()
+        return list(filter(lambda group: group.name in group_names, groups))   
+    
+    def get_subgroups(self, group: KeycloakGroup, path: str):
+        """Utility function to iterate through nested group structures
+        
+        Args: 
+            group (KeycloakGroup): Group Representation
+            path (str): Subgroup path
+            
+        Returns:
+            KeycloakGroup: Keycloak group representation or none if not exists
+        """
+        for subgroup in group.subGroups:
+            if subgroup.path == path:
+                return subgroup
+            elif subgroup.subGroups:
+                for subgroup in group.subGroups:
+                    subgroups = self.get_subgroups(subgroup, path)
+                    if subgroups:
+                        return subgroups
+        # Went through the tree without hits
+        return None  
+    
+    @result_or_error(response_model=KeycloakGroup)
+    def get_group_by_path(self, path: str, search_in_subgroups=True) -> KeycloakGroup or None:
+        """ Return Group based on path
+
+        Args:
+            path (str): Path that should be looked up
+            search_in_subgroups (bool): Whether to search in subgroups
+
+        Returns:
+            KeycloakGroup: Full entries stored at Keycloak. Or None if the path not found       
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
+        """
+        groups = self.get_all_groups()
+        
+        for group in groups:
+            if group.path == path:
+                return group
+            elif search_in_subgroups and group.subGroups:
+                for group in group.subGroups:
+                    if group.path == path:
+                        return group
+                    res = self.get_subgroups(group, path)
+                    if res is not None:
+                        return res        
+        return None
+    
+    @result_or_error(response_model=KeycloakGroup)
+    def get_group(self, group_id: str) -> KeycloakGroup or None:
+        """ Return Group based on group id
+
+        Args:
+            group_id (str): Group id to be found
+
+        Returns:
+             KeycloakGroup: Keycloak object by id. Or None if the id is invalid
+
+        Notes:
+            - The Keycloak RestAPI will only identify GroupRepresentations that
+              use name AND id which is the only reason for existence of this function
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
+        """
+        return self._admin_request(url=f'{self.groups_uri}/{group_id}', method=HTTPMethod.GET)     
+        
+    @result_or_error(response_model=KeycloakGroup)
+    def create_group(self, group_name: str, parent: Union[KeycloakGroup, str] = None) -> KeycloakGroup:
+        """ Create a group on the realm
+
+        Args:
+            group_name (str): Name of the new group
+            parent (Union[KeycloakGroup, str]): Can contain an instance or object id
+
+        Returns:
+            KeycloakGroup: If creation succeeded, else it will return the error
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
+        """
+        
+        # If it's an objetc id get an instance of the object
+        if isinstance(parent, str):
+            parent = self.get_group(parent)
+        
+        if parent is not None:
+            groups_uri = f'{self.groups_uri}/{parent.id}/children'
+            path = f'{parent.path}/{group_name}'
+        else:
+            groups_uri = self.groups_uri
+            path = f'/{group_name}'
+        
+        response = self._admin_request(url=groups_uri, data={'name': group_name}, method=HTTPMethod.POST)
+        if response.status_code == 201:
+            return self.get_group_by_path(path=path, search_in_subgroups=True)
+        else:
+            return response       
+        
+    @result_or_error()
+    def delete_group(self, group_id: str) -> dict:
+        """ Deletes a group on the realm
+
+        Args:
+            group_id (str): The group (id) to delte
+
+        Returns:
+            dict: Proxied response payload
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
+        """
+        return self._admin_request(url=f'{self.groups_uri}/{group_id}', method=HTTPMethod.DELETE)   
+
+    @result_or_error()
+    def add_user_group(self, user_id: str, group_id: str) -> dict:
+        """ Add group to a specific user
+
+        Args:
+            user_id (str): ID of the user the group should be added to
+            group_id (str): Group to add (id)
+
+        Returns:
+            dict: Proxied response payload
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
+        """
+        return self._admin_request(url=f'{self.users_uri}/{user_id}/groups/{group_id}', method=HTTPMethod.PUT)
+
+    @result_or_error(response_model=KeycloakGroup, is_list=True)
+    def get_user_groups(self, user_id: str) -> List[KeycloakGroup]:
+        """ Gets all groups of an user
+
+        Args:
+            user_id (str): ID of the user of interest
+
+        Returns:
+            List[KeycloakGroup]: All groups possessed by the user
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
+        """
+        return self._admin_request(url=f'{self.users_uri}/{user_id}/groups', method=HTTPMethod.GET)
+    
+    @result_or_error()
+    def remove_user_group(self, user_id: str, group_id: str) -> dict:
+        """ Remove group from a specific user
+
+        Args:
+            user_id str: ID of the user the groups should be removed from
+            group_id str: Group to remove (id)
+
+        Returns:
+            dict: Proxied response payload
+
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
+        """
+        return self._admin_request(url=f'{self.users_uri}/{user_id}/groups/{group_id}', method=HTTPMethod.DELETE)    
 
     @result_or_error(response_model=KeycloakUser)
     def create_user(
@@ -738,6 +932,11 @@ class FastAPIKeycloak:
     def roles_uri(self):
         """ The roles endpoint URL """
         return self.admin_uri(resource="roles")
+        
+    @functools.cached_property
+    def groups_uri(self):
+        """ The groups endpoint URL """
+        return self.admin_uri(resource="groups")
 
     @functools.cached_property
     def _admin_uri(self):

@@ -38,6 +38,7 @@ class KeycloakUser(BaseModel):
         requiredActions (List[str]):
         notBefore (int):
         access (dict):
+        attributes (Optional[dict]):
 
     Notes:
          Check the Keycloak documentation at https://www.keycloak.org/docs-api/15.0/rest-api/index.html for details. This is a mere proxy object.
@@ -55,6 +56,7 @@ class KeycloakUser(BaseModel):
     requiredActions: List[str]
     notBefore: int
     access: dict
+    attributes: Optional[dict]
 
 
 class UsernamePassword(BaseModel):
@@ -81,6 +83,7 @@ class OIDCUser(BaseModel):
         given_name (Optional[str]):
         family_name (Optional[str]):
         email (Optional[str]):
+        preferred_username (Optional[str]):
         realm_access (dict):
 
     Notes:
@@ -95,6 +98,7 @@ class OIDCUser(BaseModel):
     given_name: Optional[str]
     family_name: Optional[str]
     email: Optional[str]
+    preferred_username: Optional[str]
     realm_access: Optional[dict]
 
     @property
@@ -111,7 +115,7 @@ class OIDCUser(BaseModel):
 
     def __str__(self) -> str:
         """ String representation of an OIDCUser """
-        return self.email
+        return self.preferred_username
 
 
 class KeycloakIdentityProvider(BaseModel):
@@ -179,3 +183,22 @@ class KeycloakToken(BaseModel):
     def __str__(self):
         """ String representation of KeycloakToken """
         return f'Bearer {self.access_token}'
+
+
+class KeycloakGroup(BaseModel):
+    """ Keycloak representation of a group
+    
+    Attributes:
+        id (str):
+        name (str):
+        path (Optional[str]):
+        realmRoles (Optional[str]):        
+    """
+    id: str
+    name: str
+    path: Optional[str]
+    realmRoles: Optional[List[str]]
+    subGroups: Optional[List['KeycloakGroup']]
+
+
+KeycloakGroup.update_forward_refs()
