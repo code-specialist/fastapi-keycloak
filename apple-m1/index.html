@@ -74,11 +74,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#apple-macbook-m1-issues" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -321,8 +316,6 @@
       <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
       
       
-        
-      
       
       <a href="./" class="md-nav__link md-nav__link--active">
         Known issues
@@ -339,25 +332,6 @@
               </div>
             
             
-              
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
-                <div class="md-sidebar__scrollwrap">
-                  <div class="md-sidebar__inner">
-                    
-
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-</nav>
-                  </div>
-                </div>
-              </div>
-            
           
           <div class="md-content" data-md-component="content">
             <article class="md-content__inner md-typeset">
@@ -368,17 +342,9 @@
                   </a>
                 
                 
-                <h1 id="apple-macbook-m1-issues">Apple MacBook M1 issues</h1>
-<p>In case you're using a  current Apple MacBook with M1 CPU, you might encounter the issue that Keycloak just won't start (local testing purposes). We resolved this issues 
-ourselves by rebuilding the image locally. Doing so might look like the following:</p>
-<div class="highlight"><pre><span></span><code><span class="ch">#!/bin/zsh</span>
-
-<span class="nb">cd</span> /tmp
-git clone git@github.com:keycloak/keycloak-containers.git
-<span class="nb">cd</span> keycloak-containers/server
-git checkout <span class="m">16</span>.1.0
-docker build -t <span class="s2">&quot;jboss/keycloak:16.1.0&quot;</span> .
-</code></pre></div>
+                  <h1>Known issues</h1>
+                
+                
                 
               
               
