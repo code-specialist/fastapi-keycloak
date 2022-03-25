@@ -1,7 +1,3 @@
-import subprocess
-from time import sleep
-
-
 def pytest_sessionstart(session):
     # subprocess.call(['sh', './start_infra.sh'])
     # print("Waiting for Keycloak to start")

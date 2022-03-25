@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import FastAPI, Depends, Query, Body
 from pydantic import SecretStr
 
-from fastapi_keycloak import FastAPIKeycloak, OIDCUser, UsernamePassword, HTTPMethod, KeycloakUser, KeycloakGroup
+from fastapi_keycloak import FastAPIKeycloak, OIDCUser, UsernamePassword, HTTPMethod, KeycloakUser
 
 app = FastAPI()
 idp = FastAPIKeycloak(
@@ -22,7 +22,10 @@ idp.add_swagger_config(app)
 # Admin
 
 @app.post("/proxy", tags=["admin-cli"])
-def proxy_admin_request(relative_path: str, method: HTTPMethod, additional_headers: dict = Body(None), payload: dict = Body(None)):
+def proxy_admin_request(
+        relative_path: str, method: HTTPMethod, additional_headers: dict = Body(None),
+        payload: dict = Body(None)
+):
     return idp.proxy(
         additional_headers=additional_headers,
         relative_path=relative_path,
@@ -55,7 +58,8 @@ def get_user_by_query(query: str = None):
 
 @app.post("/users", tags=["user-management"])
 def create_user(first_name: str, last_name: str, email: str, password: SecretStr, id: str = None):
-    return idp.create_user(first_name=first_name, last_name=last_name, username=email, email=email, password=password.get_secret_value(), id=id)
+    return idp.create_user(first_name=first_name, last_name=last_name, username=email, email=email,
+                           password=password.get_secret_value(), id=id)
 
 
 @app.get("/user/{user_id}", tags=["user-management"])
