@@ -13,9 +13,14 @@ from jose.exceptions import JWTClaimsError
 from pydantic import BaseModel
 from requests import Response
 
-from fastapi_keycloak.exceptions import KeycloakError, MandatoryActionException, UpdateUserLocaleException, ConfigureTOTPException, VerifyEmailException, \
-    UpdateProfileException, UpdatePasswordException
-from fastapi_keycloak.model import HTTPMethod, KeycloakUser, OIDCUser, KeycloakToken, KeycloakRole, KeycloakIdentityProvider, KeycloakGroup
+from fastapi_keycloak.exceptions import (
+    KeycloakError, MandatoryActionException, UpdateUserLocaleException,
+    ConfigureTOTPException, VerifyEmailException,
+    UpdateProfileException, UpdatePasswordException)
+from fastapi_keycloak.model import (
+    HTTPMethod, KeycloakUser, OIDCUser, KeycloakToken, KeycloakRole,
+    KeycloakIdentityProvider, KeycloakGroup
+)
 
 
 def result_or_error(response_model: Type[BaseModel] = None, is_list: bool = False) -> List[BaseModel] or BaseModel or KeycloakError:
@@ -44,10 +49,7 @@ def result_or_error(response_model: Type[BaseModel] = None, is_list: bool = Fals
         def wrapper(*args, **kwargs):
 
             def create_list(json: List[dict]):
-                items = list()
-                for entry in json:
-                    items.append(response_model.parse_obj(entry))
-                return items
+                return [response_model.parse_obj(entry) for entry in json]
 
             def create_object(json: dict):
                 return response_model.parse_obj(json)
@@ -85,8 +87,8 @@ def result_or_error(response_model: Type[BaseModel] = None, is_list: bool = Fals
 class FastAPIKeycloak:
     """ Instance to wrap the Keycloak API with FastAPI
 
-    Attributes:
-        _admin_token (KeycloakToken): A KeycloakToken instance, containing the access token that is used for any admin related request
+    Attributes: _admin_token (KeycloakToken): A KeycloakToken instance, containing the access token that is used for
+    any admin related request
 
     Example:
         ```python
@@ -138,9 +140,8 @@ class FastAPIKeycloak:
         """
         if self.token_is_valid(token=self._admin_token):
             return self._admin_token
-        else:
-            self._get_admin_token()
-            return self.admin_token
+        self._get_admin_token()
+        return self.admin_token
 
     @admin_token.setter
     def admin_token(self, value: str):
@@ -185,7 +186,8 @@ class FastAPIKeycloak:
         return OAuth2PasswordBearer(tokenUrl=self.token_uri)
 
     def get_current_user(self, required_roles: List[str] = None) -> OIDCUser:
-        """ Returns the current user based on an access token in the HTTP-header. Optionally verifies roles are possessed by the user
+        """ Returns the current user based on an access token in the HTTP-header. Optionally verifies roles are possessed
+        by the user
 
         Args:
             required_roles List[str]: List of role names required for this endpoint
@@ -236,7 +238,8 @@ class FastAPIKeycloak:
         return response.json()
 
     def proxy(self, relative_path: str, method: HTTPMethod, additional_headers: dict = None, payload: dict = None) -> Response:
-        """ Proxies a request to Keycloak and automatically adds the required Authorization header. Should not be exposed under any circumstances. Grants full API admin access.
+        """ Proxies a request to Keycloak and automatically adds the required Authorization header. Should not be
+        exposed under any circumstances. Grants full API admin access.
 
         Args:
 
@@ -285,10 +288,17 @@ class FastAPIKeycloak:
         response = requests.post(url=self.token_uri, headers=headers, data=data)
         try:
             self.admin_token = response.json()['access_token']
-        except JSONDecodeError:
-            raise KeycloakError(reason=response.content.decode('utf-8'), status_code=response.status_code)
-        except KeyError:
-            raise KeycloakError(reason=f"The response did not contain an access_token: {response.json()}", status_code=403)
+        except JSONDecodeError as e:
+            raise KeycloakError(
+                reason=response.content.decode('utf-8'),
+                status_code=response.status_code,
+            ) from e
+
+        except KeyError as e:
+            raise KeycloakError(
+                reason=f"The response did not contain an access_token: {response.json()}",
+                status_code=403,
+            ) from e
 
     @functools.cached_property
     def public_key(self) -> str:
@@ -471,11 +481,10 @@ class FastAPIKeycloak:
                 return subgroup
             elif subgroup.subGroups:
                 for subgroup in group.subGroups:
-                    subgroups = self.get_subgroups(subgroup, path)
-                    if subgroups:
+                    if subgroups := self.get_subgroups(subgroup, path):
                         return subgroups
         # Went through the tree without hits
-        return None  
+        return None
     
     @result_or_error(response_model=KeycloakGroup)
     def get_group_by_path(self, path: str, search_in_subgroups=True) -> KeycloakGroup or None:
@@ -502,8 +511,7 @@ class FastAPIKeycloak:
                         return group
                     res = self.get_subgroups(group, path)
                     if res is not None:
-                        return res        
-        return None
+                        return res
     
     @result_or_error(response_model=KeycloakGroup)
     def get_group(self, group_id: str) -> KeycloakGroup or None:
@@ -669,13 +677,12 @@ class FastAPIKeycloak:
             "requiredActions": ["VERIFY_EMAIL" if send_email_verification else None]
         }
         response = self._admin_request(url=self.users_uri, data=data, method=HTTPMethod.POST)
-        if response.status_code == 201:
-            user = self.get_user(query=f'username={username}')
-            if send_email_verification:
-                self.send_email_verification(user.id)
-            return user
-        else:
+        if response.status_code != 201:
             return response
+        user = self.get_user(query=f'username={username}')
+        if send_email_verification:
+            self.send_email_verification(user.id)
+        return user
 
     @result_or_error()
     def change_password(self, user_id: str, new_password: str, temporary: bool = False) -> dict:
@@ -747,9 +754,8 @@ class FastAPIKeycloak:
         Raises:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
 
-        Notes:
-            - You may alter any aspect of the user object, also the requiredActions for instance. There is not explicit function for updating those as it is a user update in
-              essence
+        Notes: - You may alter any aspect of the user object, also the requiredActions for instance. There is no
+        explicit function for updating those as it is a user update in essence
         """
         response = self._admin_request(url=f'{self.users_uri}/{user.id}', data=user.__dict__, method=HTTPMethod.PUT)
         if response.status_code == 204:  # Update successful
@@ -781,8 +787,7 @@ class FastAPIKeycloak:
         Raises:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
-        response = self._admin_request(url=self.users_uri, method=HTTPMethod.GET)
-        return response
+        return self._admin_request(url=self.users_uri, method=HTTPMethod.GET)
 
     @result_or_error(response_model=KeycloakIdentityProvider, is_list=True)
     def get_identity_providers(self) -> List[KeycloakIdentityProvider]:
@@ -798,7 +803,8 @@ class FastAPIKeycloak:
 
     @result_or_error(response_model=KeycloakToken)
     def user_login(self, username: str, password: str) -> KeycloakToken:
-        """ Models the password OAuth2 flow. Exchanges username and password for an access token. Will raise detailed errors if login fails due to requiredActions
+        """ Models the password OAuth2 flow. Exchanges username and password for an access token. Will raise detailed
+        errors if login fails due to requiredActions
 
         Args:
             username (str): Username used for login
@@ -846,15 +852,17 @@ class FastAPIKeycloak:
                 }.get(
                     reason,  # Try to return the matching exception
                     # On custom or unknown actions return a MandatoryActionException by default
-                    MandatoryActionException(detail=f"This user can't login until the following action has been resolved: {reason}")
+                    MandatoryActionException(detail=f"This user can't login until the following action has been "
+                                                    f"resolved: {reason}")
                 )
                 raise exception
         return response
 
     @result_or_error(response_model=KeycloakToken)
     def exchange_authorization_code(self, session_state: str, code: str) -> KeycloakToken:
-        """ Models the authorization code OAuth2 flow. Opening the URL provided by `login_uri` will result in a callback to the configured callback URL.
-        The callback will also create a session_state and code query parameter that can be exchanged for an access token.
+        """ Models the authorization code OAuth2 flow. Opening the URL provided by `login_uri` will result in a
+        callback to the configured callback URL. The callback will also create a session_state and code query
+        parameter that can be exchanged for an access token.
 
         Args:
             session_state (str): Salt to reduce the risk of successful attacks
@@ -877,8 +885,7 @@ class FastAPIKeycloak:
             "grant_type": "authorization_code",
             "redirect_uri": self.callback_uri
         }
-        response = requests.post(url=self.token_uri, headers=headers, data=data)
-        return response
+        return requests.post(url=self.token_uri, headers=headers, data=data)
 
     def _admin_request(self, url: str, method: HTTPMethod, data: dict = None, content_type: str = "application/json") -> Response:
         """ Private method that is the basis for any requests requiring admin access to the api. Will append the necessary `Authorization` header
@@ -999,7 +1006,7 @@ class FastAPIKeycloak:
 
     def __str__(self):
         """ String representation """
-        return f'FastAPI Keycloak Integration'
+        return 'FastAPI Keycloak Integration'
 
     def __repr__(self):
         """ Debug representation """

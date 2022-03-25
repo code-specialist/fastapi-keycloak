@@ -22,30 +22,35 @@ class MandatoryActionException(HTTPException):
 
 
 class UpdateUserLocaleException(MandatoryActionException):
-    """ Throw if the exchange of username and password for an access token fails due to the update_user_locale requiredAction"""
+    """ Throw if the exchange of username and password for an access token fails due to the update_user_locale
+    requiredAction """
     def __init__(self) -> None:
-        super().__init__(detail=f"This user can't login until he updated his locale")
+        super().__init__(detail="This user can't login until he updated his locale")
 
 
 class ConfigureTOTPException(MandatoryActionException):
-    """ Throw if the exchange of username and password for an access token fails due to the CONFIGURE_TOTP requiredAction"""
+    """ Throw if the exchange of username and password for an access token fails due to the CONFIGURE_TOTP
+    requiredAction """
     def __init__(self) -> None:
-        super().__init__(detail=f"This user can't login until he configured TOTP")
+        super().__init__(detail="This user can't login until he configured TOTP")
 
 
 class VerifyEmailException(MandatoryActionException):
-    """ Throw if the exchange of username and password for an access token fails due to the VERIFY_EMAIL requiredAction"""
+    """ Throw if the exchange of username and password for an access token fails due to the VERIFY_EMAIL
+    requiredAction """
     def __init__(self) -> None:
-        super().__init__(detail=f"This user can't login until he verified his email")
+        super().__init__(detail="This user can't login until he verified his email")
 
 
 class UpdatePasswordException(MandatoryActionException):
-    """ Throw if the exchange of username and password for an access token fails due to the UPDATE_PASSWORD requiredAction"""
+    """ Throw if the exchange of username and password for an access token fails due to the UPDATE_PASSWORD
+    requiredAction """
     def __init__(self) -> None:
-        super().__init__(detail=f"This user can't login until he updated his password")
+        super().__init__(detail="This user can't login until he updated his password")
 
 
 class UpdateProfileException(MandatoryActionException):
-    """ Throw if the exchange of username and password for an access token fails due to the UPDATE_PROFILE requiredAction"""
+    """ Throw if the exchange of username and password for an access token fails due to the UPDATE_PROFILE
+    requiredAction """
     def __init__(self) -> None:
-        super().__init__(detail=f"This user can't login until he updated his profile")
+        super().__init__(detail="This user can't login until he updated his profile")
