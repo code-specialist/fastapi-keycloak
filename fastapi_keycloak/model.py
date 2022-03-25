@@ -40,8 +40,8 @@ class KeycloakUser(BaseModel):
         access (dict):
         attributes (Optional[dict]):
 
-    Notes:
-         Check the Keycloak documentation at https://www.keycloak.org/docs-api/15.0/rest-api/index.html for details. This is a mere proxy object.
+    Notes: Check the Keycloak documentation at https://www.keycloak.org/docs-api/15.0/rest-api/index.html for
+    details. This is a mere proxy object.
     """
     id: str
     createdTimestamp: int
@@ -71,7 +71,7 @@ class UsernamePassword(BaseModel):
 
 
 class OIDCUser(BaseModel):
-    """ Represents a user object of Keycloak, parsed from an access token 
+    """ Represents a user object of Keycloak, parsed from access token
     
     Attributes:
         sub (str):
@@ -86,8 +86,8 @@ class OIDCUser(BaseModel):
         preferred_username (Optional[str]):
         realm_access (dict):
 
-    Notes:
-         Check the Keycloak documentation at https://www.keycloak.org/docs-api/15.0/rest-api/index.html for details. This is a mere proxy object.
+    Notes: Check the Keycloak documentation at https://www.keycloak.org/docs-api/15.0/rest-api/index.html for
+    details. This is a mere proxy object.
     """
     sub: str
     iat: int
@@ -110,8 +110,11 @@ class OIDCUser(BaseModel):
         """
         try:
             return self.realm_access['roles']
-        except KeyError:
-            raise KeycloakError(status_code=404, reason="The 'realm_access' section of the provided access token did not contain any 'roles'")
+        except KeyError as e:
+            raise KeycloakError(
+                status_code=404,
+                reason="The 'realm_access' section of the provided access token did not contain any 'roles'",
+            ) from e
 
     def __str__(self) -> str:
         """ String representation of an OIDCUser """
@@ -135,8 +138,8 @@ class KeycloakIdentityProvider(BaseModel):
         firstBrokerLoginFlowAlias (str):
         config (dict):
 
-    Notes:
-        Check the Keycloak documentation at https://www.keycloak.org/docs-api/15.0/rest-api/index.html for details. This is a mere proxy object.
+    Notes: Check the Keycloak documentation at https://www.keycloak.org/docs-api/15.0/rest-api/index.html for
+    details. This is a mere proxy object.
     """
     alias: str
     internalId: str
@@ -162,8 +165,8 @@ class KeycloakRole(BaseModel):
         clientRole (bool):
         containerId (str):
         
-    Notes:
-        Check the Keycloak documentation at https://www.keycloak.org/docs-api/15.0/rest-api/index.html for details. This is a mere proxy object.
+    Notes: Check the Keycloak documentation at https://www.keycloak.org/docs-api/15.0/rest-api/index.html for
+    details. This is a mere proxy object.
     """
     id: str
     name: str
