@@ -85,6 +85,7 @@ class OIDCUser(BaseModel):
         email (Optional[str]):
         preferred_username (Optional[str]):
         realm_access (dict):
+        resource_access (dict):
 
     Notes:
          Check the Keycloak documentation at https://www.keycloak.org/docs-api/15.0/rest-api/index.html for details. This is a mere proxy object.
@@ -100,6 +101,7 @@ class OIDCUser(BaseModel):
     email: Optional[str]
     preferred_username: Optional[str]
     realm_access: Optional[dict]
+    resource_access: Optional[dict]
 
     @property
     def roles(self) -> List[str]:
