@@ -230,7 +230,7 @@ class TestAPIFunctional(BaseTestClass):
         oidc_user: OIDCUser = OIDCUser.parse_obj(decoded_token)
         for role in ["role_a", "role_b"]:
             assert role in oidc_user.roles
-
+            
         idp.delete_role("role_a")
         idp.delete_role("role_b")
         idp.delete_user(user.id)
