@@ -224,6 +224,13 @@ class TestAPIFunctional(BaseTestClass):
             send_email_verification=False
         )
         assert user
+
+        user_token: KeycloakToken = idp.user_login(username=user.username, password=TEST_PASSWORD)
+        decoded_token = idp._decode_token(token=user_token.access_token, audience="account")
+        oidc_user: OIDCUser = OIDCUser.parse_obj(decoded_token)
+        for role in ["role_a", "role_b"]:
+            assert role in oidc_user.roles
+            
         idp.delete_role("role_a")
         idp.delete_role("role_b")
         idp.delete_user(user.id)

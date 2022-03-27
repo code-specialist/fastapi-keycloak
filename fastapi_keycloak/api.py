@@ -666,7 +666,6 @@ class FastAPIKeycloak:
             "firstName": first_name,
             "lastName": last_name,
             "enabled": enabled,
-            "realmRoles": initial_roles,
             "credentials": [
                 {
                     "temporary": False,
@@ -682,6 +681,9 @@ class FastAPIKeycloak:
         user = self.get_user(query=f'username={username}')
         if send_email_verification:
             self.send_email_verification(user.id)
+        if initial_roles:
+            self.add_user_roles(initial_roles, user.id)
+            user = self.get_user(user_id=user.id)
         return user
 
     @result_or_error()
