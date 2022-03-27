@@ -660,16 +660,13 @@ class FastAPIKeycloak:
         Raises:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
-        initial_roles = self.get_roles(initial_roles)
-        initial_roles_json = [role.dict() for role in initial_roles]
-
         data = {
             "email": email,
             "username": username,
             "firstName": first_name,
             "lastName": last_name,
             "enabled": enabled,
-            "clientRoles": initial_roles_json,
+            "realmRoles": initial_roles,
             "credentials": [
                 {
                     "temporary": False,
