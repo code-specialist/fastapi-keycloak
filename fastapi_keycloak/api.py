@@ -435,7 +435,7 @@ class FastAPIKeycloak:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         return self._admin_request(url=f'{self.roles_uri}/{role_name}', method=HTTPMethod.DELETE)
-        
+
     @result_or_error(response_model=KeycloakGroup, is_list=True)
     def get_all_groups(self) -> List[KeycloakGroup]:
         """ Get all base groups of the Keycloak realm
@@ -446,8 +446,8 @@ class FastAPIKeycloak:
         Raises:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
-        return self._admin_request(url=self.groups_uri, method=HTTPMethod.GET)     
-        
+        return self._admin_request(url=self.groups_uri, method=HTTPMethod.GET)
+
     @result_or_error(response_model=KeycloakGroup, is_list=True)
     def get_groups(self, group_names: List[str]) -> List[KeycloakGroup] or None:
         """ Returns full entries of base Groups based on group names
@@ -464,8 +464,8 @@ class FastAPIKeycloak:
         if group_names is None:
             return None
         groups = self.get_all_groups()
-        return list(filter(lambda group: group.name in group_names, groups))   
-    
+        return list(filter(lambda group: group.name in group_names, groups))
+
     def get_subgroups(self, group: KeycloakGroup, path: str):
         """Utility function to iterate through nested group structures
         
@@ -485,7 +485,7 @@ class FastAPIKeycloak:
                         return subgroups
         # Went through the tree without hits
         return None
-    
+
     @result_or_error(response_model=KeycloakGroup)
     def get_group_by_path(self, path: str, search_in_subgroups=True) -> KeycloakGroup or None:
         """ Return Group based on path
@@ -501,7 +501,7 @@ class FastAPIKeycloak:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         groups = self.get_all_groups()
-        
+
         for group in groups:
             if group.path == path:
                 return group
@@ -512,7 +512,7 @@ class FastAPIKeycloak:
                     res = self.get_subgroups(group, path)
                     if res is not None:
                         return res
-    
+
     @result_or_error(response_model=KeycloakGroup)
     def get_group(self, group_id: str) -> KeycloakGroup or None:
         """ Return Group based on group id
@@ -530,8 +530,8 @@ class FastAPIKeycloak:
         Raises:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
-        return self._admin_request(url=f'{self.groups_uri}/{group_id}', method=HTTPMethod.GET)     
-        
+        return self._admin_request(url=f'{self.groups_uri}/{group_id}', method=HTTPMethod.GET)
+
     @result_or_error(response_model=KeycloakGroup)
     def create_group(self, group_name: str, parent: Union[KeycloakGroup, str] = None) -> KeycloakGroup:
         """ Create a group on the realm
@@ -546,24 +546,24 @@ class FastAPIKeycloak:
         Raises:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
-        
+
         # If it's an objetc id get an instance of the object
         if isinstance(parent, str):
             parent = self.get_group(parent)
-        
+
         if parent is not None:
             groups_uri = f'{self.groups_uri}/{parent.id}/children'
             path = f'{parent.path}/{group_name}'
         else:
             groups_uri = self.groups_uri
             path = f'/{group_name}'
-        
+
         response = self._admin_request(url=groups_uri, data={'name': group_name}, method=HTTPMethod.POST)
         if response.status_code == 201:
             return self.get_group_by_path(path=path, search_in_subgroups=True)
         else:
-            return response       
-        
+            return response
+
     @result_or_error()
     def delete_group(self, group_id: str) -> dict:
         """ Deletes a group on the realm
@@ -577,7 +577,7 @@ class FastAPIKeycloak:
         Raises:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
-        return self._admin_request(url=f'{self.groups_uri}/{group_id}', method=HTTPMethod.DELETE)   
+        return self._admin_request(url=f'{self.groups_uri}/{group_id}', method=HTTPMethod.DELETE)
 
     @result_or_error()
     def add_user_group(self, user_id: str, group_id: str) -> dict:
@@ -609,7 +609,7 @@ class FastAPIKeycloak:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         return self._admin_request(url=f'{self.users_uri}/{user_id}/groups', method=HTTPMethod.GET)
-    
+
     @result_or_error()
     def remove_user_group(self, user_id: str, group_id: str) -> dict:
         """ Remove group from a specific user
@@ -624,7 +624,7 @@ class FastAPIKeycloak:
         Raises:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
-        return self._admin_request(url=f'{self.users_uri}/{user_id}/groups/{group_id}', method=HTTPMethod.DELETE)    
+        return self._admin_request(url=f'{self.users_uri}/{user_id}/groups/{group_id}', method=HTTPMethod.DELETE)
 
     @result_or_error(response_model=KeycloakUser)
     def create_user(
@@ -660,13 +660,16 @@ class FastAPIKeycloak:
         Raises:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
+        initial_roles = self.get_roles(initial_roles)
+        initial_roles_json = [role.dict() for role in initial_roles]
+
         data = {
             "email": email,
             "username": username,
             "firstName": first_name,
             "lastName": last_name,
             "enabled": enabled,
-            "clientRoles": self.get_roles(initial_roles),
+            "clientRoles": initial_roles_json,
             "credentials": [
                 {
                     "temporary": False,
@@ -939,7 +942,7 @@ class FastAPIKeycloak:
     def roles_uri(self):
         """ The roles endpoint URL """
         return self.admin_uri(resource="roles")
-        
+
     @functools.cached_property
     def groups_uri(self):
         """ The groups endpoint URL """
