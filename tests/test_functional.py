@@ -209,6 +209,25 @@ class TestAPIFunctional(BaseTestClass):
         idp.delete_user(user_id=user_alice.id)
         idp.delete_user(user_id=user_bob.id)
 
+    def test_user_with_initial_roles(self, idp):
+        idp.create_role("role_a")
+        idp.create_role("role_b")
+
+        user: KeycloakUser = idp.create_user(
+            first_name="test",
+            last_name="user",
+            username="user@code-specialist.com",
+            email="user@code-specialist.com",
+            initial_roles=["role_a", "role_b"],
+            password=TEST_PASSWORD,
+            enabled=True,
+            send_email_verification=False
+        )
+        assert user
+        idp.delete_role("role_a")
+        idp.delete_role("role_b")
+        idp.delete_user(user.id)
+
     def test_groups(self, idp):
 
         # None of empty list groups
