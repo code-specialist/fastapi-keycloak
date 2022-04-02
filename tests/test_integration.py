@@ -11,7 +11,6 @@ from tests import BaseTestClass
 
 
 class TestAPIIntegration(BaseTestClass):
-
     def test_properties(self, idp):
         assert idp.public_key
         assert idp.admin_token
@@ -43,7 +42,7 @@ class TestAPIIntegration(BaseTestClass):
         assert app.swagger_ui_init_oauth == {
             "usePkceWithAuthorizationCodeGrant": True,
             "clientId": idp.client_id,
-            "clientSecret": idp.client_secret
+            "clientSecret": idp.client_secret,
         }
 
     def test_user_auth_scheme(self, idp):
@@ -54,10 +53,7 @@ class TestAPIIntegration(BaseTestClass):
         assert type(idp.open_id_configuration) == dict
 
     def test_proxy(self, idp):
-        response = idp.proxy(
-            relative_path="/realms/Test",
-            method=HTTPMethod.GET
-        )
+        response = idp.proxy(relative_path="/realms/Test", method=HTTPMethod.GET)
         assert type(response.json()) == dict
 
     def test_get_all_roles_and_get_roles(self, idp):

@@ -1,10 +1,16 @@
 from typing import List, Optional
 
 import uvicorn
-from fastapi import FastAPI, Depends, Query, Body
+from fastapi import Body, Depends, FastAPI, Query
 from pydantic import SecretStr
 
-from fastapi_keycloak import FastAPIKeycloak, OIDCUser, UsernamePassword, HTTPMethod, KeycloakUser
+from fastapi_keycloak import (
+    FastAPIKeycloak,
+    HTTPMethod,
+    KeycloakUser,
+    OIDCUser,
+    UsernamePassword,
+)
 
 app = FastAPI()
 idp = FastAPIKeycloak(
@@ -14,23 +20,26 @@ idp = FastAPIKeycloak(
     admin_client_id="admin-cli",
     admin_client_secret="BIcczGsZ6I8W5zf0rZg5qSexlloQLPKB",
     realm="Test",
-    callback_uri="http://localhost:8081/callback"
+    callback_uri="http://localhost:8081/callback",
 )
 idp.add_swagger_config(app)
 
 
 # Admin
 
+
 @app.post("/proxy", tags=["admin-cli"])
 def proxy_admin_request(
-        relative_path: str, method: HTTPMethod, additional_headers: dict = Body(None),
-        payload: dict = Body(None)
+    relative_path: str,
+    method: HTTPMethod,
+    additional_headers: dict = Body(None),
+    payload: dict = Body(None),
 ):
     return idp.proxy(
         additional_headers=additional_headers,
         relative_path=relative_path,
         method=method,
-        payload=payload
+        payload=payload,
     )
 
 
@@ -46,6 +55,7 @@ def get_idp_config():
 
 # User Management
 
+
 @app.get("/users", tags=["user-management"])
 def get_users():
     return idp.get_all_users()
@@ -57,9 +67,17 @@ def get_user_by_query(query: str = None):
 
 
 @app.post("/users", tags=["user-management"])
-def create_user(first_name: str, last_name: str, email: str, password: SecretStr, id: str = None):
-    return idp.create_user(first_name=first_name, last_name=last_name, username=email, email=email,
-                           password=password.get_secret_value(), id=id)
+def create_user(
+    first_name: str, last_name: str, email: str, password: SecretStr, id: str = None
+):
+    return idp.create_user(
+        first_name=first_name,
+        last_name=last_name,
+        username=email,
+        email=email,
+        password=password.get_secret_value(),
+        id=id,
+    )
 
 
 @app.get("/user/{user_id}", tags=["user-management"])
@@ -89,6 +107,7 @@ def send_email_verification(user_id: str):
 
 # Role Management
 
+
 @app.get("/roles", tags=["role-management"])
 def get_all_roles():
     return idp.get_all_roles()
@@ -110,6 +129,7 @@ def delete_roles(role_name: str):
 
 
 # Group Management
+
 
 @app.get("/groups", tags=["group-management"])
 def get_all_groups():
@@ -138,6 +158,7 @@ def delete_groups(group_id: str):
 
 # User Roles
 
+
 @app.post("/users/{user_id}/roles", tags=["user-roles"])
 def add_roles_to_user(user_id: str, roles: Optional[List[str]] = Query(None)):
     return idp.add_user_roles(user_id=user_id, roles=roles)
@@ -154,6 +175,7 @@ def delete_roles_from_user(user_id: str, roles: Optional[List[str]] = Query(None
 
 
 # User Groups
+
 
 @app.post("/users/{user_id}/groups", tags=["user-groups"])
 def add_group_to_user(user_id: str, group_id: str):
@@ -172,6 +194,7 @@ def delete_groups_from_user(user_id: str, group_id: str):
 
 # Example User Requests
 
+
 @app.get("/protected", tags=["example-user-request"])
 def protected(user: OIDCUser = Depends(idp.get_current_user())):
     return user
@@ -183,16 +206,21 @@ def get_current_users_roles(user: OIDCUser = Depends(idp.get_current_user())):
 
 
 @app.get("/admin", tags=["example-user-request"])
-def company_admin(user: OIDCUser = Depends(idp.get_current_user(required_roles=["admin"]))):
-    return f'Hi admin {user}'
+def company_admin(
+    user: OIDCUser = Depends(idp.get_current_user(required_roles=["admin"])),
+):
+    return f"Hi admin {user}"
 
 
 @app.get("/login", tags=["example-user-request"])
 def login(user: UsernamePassword = Depends()):
-    return idp.user_login(username=user.username, password=user.password.get_secret_value())
+    return idp.user_login(
+        username=user.username, password=user.password.get_secret_value()
+    )
 
 
 # Auth Flow
+
 
 @app.get("/login-link", tags=["auth-flow"])
 def login_redirect():
@@ -209,5 +237,5 @@ def logout():
     return idp.logout_uri
 
 
-if __name__ == '__main__':
-    uvicorn.run('app:app', host="127.0.0.1", port=8081)
+if __name__ == "__main__":
+    uvicorn.run("app:app", host="127.0.0.1", port=8081)
