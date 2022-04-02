@@ -4,6 +4,7 @@ import functools
 import json
 from json import JSONDecodeError
 from typing import Any, List, Type, Union
+from urllib.parse import urlencode
 
 import requests
 from fastapi import Depends, FastAPI, HTTPException
@@ -484,7 +485,8 @@ class FastAPIKeycloak:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         return self._admin_request(
-            url=f"{self.roles_uri}/{role_name}", method=HTTPMethod.DELETE
+            url=f"{self.roles_uri}/{role_name}",
+            method=HTTPMethod.DELETE,
         )
 
     @result_or_error(response_model=KeycloakGroup, is_list=True)
@@ -584,7 +586,8 @@ class FastAPIKeycloak:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         return self._admin_request(
-            url=f"{self.groups_uri}/{group_id}", method=HTTPMethod.GET
+            url=f"{self.groups_uri}/{group_id}",
+            method=HTTPMethod.GET,
         )
 
     @result_or_error(response_model=KeycloakGroup)
@@ -637,7 +640,8 @@ class FastAPIKeycloak:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         return self._admin_request(
-            url=f"{self.groups_uri}/{group_id}", method=HTTPMethod.DELETE
+            url=f"{self.groups_uri}/{group_id}",
+            method=HTTPMethod.DELETE,
         )
 
     @result_or_error()
@@ -672,7 +676,8 @@ class FastAPIKeycloak:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         return self._admin_request(
-            url=f"{self.users_uri}/{user_id}/groups", method=HTTPMethod.GET
+            url=f"{self.users_uri}/{user_id}/groups",
+            method=HTTPMethod.GET,
         )
 
     @result_or_error()
@@ -798,7 +803,8 @@ class FastAPIKeycloak:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         return self._admin_request(
-            url=f"{self.users_uri}/{user_id}/send-verify-email", method=HTTPMethod.PUT
+            url=f"{self.users_uri}/{user_id}/send-verify-email",
+            method=HTTPMethod.PUT,
         )
 
     @result_or_error(response_model=KeycloakUser)
@@ -863,7 +869,8 @@ class FastAPIKeycloak:
             KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
         """
         return self._admin_request(
-            url=f"{self.users_uri}/{user_id}", method=HTTPMethod.DELETE
+            url=f"{self.users_uri}/{user_id}",
+            method=HTTPMethod.DELETE
         )
 
     @result_or_error(response_model=KeycloakUser, is_list=True)
@@ -1012,7 +1019,12 @@ class FastAPIKeycloak:
     @functools.cached_property
     def login_uri(self):
         """The URL for users to login on the realm. Also adds the client id and the callback."""
-        return f"{self.authorization_uri}?response_type=code&client_id={self.client_id}&redirect_uri={self.callback_uri}"
+        params = {
+            "response_type": "code",
+            "client_id": self.client_id,
+            "redirect_uri": self.callback_uri,
+        }
+        return f"{self.authorization_uri}?{urlencode(params)}"
 
     @functools.cached_property
     def authorization_uri(self):
