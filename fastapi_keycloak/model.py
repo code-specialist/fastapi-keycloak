@@ -7,7 +7,7 @@ from fastapi_keycloak.exceptions import KeycloakError
 
 
 class HTTPMethod(Enum):
-    """ Represents the basic HTTP verbs
+    """Represents the basic HTTP verbs
 
     Values:
         - GET: get
@@ -15,15 +15,16 @@ class HTTPMethod(Enum):
         - DELETE: delete
         - PUT: put
     """
-    GET = 'get'
-    POST = 'post'
-    DELETE = 'delete'
-    PUT = 'put'
+
+    GET = "get"
+    POST = "post"
+    DELETE = "delete"
+    PUT = "put"
 
 
 class KeycloakUser(BaseModel):
-    """ Represents a user object of Keycloak.
-    
+    """Represents a user object of Keycloak.
+
     Attributes:
         id (str):
         createdTimestamp (int):
@@ -44,6 +45,7 @@ class KeycloakUser(BaseModel):
     Notes: Check the Keycloak documentation at https://www.keycloak.org/docs-api/15.0/rest-api/index.html for
     details. This is a mere proxy object.
     """
+
     id: str
     createdTimestamp: int
     username: str
@@ -62,19 +64,20 @@ class KeycloakUser(BaseModel):
 
 
 class UsernamePassword(BaseModel):
-    """ Represents a request body that contains username and password
+    """Represents a request body that contains username and password
 
     Attributes:
         username (str): Username
         password (str): Password, masked by swagger
     """
+
     username: str
     password: SecretStr
 
 
 class OIDCUser(BaseModel):
-    """ Represents a user object of Keycloak, parsed from access token
-    
+    """Represents a user object of Keycloak, parsed from access token
+
     Attributes:
         sub (str):
         iat (int):
@@ -92,6 +95,7 @@ class OIDCUser(BaseModel):
     Notes: Check the Keycloak documentation at https://www.keycloak.org/docs-api/15.0/rest-api/index.html for
     details. This is a mere proxy object.
     """
+
     sub: str
     iat: int
     exp: int
@@ -107,13 +111,13 @@ class OIDCUser(BaseModel):
 
     @property
     def roles(self) -> List[str]:
-        """ Returns the roles of the user
+        """Returns the roles of the user
 
         Returns:
             List[str]: If the realm access dict contains roles
         """
         try:
-            return self.realm_access['roles']
+            return self.realm_access["roles"]
         except KeyError as e:
             raise KeycloakError(
                 status_code=404,
@@ -121,12 +125,12 @@ class OIDCUser(BaseModel):
             ) from e
 
     def __str__(self) -> str:
-        """ String representation of an OIDCUser """
+        """String representation of an OIDCUser"""
         return self.preferred_username
 
 
 class KeycloakIdentityProvider(BaseModel):
-    """ Keycloak representation of an identity provider
+    """Keycloak representation of an identity provider
 
     Attributes:
         alias (str):
@@ -145,6 +149,7 @@ class KeycloakIdentityProvider(BaseModel):
     Notes: Check the Keycloak documentation at https://www.keycloak.org/docs-api/15.0/rest-api/index.html for
     details. This is a mere proxy object.
     """
+
     alias: str
     internalId: str
     providerId: str
@@ -160,18 +165,19 @@ class KeycloakIdentityProvider(BaseModel):
 
 
 class KeycloakRole(BaseModel):
-    """ Keycloak representation of a role
-    
+    """Keycloak representation of a role
+
     Attributes:
         id (str):
         name (str):
         composite (bool):
         clientRole (bool):
         containerId (str):
-        
+
     Notes: Check the Keycloak documentation at https://www.keycloak.org/docs-api/15.0/rest-api/index.html for
     details. This is a mere proxy object.
     """
+
     id: str
     name: str
     composite: bool
@@ -180,32 +186,34 @@ class KeycloakRole(BaseModel):
 
 
 class KeycloakToken(BaseModel):
-    """ Keycloak representation of a token object
+    """Keycloak representation of a token object
 
     Attributes:
         access_token (str): An access token
     """
+
     access_token: str
 
     def __str__(self):
-        """ String representation of KeycloakToken """
-        return f'Bearer {self.access_token}'
+        """String representation of KeycloakToken"""
+        return f"Bearer {self.access_token}"
 
 
 class KeycloakGroup(BaseModel):
-    """ Keycloak representation of a group
-    
+    """Keycloak representation of a group
+
     Attributes:
         id (str):
         name (str):
         path (Optional[str]):
-        realmRoles (Optional[str]):        
+        realmRoles (Optional[str]):
     """
+
     id: str
     name: str
     path: Optional[str]
     realmRoles: Optional[List[str]]
-    subGroups: Optional[List['KeycloakGroup']]
+    subGroups: Optional[List["KeycloakGroup"]]
 
 
 KeycloakGroup.update_forward_refs()
