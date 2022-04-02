@@ -20,11 +20,16 @@ from fastapi_keycloak.exceptions import (
     UpdatePasswordException,
     UpdateProfileException,
     UpdateUserLocaleException,
-    VerifyEmailException)
+    VerifyEmailException,
+)
 from fastapi_keycloak.model import (
-    HTTPMethod, KeycloakGroup,
-    KeycloakIdentityProvider, KeycloakRole,
-    KeycloakToken, KeycloakUser, OIDCUser
+    HTTPMethod,
+    KeycloakGroup,
+    KeycloakIdentityProvider,
+    KeycloakRole,
+    KeycloakToken,
+    KeycloakUser,
+    OIDCUser,
 )
 
 
