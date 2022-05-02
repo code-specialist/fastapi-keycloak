@@ -35,7 +35,7 @@ jobs:
 
       - name: Wait for Infrastructure to be ready
         run: |
-          chmod +x tests/wait_for_service.sh & bash tests/wait_for_service.sh "localhost:8085" "200" "30"
+          chmod +x tests/wait_for_service.sh & bash tests/wait_for_service.sh http://localhost:8085 200 60
 
       - name: Test with pytest
         run: |
