@@ -44,5 +44,5 @@ jobs:
       - name: Teardown Test Infrastructure
         if: always()
         run: |
-          bash ./tests/start_infra.sh
+          bash ./tests/stop_infra.sh
         shell: bash
