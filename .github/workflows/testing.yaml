@@ -33,6 +33,10 @@ jobs:
           python -m pip install pytest pytest-cov
           python -m pip install -r requirements.txt
 
+      - name: Wait for Infrastructure to be ready
+        run: |
+          chmod +x tests/wait_for_service.sh & bash tests/wait_for_service.sh "localhost:8085" "200" "30"
+
       - name: Test with pytest
         run: |
           pytest tests
@@ -47,4 +51,3 @@ jobs:
         run: |
           cd tests
           bash ./stop_infra.sh
-        shell: bash
