@@ -16,7 +16,8 @@ jobs:
 
       - name: Start Test Infrastructure
         run: |
-          bash ./tests/start_infra.sh
+          cd tests
+          bash ./start_infra.sh
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
@@ -44,5 +45,6 @@ jobs:
       - name: Teardown Test Infrastructure
         if: always()
         run: |
-          bash ./tests/stop_infra.sh
+          cd tests
+          bash ./stop_infra.sh
         shell: bash
