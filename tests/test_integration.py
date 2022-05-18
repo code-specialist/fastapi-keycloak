@@ -4,6 +4,7 @@ import pytest as pytest
 from fastapi import FastAPI
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError
+from requests import ReadTimeout
 
 from fastapi_keycloak import HTTPMethod
 from fastapi_keycloak.model import KeycloakRole
@@ -55,6 +56,14 @@ class TestAPIIntegration(BaseTestClass):
     def test_proxy(self, idp):
         response = idp.proxy(relative_path="/realms/Test", method=HTTPMethod.GET)
         assert type(response.json()) == dict
+
+    def test_timeout(self, idp):
+        idp.timeout = 0.001
+        try:
+            idp.proxy(relative_path="/realms/Test", method=HTTPMethod.GET)
+            assert False
+        except ReadTimeout:
+            assert True
 
     def test_get_all_roles_and_get_roles(self, idp):
         roles: List[KeycloakRole] = idp.get_all_roles()
