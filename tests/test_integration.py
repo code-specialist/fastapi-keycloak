@@ -58,7 +58,7 @@ class TestAPIIntegration(BaseTestClass):
         assert type(response.json()) == dict
 
     def test_timeout(self, idp):
-        idp.timeout = 0.001
+        idp.timeout = 0.0001
         try:
             idp.proxy(relative_path="/realms/Test", method=HTTPMethod.GET)
             assert False
