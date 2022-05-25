@@ -762,7 +762,7 @@ class FastAPIKeycloak:
                 {"temporary": False, "type": "password", "value": password}
             ],
             "requiredActions": ["VERIFY_EMAIL" if send_email_verification else None],
-            "attributes": attributes
+            "attributes": attributes,
         }
         response = self._admin_request(
             url=self.users_uri, data=data, method=HTTPMethod.POST
