@@ -35,6 +35,8 @@ class KeycloakUser(BaseModel):
         firstName (Optional[str]):
         lastName (Optional[str]):
         email (Optional[str]):
+        phone (Optional[str]):
+        city (Optional[str]):
         disableableCredentialTypes (List[str]):
         requiredActions (List[str]):
         realmRoles (List[str]):
@@ -55,6 +57,8 @@ class KeycloakUser(BaseModel):
     firstName: Optional[str]
     lastName: Optional[str]
     email: Optional[str]
+    phone: Optional[str]
+    city: Optional[str]
     disableableCredentialTypes: List[str]
     requiredActions: List[str]
     realmRoles: Optional[List[str]]

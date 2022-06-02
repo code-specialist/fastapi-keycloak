@@ -712,6 +712,8 @@ class FastAPIKeycloak:
             username: str,
             email: str,
             password: str,
+            phone: str,
+            city: str,
             enabled: bool = True,
             initial_roles: List[str] = None,
             send_email_verification: bool = True,
@@ -724,6 +726,8 @@ class FastAPIKeycloak:
             username (str): The username of the new user
             email (str): The email of the new user
             password (str): The password of the new user
+            phone (str): Phone
+            city (str): City
             initial_roles (List[str]): The roles the user should posses. Defaults to `None`
             enabled (bool): True if the user should be able to be used. Defaults to `True`
             send_email_verification (bool): If true, the email verification will be added as an required
@@ -744,6 +748,8 @@ class FastAPIKeycloak:
             "username": username,
             "firstName": first_name,
             "lastName": last_name,
+            "phone": phone,
+            "city": city,
             "enabled": enabled,
             "credentials": [
                 {"temporary": False, "type": "password", "value": password}
