@@ -22,7 +22,7 @@ classifiers = [
     'Programming Language :: Python :: 3.8',
 ]
 requires-python = ">=3.8"
-dynamic = ["version", "description"]
+dynamic = ["version"]
 dependencies = [
     "anyio>=3.4.0",
     "asgiref>=3.4.1",
@@ -49,3 +49,6 @@ dependencies = [
 
 [project.urls]
 Documentation = "https://fastapi-keycloak.code-specialist.com/"
+
+[tool.setuptools.dynamic]
+description = {file = ["README.md"]}
