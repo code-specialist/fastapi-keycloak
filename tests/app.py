@@ -68,19 +68,15 @@ def get_user_by_query(query: str = None):
 
 @app.post("/users", tags=["user-management"])
 def create_user(
-    first_name: str, last_name: str, email: str, password: SecretStr, phone: str, city: str, id: str = None
+    first_name: str, last_name: str, email: str, password: SecretStr, id: str = None
 ):
     return idp.create_user(
         first_name=first_name,
         last_name=last_name,
         username=email,
         email=email,
-        phone=phone,
-        city=city,
         password=password.get_secret_value(),
         id=id,
-        phone=phone,
-        city=city,
     )
 
 

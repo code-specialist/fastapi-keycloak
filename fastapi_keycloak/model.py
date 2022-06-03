@@ -35,8 +35,6 @@ class KeycloakUser(BaseModel):
         firstName (Optional[str]):
         lastName (Optional[str]):
         email (Optional[str]):
-        phone (Optional[str]):
-        city (Optional[str]):
         disableableCredentialTypes (List[str]):
         requiredActions (List[str]):
         realmRoles (List[str]):
@@ -57,8 +55,6 @@ class KeycloakUser(BaseModel):
     firstName: Optional[str]
     lastName: Optional[str]
     email: Optional[str]
-    phone: Optional[str]
-    city: Optional[str]
     disableableCredentialTypes: List[str]
     requiredActions: List[str]
     realmRoles: Optional[List[str]]
@@ -95,6 +91,7 @@ class OIDCUser(BaseModel):
         preferred_username (Optional[str]):
         realm_access (dict):
         resource_access (dict):
+        extra_fields (dict):
 
     Notes: Check the Keycloak documentation at https://www.keycloak.org/docs-api/15.0/rest-api/index.html for
     details. This is a mere proxy object.
@@ -112,7 +109,8 @@ class OIDCUser(BaseModel):
     preferred_username: Optional[str]
     realm_access: Optional[dict]
     resource_access: Optional[dict]
-
+    extra_fields: Optional[dict]
+    
     @property
     def roles(self) -> List[str]:
         """Returns the roles of the user
