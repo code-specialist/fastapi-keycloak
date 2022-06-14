@@ -31,6 +31,7 @@ from fastapi_keycloak.model import (
     KeycloakToken,
     KeycloakUser,
     OIDCUser,
+    JWTData,
 )
 
 
@@ -914,8 +915,8 @@ class FastAPIKeycloak:
         """
         return self._admin_request(url=self.providers_uri, method=HTTPMethod.GET).json()
 
-    @result_or_error(response_model=KeycloakToken)
-    def user_login(self, username: str, password: str) -> KeycloakToken:
+    @result_or_error(response_model=JWTData)
+    def user_login(self, username: str, password: str) -> JWTData:
         """Models the password OAuth2 flow. Exchanges username and password for an access token. Will raise detailed
         errors if login fails due to requiredActions
 
@@ -924,7 +925,7 @@ class FastAPIKeycloak:
             password (str): Password of the user
 
         Returns:
-            KeycloakToken: If the exchange succeeds
+            JWTData: If the exchange succeeds
 
         Raises:
             HTTPException: If the credentials did not match any user

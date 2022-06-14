@@ -201,6 +201,20 @@ class KeycloakToken(BaseModel):
         return f"Bearer {self.access_token}"
 
 
+class JWTData(BaseModel):
+    """Data from JWT token
+
+    Attributes:
+        access_token (str): An access token
+        refresh_token (str): A refresh token
+        session_state (str): A session_state
+
+    """
+    access_token: str
+    refresh_token: str
+    session_state: str
+
+
 class KeycloakGroup(BaseModel):
     """Keycloak representation of a group
 
