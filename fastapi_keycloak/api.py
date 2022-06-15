@@ -7,7 +7,7 @@ from typing import Any, List, Type, Union
 from urllib.parse import urlencode
 
 import requests
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import ExpiredSignatureError, JWTError, jwt
 from jose.exceptions import JWTClaimsError
@@ -221,12 +221,13 @@ class FastAPIKeycloak:
         """
         return OAuth2PasswordBearer(tokenUrl=self.token_uri)
 
-    def get_current_user(self, required_roles: List[str] = None) -> OIDCUser:
+    def get_current_user(self, required_roles: List[str] = None, extra_fields: List[str] = None) -> OIDCUser:
         """Returns the current user based on an access token in the HTTP-header. Optionally verifies roles are possessed
         by the user
 
         Args:
             required_roles List[str]: List of role names required for this endpoint
+            extra_fields List[str]: The names of the additional fields you need that are encoded in JWT
 
         Returns:
             OIDCUser: Decoded JWT content
@@ -258,12 +259,22 @@ class FastAPIKeycloak:
             decoded_token = self._decode_token(token=token, audience="account")
             user = OIDCUser.parse_obj(decoded_token)
             if required_roles:
+                if not user.realm_access:  # in cases where there are no roles in realm accessing
+                    raise HTTPException(
+                        status_code=status.HTTP_403_FORBIDDEN,
+                        detail=f"Role(s) {', '.join(required_roles)} is required to perform this action",
+                    )
                 for role in required_roles:
                     if role not in user.roles:
                         raise HTTPException(
-                            status_code=403,
+                            status_code=status.HTTP_403_FORBIDDEN,
                             detail=f'Role "{role}" is required to perform this action',
                         )
+
+            if extra_fields:
+                for field in extra_fields:
+                    user.extra_fields[field] = decoded_token.get(field, None)
+
             return user
 
         return current_user
@@ -715,6 +726,7 @@ class FastAPIKeycloak:
             enabled: bool = True,
             initial_roles: List[str] = None,
             send_email_verification: bool = True,
+            attributes: dict[str, Any] = None,
     ) -> KeycloakUser:
         """
 
@@ -729,6 +741,7 @@ class FastAPIKeycloak:
             send_email_verification (bool): If true, the email verification will be added as an required
                                             action and the email triggered - if the user was created successfully.
                                             Defaults to `True`
+            attributes (dict): attributes of new user
 
         Returns:
             KeycloakUser: If the creation succeeded
@@ -749,6 +762,7 @@ class FastAPIKeycloak:
                 {"temporary": False, "type": "password", "value": password}
             ],
             "requiredActions": ["VERIFY_EMAIL" if send_email_verification else None],
+            "attributes": attributes,
         }
         response = self._admin_request(
             url=self.users_uri, data=data, method=HTTPMethod.POST
