@@ -1,7 +1,8 @@
 from typing import List, Optional
 
 import uvicorn
-from fastapi import Body, Depends, FastAPI, Query
+from fastapi import FastAPI, Depends, Query, Body, Request
+from fastapi.responses import JSONResponse
 from pydantic import SecretStr
 
 from fastapi_keycloak import (
@@ -10,6 +11,7 @@ from fastapi_keycloak import (
     KeycloakUser,
     OIDCUser,
     UsernamePassword,
+    KeycloakError
 )
 
 app = FastAPI()
@@ -25,6 +27,15 @@ idp = FastAPIKeycloak(
 idp.add_swagger_config(app)
 
 
+# Custom error handler for showing Keycloak errors on FastAPI
+@app.exception_handler(KeycloakError)
+async def keycloak_exception_handler(request: Request, exc: KeycloakError):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"message": exc.reason},
+    )
+
+    
 # Admin
 
 
@@ -212,8 +223,8 @@ def company_admin(
     return f"Hi admin {user}"
 
 
-@app.get("/login", tags=["example-user-request"])
-def login(user: UsernamePassword = Depends()):
+@app.post("/login", tags=["example-user-request"])
+def login(user: UsernamePassword = Body(...)):
     return idp.user_login(
         username=user.username, password=user.password.get_secret_value()
     )
