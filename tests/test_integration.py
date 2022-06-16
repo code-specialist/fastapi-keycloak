@@ -62,7 +62,7 @@ class TestAPIIntegration(BaseTestClass):
         idp.timeout = timeout
         try:
             idp.proxy(relative_path="/realms/Test", method=HTTPMethod.GET)
-            sleep(timeout)
+            sleep(1.0+timeout)
             assert False
         except ReadTimeout:
             assert True
