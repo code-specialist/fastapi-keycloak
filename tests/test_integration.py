@@ -9,7 +9,7 @@ from requests import ReadTimeout
 from fastapi_keycloak import HTTPMethod
 from fastapi_keycloak.model import KeycloakRole
 from tests import BaseTestClass
-
+from time import sleep
 
 class TestAPIIntegration(BaseTestClass):
     def test_properties(self, idp):
@@ -58,9 +58,11 @@ class TestAPIIntegration(BaseTestClass):
         assert type(response.json()) == dict
 
     def test_timeout(self, idp):
-        idp.timeout = 0.0001
+        timeout = 0.0001
+        idp.timeout = timeout
         try:
             idp.proxy(relative_path="/realms/Test", method=HTTPMethod.GET)
+            sleep(timeout)
             assert False
         except ReadTimeout:
             assert True
