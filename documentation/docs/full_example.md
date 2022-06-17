@@ -4,10 +4,19 @@
 from typing import List, Optional
 
 import uvicorn
-from fastapi import FastAPI, Depends, Query, Body
+from fastapi import FastAPI, Depends, Query, Body, Request
+from fastapi.responses import JSONResponse
 from pydantic import SecretStr
 
-from fastapi_keycloak import FastAPIKeycloak, OIDCUser, UsernamePassword, HTTPMethod, KeycloakUser, KeycloakGroup
+from fastapi_keycloak import (
+    FastAPIKeycloak,
+    OIDCUser,
+    UsernamePassword,
+    HTTPMethod,
+    KeycloakUser,
+    KeycloakGroup,
+    KeycloakError
+)
 
 app = FastAPI()
 idp = FastAPIKeycloak(
@@ -21,10 +30,24 @@ idp = FastAPIKeycloak(
 idp.add_swagger_config(app)
 
 
+# Custom error handler for showing Keycloak errors on FastAPI
+@app.exception_handler(KeycloakError)
+async def keycloak_exception_handler(request: Request, exc: KeycloakError):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"message": exc.reason},
+    )
+
+    
 # Admin
 
 @app.post("/proxy", tags=["admin-cli"])
-def proxy_admin_request(relative_path: str, method: HTTPMethod, additional_headers: dict = Body(None), payload: dict = Body(None)):
+def proxy_admin_request(
+    relative_path: str,
+    method: HTTPMethod,
+    additional_headers: dict = Body(None),
+    payload: dict = Body(None),
+):
     return idp.proxy(
         additional_headers=additional_headers,
         relative_path=relative_path,
@@ -56,8 +79,17 @@ def get_user_by_query(query: str = None):
 
 
 @app.post("/users", tags=["user-management"])
-def create_user(first_name: str, last_name: str, email: str, password: SecretStr, id: str = None):
-    return idp.create_user(first_name=first_name, last_name=last_name, username=email, email=email, password=password.get_secret_value(), id=id)
+def create_user(
+    first_name: str, last_name: str, email: str, password: SecretStr, id: str = None
+):
+    return idp.create_user(
+        first_name=first_name,
+        last_name=last_name,
+        username=email,
+        email=email,
+        password=password.get_secret_value(),
+        id=id
+    )
 
 
 @app.get("/user/{user_id}", tags=["user-management"])
@@ -182,12 +214,14 @@ def get_current_users_roles(user: OIDCUser = Depends(idp.get_current_user())):
 
 @app.get("/admin", tags=["example-user-request"])
 def company_admin(user: OIDCUser = Depends(idp.get_current_user(required_roles=["admin"]))):
-    return f'Hi admin {user}'
+    return f"Hi admin {user}"
 
 
-@app.get("/login", tags=["example-user-request"])
-def login(user: UsernamePassword = Depends()):
-    return idp.user_login(username=user.username, password=user.password.get_secret_value())
+@app.post("/login", tags=["example-user-request"])
+def login(user: UsernamePassword = Body(...)):
+    return idp.user_login(
+        username=user.username, password=user.password.get_secret_value()
+    )
 
 
 # Auth Flow
@@ -207,6 +241,6 @@ def logout():
     return idp.logout_uri
 
 
-if __name__ == '__main__':
-    uvicorn.run('app:app', host="127.0.0.1", port=8081)
+if __name__ == "__main__":
+    uvicorn.run("app:app", host="127.0.0.1", port=8081)
 ```
