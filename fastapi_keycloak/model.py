@@ -109,7 +109,7 @@ class OIDCUser(BaseModel):
     preferred_username: Optional[str]
     realm_access: Optional[dict]
     resource_access: Optional[dict]
-    extra_fields: dict = Field(default_factory=lambda: dict())
+    extra_fields: dict = Field(default_factory=dict)
 
     @property
     def roles(self) -> List[str]:
