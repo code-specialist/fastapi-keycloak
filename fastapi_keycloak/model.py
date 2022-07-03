@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List, Optional
 
-from pydantic import BaseModel, SecretStr
+from pydantic import BaseModel, SecretStr, Field
 
 from fastapi_keycloak.exceptions import KeycloakError
 
@@ -109,7 +109,7 @@ class OIDCUser(BaseModel):
     preferred_username: Optional[str]
     realm_access: Optional[dict]
     resource_access: Optional[dict]
-    extra_fields: Optional[dict]
+    extra_fields: dict = Field(default_factory=dict)
 
     @property
     def roles(self) -> List[str]:
