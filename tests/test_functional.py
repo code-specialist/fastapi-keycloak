@@ -9,6 +9,7 @@ from fastapi_keycloak.exceptions import (
     UpdatePasswordException,
     UpdateProfileException,
     UpdateUserLocaleException,
+    UserNotFound,
     VerifyEmailException,
 )
 from fastapi_keycloak.model import (
@@ -445,3 +446,10 @@ class TestAPIFunctional(BaseTestClass):
 
         # Clean up
         idp.delete_user(user_id=user.id)
+
+    def test_user_not_found_exception(self, idp):
+
+        with pytest.raises(
+            UserNotFound
+        ):  # Expect the get to fail due to anon existant user
+            u = idp.get_user(user_id="some_non_existant_user_id")
