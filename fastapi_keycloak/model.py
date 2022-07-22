@@ -118,6 +118,13 @@ class OIDCUser(BaseModel):
         Returns:
             List[str]: If the realm access dict contains roles
         """
+        if not self.realm_access:
+            raise KeycloakError(
+                status_code=404,
+                reason="'realm_access' section missing on the provided access token. \
+                HINT: enable 'Full Scope Allowed' on the 'client Scope Mappings', \
+                or manually assign the realm roles to scope",
+            )
         try:
             return self.realm_access["roles"]
         except KeyError as e:
