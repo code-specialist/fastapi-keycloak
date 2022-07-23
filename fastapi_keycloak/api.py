@@ -259,11 +259,6 @@ class FastAPIKeycloak:
             decoded_token = self._decode_token(token=token, audience="account")
             user = OIDCUser.parse_obj(decoded_token)
             if required_roles:
-                if not user.realm_access:  # in cases where there are no roles in realm accessing
-                    raise HTTPException(
-                        status_code=status.HTTP_403_FORBIDDEN,
-                        detail=f"Role(s) {', '.join(required_roles)} is required to perform this action",
-                    )
                 for role in required_roles:
                     if role not in user.roles:
                         raise HTTPException(

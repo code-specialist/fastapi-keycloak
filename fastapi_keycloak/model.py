@@ -118,6 +118,11 @@ class OIDCUser(BaseModel):
         Returns:
             List[str]: If the realm access dict contains roles
         """
+        if not self.realm_access:
+            raise KeycloakError(
+                status_code=404,
+                reason="The 'realm_access' section of the provided access token is missing",
+            )
         try:
             return self.realm_access["roles"]
         except KeyError as e:
