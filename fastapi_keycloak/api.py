@@ -21,6 +21,7 @@ from fastapi_keycloak.exceptions import (
     UpdatePasswordException,
     UpdateProfileException,
     UpdateUserLocaleException,
+    UserNotFound,
     VerifyEmailException,
 )
 from fastapi_keycloak.model import (
@@ -844,6 +845,11 @@ class FastAPIKeycloak:
             response = self._admin_request(
                 url=f"{self.users_uri}/{user_id}", method=HTTPMethod.GET
             )
+            if response.status_code == status.HTTP_404_NOT_FOUND:
+                raise UserNotFound(
+                    status_code = status.HTTP_404_NOT_FOUND,
+                    reason=f"User with user_id[{user_id}] was not found"
+                )
             return KeycloakUser(**response.json())
 
     @result_or_error(response_model=KeycloakUser)
