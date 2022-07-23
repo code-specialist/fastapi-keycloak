@@ -3,7 +3,7 @@ from __future__ import annotations
 import functools
 import json
 from json import JSONDecodeError
-from typing import Any, List, Type, Union
+from typing import Any, Callable, List, Type, Union
 from urllib.parse import urlencode
 
 import requests
@@ -67,7 +67,7 @@ def result_or_error(
                 return response_model.parse_obj(json_data)
 
             result: Response = f(*args, **kwargs)  # The actual call
-
+Fix the type hint of get_cur
             if (
                     type(result) != Response
             ):  # If the object given is not a response object, directly return it.
@@ -221,7 +221,7 @@ class FastAPIKeycloak:
         """
         return OAuth2PasswordBearer(tokenUrl=self.token_uri)
 
-    def get_current_user(self, required_roles: List[str] = None, extra_fields: List[str] = None) -> OIDCUser:
+    def get_current_user(self, required_roles: List[str] = None, extra_fields: List[str] = None) -> Callable[OAuth2PasswordBearer, OIDCUser]:
         """Returns the current user based on an access token in the HTTP-header. Optionally verifies roles are possessed
         by the user
 
@@ -230,7 +230,7 @@ class FastAPIKeycloak:
             extra_fields List[str]: The names of the additional fields you need that are encoded in JWT
 
         Returns:
-            OIDCUser: Decoded JWT content
+            Callable[OAuth2PasswordBearer, OIDCUser]: Dependency method which returns the decoded JWT content
 
         Raises:
             ExpiredSignatureError: If the token is expired (exp > datetime.now())
