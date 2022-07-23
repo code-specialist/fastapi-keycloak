@@ -67,7 +67,7 @@ def result_or_error(
                 return response_model.parse_obj(json_data)
 
             result: Response = f(*args, **kwargs)  # The actual call
-Fix the type hint of get_cur
+
             if (
                     type(result) != Response
             ):  # If the object given is not a response object, directly return it.
