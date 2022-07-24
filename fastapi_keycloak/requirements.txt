@@ -4,7 +4,7 @@ certifi==2021.10.8
 charset-normalizer==2.0.9
 click==8.0.3
 ecdsa==0.17.0
-fastapi==0.70.1
+fastapi==0.79.0
 h11==0.12.0
 idna==3.3
 pyasn1==0.4.8
@@ -14,8 +14,9 @@ requests==2.26.0
 rsa==4.8
 six==1.16.0
 sniffio==1.2.0
-starlette==0.16.0
+starlette==0.19.1
 typing_extensions==4.0.1
 urllib3==1.26.7
 uvicorn==0.16.0
-itsdangerous==2.0.1
+watchdog==2.1.6
+zipp==3.6.0

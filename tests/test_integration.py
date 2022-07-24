@@ -1,5 +1,7 @@
+from time import sleep
 from typing import List
 
+import httpretty as httpretty
 import pytest as pytest
 from fastapi import FastAPI
 from fastapi.security import OAuth2PasswordBearer
@@ -9,7 +11,7 @@ from requests import ReadTimeout
 from fastapi_keycloak import HTTPMethod
 from fastapi_keycloak.model import KeycloakRole
 from tests import BaseTestClass
-from time import sleep
+
 
 class TestAPIIntegration(BaseTestClass):
     def test_properties(self, idp):
@@ -57,15 +59,17 @@ class TestAPIIntegration(BaseTestClass):
         response = idp.proxy(relative_path="/realms/Test", method=HTTPMethod.GET)
         assert type(response.json()) == dict
 
+    @httpretty.activate(allow_net_connect=False)
     def test_timeout(self, idp):
-        timeout = 0.0001
-        idp.timeout = timeout
-        try:
-            idp.proxy(relative_path="/realms/Test", method=HTTPMethod.GET)
-            sleep(1.0+timeout)
-            assert False
-        except ReadTimeout:
-            assert True
+        def request_callback(request, url, headers):
+            sleep(1)
+            return 200, headers, 'OK'
+
+        httpretty.register_uri(httpretty.GET, f"{idp.server_url}/timeout", body=request_callback)
+        idp.timeout = 0.5
+
+        with pytest.raises(ReadTimeout):
+            idp.proxy(relative_path="/timeout", method=HTTPMethod.GET)
 
     def test_get_all_roles_and_get_roles(self, idp):
         roles: List[KeycloakRole] = idp.get_all_roles()

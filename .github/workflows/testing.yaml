@@ -30,12 +30,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install pytest pytest-cov
           python -m pip install -r requirements.txt
 
       - name: Wait for Infrastructure to be ready
         run: |
-          chmod +x tests/wait_for_service.sh & bash tests/wait_for_service.sh http://localhost:8085 200 60
+          chmod +x tests/wait_for_service.sh & bash tests/wait_for_service.sh http://localhost:8085 200 100
 
       - name: Test with pytest
         run: |
