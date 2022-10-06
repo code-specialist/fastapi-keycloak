@@ -9,6 +9,6 @@
    client manually)
 3. Valid Redirect URIs: `http://localhost:8081/callback` (Or whatever you configure in your python app)
 ## Modify the `admin-cli` client
-1. **Settings**: Service Accounts Enabled
+1. **Settings**: Access Type confidential, Service Accounts Enabled
 2. **Scope**: Full Scope Allowed
 3. **Service Account Roles**: Select all Client Roles available for `account` and `realm_management`
