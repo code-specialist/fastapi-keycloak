@@ -48,6 +48,8 @@ markdown_extensions:
   - attr_list
   - def_list
   - abbr
+  - markdown_include.include:
+      base_path: docs/
   - pymdownx.snippets
 
 extra_css:
