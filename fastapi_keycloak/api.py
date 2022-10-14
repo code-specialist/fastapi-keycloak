@@ -840,6 +840,11 @@ class FastAPIKeycloak:
             response = self._admin_request(
                 url=f"{self.users_uri}?{query}", method=HTTPMethod.GET
             )
+            if not response.json():
+                raise UserNotFound(
+                    status_code = status.HTTP_404_NOT_FOUND,
+                    reason=f"User query with filters of [{query}] did no match any users"
+                )
             return KeycloakUser(**response.json()[0])
         else:
             response = self._admin_request(

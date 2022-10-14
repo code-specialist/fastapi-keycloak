@@ -451,5 +451,10 @@ class TestAPIFunctional(BaseTestClass):
 
         with pytest.raises(
             UserNotFound
-        ):  # Expect the get to fail due to anon existant user
+        ):  # Expect the get to fail due to a non existant user
             u = idp.get_user(user_id="some_non_existant_user_id")
+
+        with pytest.raises(
+            UserNotFound
+        ):  # Expect the get to fail due to a failed query search
+            u = idp.get_user(username="some_non_existant_username")
