@@ -9,6 +9,11 @@
 
 ---
 
+## Notice
+
+We created this as an open-source project in order to share our code with other people. Unfortunately we decided to abandon Keycloak in our project due to its unreliability in API compatiblity and the general maintenance overhead. Therefore, we are no longer able to frequently update this library. We are searching for someone or a group of people to maintain this repository actively, as we do not have the capacity but think that keycloak still is a highly relevant IDP solution. If you or your team want to take over the responsibility, please mail us at [admin@code-specialist.com](mailto:admin@code-specialist.com)
+
+## Introduction
 
 Welcome to `fastapi-keycloak`. This projects goal is to ease the integration of Keycloak (OpenID Connect) with Python, especially FastAPI. FastAPI is not necessary but is
 encouraged due to specific features. Currently, this package supports only the `password` and the `authorization_code`. However, the `get_current_user()` method accepts any JWT
