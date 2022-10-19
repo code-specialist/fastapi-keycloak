@@ -6,6 +6,7 @@
 ![Py3.8](https://img.shields.io/badge/-Python%203.8-brightgreen)
 ![Py3.9](https://img.shields.io/badge/-Python%203.9-brightgreen)
 ![Py3.10](https://img.shields.io/badge/-Python%203.10-brightgreen)
+[![CodeQL](https://github.com/code-specialist/fastapi-keycloak/actions/workflows/codeql.yml/badge.svg)](https://github.com/code-specialist/fastapi-keycloak/actions/workflows/codeql.yml)
 
 ---
 
