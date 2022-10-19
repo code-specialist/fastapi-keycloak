@@ -448,13 +448,8 @@ class TestAPIFunctional(BaseTestClass):
         idp.delete_user(user_id=user.id)
 
     def test_user_not_found_exception(self, idp):
+        with pytest.raises(UserNotFound):  # Expect the get to fail due to a non existent user
+            idp.get_user(user_id='abc')
 
-        with pytest.raises(
-            UserNotFound
-        ):  # Expect the get to fail due to a non existant user
-            u = idp.get_user(user_id="some_non_existant_user_id")
-
-        with pytest.raises(
-            UserNotFound
-        ):  # Expect the get to fail due to a failed query search
-            u = idp.get_user(username="some_non_existant_username")
+        with pytest.raises(UserNotFound):  # Expect the get to fail due to a failed query search
+            idp.get_user(query='username="some_non_existant_username"')
