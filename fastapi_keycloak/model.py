@@ -128,9 +128,9 @@ class OIDCUser(BaseModel):
             if "roles" in self.realm_access:
                 roles += self.realm_access["roles"]
         if self.resource_access:
-            for client_name, roles_dict in self.resource_access.items():
-                if "roles" in roles_dict:
-                    roles += roles_dict["roles"]
+            if "azp" in self.resource_access:
+                if "roles" in self.resource_access:
+                    roles += self.resource_access["roles"]
         if not roles:
             raise KeycloakError(
                 status_code=404,
