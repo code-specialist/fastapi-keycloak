@@ -118,18 +118,26 @@ class OIDCUser(BaseModel):
         Returns:
             List[str]: If the realm access dict contains roles
         """
-        if not self.realm_access:
+        if not self.realm_access and not self.resource_access:
             raise KeycloakError(
                 status_code=404,
-                reason="The 'realm_access' section of the provided access token is missing",
+                reason="The 'realm_access' and 'resource_access' sections of the provided access token are missing.",
             )
-        try:
-            return self.realm_access["roles"]
-        except KeyError as e:
+        roles = []
+        if self.realm_access:
+            if "roles" in self.realm_access:
+                roles += self.realm_access["roles"]
+        if self.resource_access:
+            for client_name, roles_dict in self.resource_access.items():
+                if "roles" in roles_dict:
+                    roles += roles_dict["roles"]
+        if not roles:
             raise KeycloakError(
                 status_code=404,
-                reason="The 'realm_access' section of the provided access token did not contain any 'roles'",
-            ) from e
+                reason="The 'realm_access' and 'resource_access' sections of the provided access token did not "
+                       "contain any 'roles'",
+            )
+        return roles
 
     def __str__(self) -> str:
         """String representation of an OIDCUser"""
