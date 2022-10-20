@@ -97,6 +97,7 @@ class OIDCUser(BaseModel):
     details. This is a mere proxy object.
     """
 
+    azp: Optional[str]
     sub: str
     iat: int
     exp: int
@@ -127,10 +128,10 @@ class OIDCUser(BaseModel):
         if self.realm_access:
             if "roles" in self.realm_access:
                 roles += self.realm_access["roles"]
-        if self.resource_access:
-            if "azp" in self.resource_access:
-                if "roles" in self.resource_access:
-                    roles += self.resource_access["roles"]
+        if self.azp and self.resource_access:
+            if self.azp in self.resource_access:
+                if "roles" in self.resource_access[self.azp]:
+                    roles += self.resource_access[self.azp]["roles"]
         if not roles:
             raise KeycloakError(
                 status_code=404,
