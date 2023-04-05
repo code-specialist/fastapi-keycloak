@@ -117,7 +117,6 @@ class FastAPIKeycloak:
             server_url="https://auth.some-domain.com/auth",
             client_id="some-test-client",
             client_secret="some-secret",
-            admin_client_secret="some-admin-cli-secret",
             realm="Test",
             callback_uri=f"http://localhost:8081/callback"
         )
@@ -133,7 +132,6 @@ class FastAPIKeycloak:
             client_id: str,
             client_secret: str,
             realm: str,
-            admin_client_secret: str,
             callback_uri: str,
             admin_client_id: str = "admin-cli",
             timeout: int = 10,
@@ -146,7 +144,6 @@ class FastAPIKeycloak:
             client_secret (str): The client secret
             realm (str): The realm (name)
             admin_client_id (str): The id for the admin client, defaults to 'admin-cli'
-            admin_client_secret (str): Secret for the `admin-cli` client
             callback_uri (str): Callback URL of the instance, used for auth flows. Must match at least one
             `Valid Redirect URIs` of Keycloak and should point to an endpoint that utilizes the authorization_code flow.
             timeout (int): Timeout in seconds to wait for the server
@@ -156,10 +153,10 @@ class FastAPIKeycloak:
         self.client_id = client_id
         self.client_secret = client_secret
         self.admin_client_id = admin_client_id
-        self.admin_client_secret = admin_client_secret
+        #self.admin_client_secret = admin_client_secret
         self.callback_uri = callback_uri
         self.timeout = timeout
-        self._get_admin_token()  # Requests an admin access token on startup
+        #self._get_admin_token()  # Requests an admin access token on startup
 
     @property
     def admin_token(self):
