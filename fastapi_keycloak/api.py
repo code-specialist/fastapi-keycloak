@@ -117,6 +117,7 @@ class FastAPIKeycloak:
             server_url="https://auth.some-domain.com/auth",
             client_id="some-test-client",
             client_secret="some-secret",
+            admin_client_secret="some-admin-cli-secret",
             realm="Test",
             callback_uri=f"http://localhost:8081/callback"
         )
@@ -132,6 +133,7 @@ class FastAPIKeycloak:
             client_id: str,
             client_secret: str,
             realm: str,
+            admin_client_secret: str,
             callback_uri: str,
             admin_client_id: str = "admin-cli",
             timeout: int = 10,
@@ -144,6 +146,7 @@ class FastAPIKeycloak:
             client_secret (str): The client secret
             realm (str): The realm (name)
             admin_client_id (str): The id for the admin client, defaults to 'admin-cli'
+            admin_client_secret (str): Secret for the `admin-cli` client
             callback_uri (str): Callback URL of the instance, used for auth flows. Must match at least one
             `Valid Redirect URIs` of Keycloak and should point to an endpoint that utilizes the authorization_code flow.
             timeout (int): Timeout in seconds to wait for the server
@@ -153,10 +156,10 @@ class FastAPIKeycloak:
         self.client_id = client_id
         self.client_secret = client_secret
         self.admin_client_id = admin_client_id
-        #self.admin_client_secret = admin_client_secret
+        self.admin_client_secret = admin_client_secret
         self.callback_uri = callback_uri
         self.timeout = timeout
-        #self._get_admin_token()  # Requests an admin access token on startup
+        self._get_admin_token()  # Requests an admin access token on startup
 
     @property
     def admin_token(self):
@@ -184,9 +187,7 @@ class FastAPIKeycloak:
             None: Inplace method, updates the _admin_token
         """
         decoded_token = self._decode_token(token=value)
-        if not decoded_token.get("resource_access").get(
-                "realm-management"
-        ) or not decoded_token.get("resource_access").get("account"):
+        if not decoded_token.get("resource_access.realm-management") or not decoded_token.get("resource_access.account"):
             raise AssertionError(
                 """The access required was not contained in the access token for the `admin-cli`.
                 Possibly a Keycloak misconfiguration. Check if the admin-cli client has `Full Scope Allowed`
@@ -837,11 +838,6 @@ class FastAPIKeycloak:
             response = self._admin_request(
                 url=f"{self.users_uri}?{query}", method=HTTPMethod.GET
             )
-            if not response.json():
-                raise UserNotFound(
-                    status_code = status.HTTP_404_NOT_FOUND,
-                    reason=f"User query with filters of [{query}] did no match any users"
-                )
             return KeycloakUser(**response.json()[0])
         else:
             response = self._admin_request(
