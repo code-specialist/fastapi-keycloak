@@ -1,5 +1,5 @@
 [project]
-name = "fastapi_keycloak"
+name = "bugohoss12_fastapi_keycloak"
 authors = [
     { name = "Jonas Scholl", email = "jonas@code-specialist.com" },
     { name = "Yannic Schröer", email = "yannic@code-specialist.com" }
