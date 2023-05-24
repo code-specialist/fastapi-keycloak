@@ -426,9 +426,10 @@ class TestAPIFunctional(BaseTestClass):
     )
     def test_login_exceptions(self, idp, action, exception, user):
 
-        # Get access tokens for the users
-        access_token = idp.user_login(username=user.username, password=TEST_PASSWORD)
-        assert access_token
+        # Get access and refresh for the users
+        tokens = idp.user_login(username=user.username, password=TEST_PASSWORD)
+        assert tokens.access_token
+        assert tokens.refresh_token
 
         user.requiredActions.append(action)  # Add an action
         user: KeycloakUser = idp.update_user(user=user)  # Save the change

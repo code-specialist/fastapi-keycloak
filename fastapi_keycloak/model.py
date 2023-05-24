@@ -206,9 +206,11 @@ class KeycloakToken(BaseModel):
 
     Attributes:
         access_token (str): An access token
+        refresh_token (str): An a refresh token, default None
     """
 
     access_token: str
+    refresh_token: Optional[str] = None
 
     def __str__(self):
         """String representation of KeycloakToken"""
