@@ -29,7 +29,7 @@ pluggy==1.0.0
 py==1.11.0
 pyasn1==0.4.8
 pydantic==1.8.2
-Pygments==2.10.0
+Pygments==2.15.0
 pymdown-extensions==9.1
 pyparsing==3.0.6
 pytest==7.1.2
