@@ -24,8 +24,10 @@ FastAPI Keycloak enables you to do the following things without writing a single
 - Verify identities and roles of users with Keycloak
 - Get a list of available identity providers
 - Create/read/delete users
+- Create/read/delete groups
 - Create/read/delete roles
 - Assign/remove roles from users
+- Assign/remove users from groups
 - Implement the `password` or the `authorization_code` flow (login/callback/logout)
 
 ## Example

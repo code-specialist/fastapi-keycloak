@@ -59,7 +59,7 @@ class KeycloakUser(BaseModel):
     requiredActions: List[str]
     realmRoles: Optional[List[str]]
     notBefore: int
-    access: dict
+    access: Optional[dict] = None
     attributes: Optional[dict]
 
 

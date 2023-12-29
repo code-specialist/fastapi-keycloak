@@ -691,6 +691,25 @@ class FastAPIKeycloak:
             url=f"{self.users_uri}/{user_id}/groups",
             method=HTTPMethod.GET,
         )
+    
+    @result_or_error(response_model=KeycloakUser, is_list=True)
+    def get_group_members(self, group_id: str):
+        """Get all members of a group.
+        
+        Args:
+            group_id (str): ID of the group of interest
+
+        Returns:
+            List[KeycloakUser]: All users in the group. Note that
+            the user objects returned are not fully populated.
+        
+        Raises:
+            KeycloakError: If the resulting response is not a successful HTTP-Code (>299)
+        """
+        return self._admin_request(
+            url=f"{self.groups_uri}/{group_id}/members",
+            method=HTTPMethod.GET,
+        )
 
     @result_or_error()
     def remove_user_group(self, user_id: str, group_id: str) -> dict:
