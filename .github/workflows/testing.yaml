@@ -2,6 +2,8 @@ name: Test-Suite
 
 on:
   workflow_dispatch:
+  pull_request:
+    types: [review_requested]
   push:
 
 jobs:
@@ -43,7 +45,7 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
-          fail_ci_if_error: true
+          fail_ci_if_error: false
 
       - name: Teardown Test Infrastructure
         if: always()
