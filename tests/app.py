@@ -23,6 +23,7 @@ idp = FastAPIKeycloak(
     admin_client_secret="BIcczGsZ6I8W5zf0rZg5qSexlloQLPKB",
     realm="Test",
     callback_uri="http://localhost:8081/callback",
+    scope="openid profile email",
 )
 idp.add_swagger_config(app)
 

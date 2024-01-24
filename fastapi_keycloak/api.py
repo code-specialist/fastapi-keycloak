@@ -136,6 +136,7 @@ class FastAPIKeycloak:
             admin_client_secret: str,
             callback_uri: str,
             admin_client_id: str = "admin-cli",
+            scope: str = "openid profile email",
             timeout: int = 10,
     ):
         """FastAPIKeycloak constructor
@@ -150,6 +151,7 @@ class FastAPIKeycloak:
             callback_uri (str): Callback URL of the instance, used for auth flows. Must match at least one
             `Valid Redirect URIs` of Keycloak and should point to an endpoint that utilizes the authorization_code flow.
             timeout (int): Timeout in seconds to wait for the server
+            scope (str): OIDC scope
         """
         self.server_url = server_url
         self.realm = realm
@@ -159,6 +161,7 @@ class FastAPIKeycloak:
         self.admin_client_secret = admin_client_secret
         self.callback_uri = callback_uri
         self.timeout = timeout
+        self.scope = scope
         self._get_admin_token()  # Requests an admin access token on startup
 
     @property
@@ -979,6 +982,7 @@ class FastAPIKeycloak:
             "username": username,
             "password": password,
             "grant_type": "password",
+            "scope": self.scope,
         }
         response = requests.post(url=self.token_uri, headers=headers, data=data, timeout=self.timeout)
         if response.status_code == 401:
@@ -1062,9 +1066,9 @@ class FastAPIKeycloak:
 
     @functools.cached_property
     def login_uri(self):
-        """The URL for users to login on the realm. Also adds the client id and the callback."""
+        """The URL for users to login on the realm. Also adds the client id, the callback and the scope."""
         params = {
-            "scope": "openid profile email",
+            "scope": self.scope,
             "response_type": "code",
             "client_id": self.client_id,
             "redirect_uri": self.callback_uri,
