@@ -1064,6 +1064,7 @@ class FastAPIKeycloak:
     def login_uri(self):
         """The URL for users to login on the realm. Also adds the client id and the callback."""
         params = {
+            "scope": "openid profile email",
             "response_type": "code",
             "client_id": self.client_id,
             "redirect_uri": self.callback_uri,
