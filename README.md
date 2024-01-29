@@ -14,7 +14,7 @@
 
 We created this as an open-source project in order to share our code with other people. Unfortunately we decided to abandon Keycloak in our project due to its unreliability in API compatibility and the general maintenance overhead. Therefore, we are no longer able to frequently update this library. 
 
-The new home for this project is [fastapi-keycloak/fastapi-keycloak](https://github.com/fastapi-keycloak/fastapi-keycloak) with same codebase but new maintainers but same codebase.
+The new home for this project is [fastapi-keycloak/fastapi-keycloak](https://github.com/fastapi-keycloak/fastapi-keycloak) with same codebase but new maintainers.
 
 ## Introduction
 
