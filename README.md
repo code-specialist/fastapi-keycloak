@@ -10,9 +10,11 @@
 
 ---
 
-## Notice - 📢 LOOKING FOR MAINTAINERS 📢
+## Notice - 📢 ARCHIVED - NEW REPOSITORY 📢
 
-We created this as an open-source project in order to share our code with other people. Unfortunately we decided to abandon Keycloak in our project due to its unreliability in API compatibility and the general maintenance overhead. Therefore, we are no longer able to frequently update this library. We are searching for someone or a group of people to maintain this repository actively, as we do not have the capacity but think that keycloak still is a highly relevant IDP solution. If you or your team want to take over the responsibility, please mail us at [admin@code-specialist.com](mailto:admin@code-specialist.com)
+We created this as an open-source project in order to share our code with other people. Unfortunately we decided to abandon Keycloak in our project due to its unreliability in API compatibility and the general maintenance overhead. Therefore, we are no longer able to frequently update this library. 
+
+The new home for this project is [fastapi-keycloak/fastapi-keycloak](https://github.com/fastapi-keycloak/fastapi-keycloak) with same codebase but new maintainers.
 
 ## Introduction
 
