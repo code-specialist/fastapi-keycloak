@@ -10,7 +10,7 @@ idna==3.3
 pyasn1==0.4.8
 pydantic==1.8.2
 python-jose==3.3.0
-requests==2.26.0
+requests==2.31.0
 rsa==4.8
 six==1.16.0
 sniffio==1.2.0
